@@ -13,6 +13,12 @@ class LoginScreen extends Component {
         //bind 'this' to access props handler
         this.onPressButton = this.onPressButton.bind(this);
     }
+
+    onPressButton() {
+        const { navigate } = this.props.navigation;
+
+        navigate('Home');
+    }
     
     render() {
         return (
@@ -68,12 +74,6 @@ class LoginScreen extends Component {
                 
             </View>
         );
-    }
-    
-    onPressButton() {
-        const { navigate } = this.props.navigation;
-
-        navigate('Home');
     }
 }
 

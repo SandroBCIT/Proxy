@@ -14,6 +14,12 @@ class HomeScreen extends Component {
         title: 'Welcome',
     };
 
+    onPressButton() {
+        const { navigate } = this.props.navigation;
+
+        navigate('Login');
+    }   
+
     render() {
         return (
             <View>
@@ -24,12 +30,6 @@ class HomeScreen extends Component {
                 />
             </View> 
         );
-    }
-
-    onPressButton() {
-        const { navigate } = this.props.navigation;
-
-        navigate('Login');
     }
 }
 

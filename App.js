@@ -6,28 +6,7 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 
-
 export default Proxy = StackNavigator({
     Login: { screen: LoginScreen },
     Home: { screen: HomeScreen },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -12,8 +12,10 @@ class LoginScreen extends Component {
             isLoggedIn : false,
         }
     }
+   
+    
 
-    //Functions
+//Functions
     goToHome() {
         const { navigate } = this.props.navigation;
         navigate('Home');

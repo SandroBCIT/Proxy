@@ -3,15 +3,7 @@ import { Text, View, Button, StyleSheet, Image } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    drawerLabel: 'Home',
-    drawerIcon: ({ tintColor }) => (
-      <Image
-        source={require('../img/star1.png')}
-        style={[styles.icon, {tintColor: tintColor}]}
-      />
-    ),
-  };
+  
 
     render() {
         return (

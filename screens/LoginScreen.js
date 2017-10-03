@@ -1,26 +1,37 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, AsyncStorage } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { DrawerNavigator } from 'react-navigation';
 
 class LoginScreen extends Component {
-    static navigationOptions = {
-        title: 'Login',
-    };
-
     constructor() {
         super();
         
         //bind 'this' to access props handler
-        this.onPressButton = this.onPressButton.bind(this);
+        this.goToHome = this.goToHome.bind(this);
+        
+        this.state = {
+            isLoggedIn : false,
+        }
     }
 
-    onPressButton() {
-        const { navigate } = this.props.navigation;
+    static navigationOptions = {
+    };
 
+    //Functions
+    goToHome() {
+        const { navigate } = this.props.navigation;
         navigate('Home');
     }
-    
+
+    componentWillMount() {
+        if(this.state.isLoggedIn) {
+            const { navigate } = this.props.navigation;
+            navigate('Home');   
+        }
+    }
+
     render() {
+        
         return (
             <View style={styles.viewContainer}>
                 <Image 
@@ -28,9 +39,10 @@ class LoginScreen extends Component {
                     source={require('../img/pin1.png')}
                 />
                 <View style={styles.inputContainer} >
-                    <Text style={styles.inputLabel} >Username</Text>
+                    <Text style={styles.inputLabel} >Email</Text>
                     <TextInput 
                         keyboardType='email-address'
+                        returnKeyType='next'
                         style={styles.input}
                         placeholder='example@email.com'
                         underlineColorAndroid='transparent'
@@ -40,9 +52,9 @@ class LoginScreen extends Component {
                     />
                     <Text style={styles.inputLabel} >Password</Text>
                     <TextInput 
+                        secureTextEntry
                         returnKeyType='go'
                         style={styles.input}
-                        secureTextEntry
                         placeholder='**********'
                         underlineColorAndroid='transparent'
                         ref={(input) => this.passwordInput = input}
@@ -50,19 +62,19 @@ class LoginScreen extends Component {
                 </View>
                 <View style={styles.btnContainer}>
                     <Button
-                        onPress={this.onPressButton}
+                        onPress={this.goToHome}
                         title="Log In"
                         color="#634198"
                         accessibilityLabel="Learn more about this purple button"
                     />  
                     <Button
-                        onPress={this.onPressButton}
+                        onPress={this.goToHome}
                         title="Log In with Facebook"
                         color="blue"
                         accessibilityLabel="Learn more about this purple button"
                     />
                     <Button
-                        onPress={this.onPressButton}
+                        onPress={this.goToHome}
                         title="Log In with Google"
                         color="red"
                         accessibilityLabel="Learn more about this purple button"
@@ -101,7 +113,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: 'rgba(255,255,255,1)',
         marginBottom: 20,
-        textDecorationLine: 'none'
+        paddingLeft: 20
     },
     btnContainer: {
         paddingHorizontal: 20,

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet, Image } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 
-class HomeScreen extends Component {
+class SettingsScreen extends Component {
   static navigationOptions = {
-    drawerLabel: 'Home',
+    drawerLabel: 'Settings',
     drawerIcon: ({ tintColor }) => (
       <Image
         source={require('../img/star1.png')}
@@ -16,7 +16,7 @@ class HomeScreen extends Component {
     render() {
         return (
             <View style={styles.viewContainer}>
-                <Text>HOME Screen</Text>
+                <Text>SETTINGS Screen</Text>
                 <Button
                 style={styles.btn1}
                 onPress={() => this.props.navigation.navigate('DrawerOpen')}
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeScreen;
+export default SettingsScreen;

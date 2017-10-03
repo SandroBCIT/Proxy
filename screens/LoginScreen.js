@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, AsyncStorage } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
 
 class LoginScreen extends Component {
     constructor() {
@@ -13,9 +12,6 @@ class LoginScreen extends Component {
             isLoggedIn : false,
         }
     }
-
-    static navigationOptions = {
-    };
 
     //Functions
     goToHome() {
@@ -95,7 +91,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: 'gray',
+        backgroundColor: '#FFEBEBEB',
         paddingHorizontal: 50
     },
     logo: {

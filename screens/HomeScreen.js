@@ -49,22 +49,23 @@ class HomeScreen extends Component {
             this.setState({markerPosition: initialRegion}) 
         },(error) => alert(JSON.stringify(error)),
         {enableHighAccuracy: true, timeout: 20000, maximumAge:1000})
-        
-// SOMETHING WRONG HERE!        
-//        this.watchID  = navigator.geolocation.watchPosition((position) => {
-//            var lat = parseFloat(position.coords.latitude)
-//            var long = parseFloat(position.coords.longitude) 
-//            
-//            var lastRegion = {
-//                latitude: lat,
-//                longitude: long,
-//                latitudeDelta: LATITUDE_DELTA,
-//                longitudeDelta: LONGITUDE_DELTA
-//            }
-//            
-//            this.setState({initialPosition: lastRegion})
-//            this.setState({markerPosition: lastRegion})
-//        })
+             
+        this.watchID  = navigator.geolocation.watchPosition((position) => {
+            var lat = parseFloat(position.coords.latitude)
+            var long = parseFloat(position.coords.longitude) 
+            
+            var lastRegion = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            }
+            console.log(lastRegion);
+            this.setState({
+                initialPosition: lastRegion,
+                markerPosition: lastRegion
+            });
+        }, (error)=>{console.log(error)}, {enableHighAccuracy: true, timeout: 20000, maximumAge:1000})
     }
 
     componentWillUnmount() {

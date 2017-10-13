@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, AsyncStorage } from 'react-native';
+import firebase from 'firebase';
+
+import SignUpScreen from './SignUpScreen';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDs090vaNwGe-DzG4pM5pguQUGdOsuW55k",
+    authDomain: "proxy-e0029.firebaseapp.com",
+    databaseURL: "https://proxy-e0029.firebaseio.com",
+    storageBucket: "proxy-e0029.appspot.com",
+    messagingSenderId: "294902702977",
+};
+firebase.initializeApp(firebaseConfig);
+
+//Get Elements
 
 class LoginScreen extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         
         //bind 'this' to access props handler
         this.goToHome = this.goToHome.bind(this);
         
         this.state = {
-            isLoggedIn : false,
+            isLoggedIn:false,
+            userEmail:'',
+            userPassword:''
         }
+        
+        this.storeUserEmail = this.storeUserEmail.bind(this);
+        this.storeUserPassword = this.storeUserPassword.bind(this);
+        this.loginUser = this.loginUser.bind(this);
     }
    
-    
 
-//Functions
+//Functions   
+    
     goToHome() {
         const { navigate } = this.props.navigation;
         navigate('Home');
@@ -28,60 +48,93 @@ class LoginScreen extends Component {
         }
     }
 
-    render() {
+    storeUserEmail(text){
+        const userEmail = text;
         
+        this.setState({
+            userEmail:userEmail    
+        });
+    }
+    
+    storeUserPassword(text){
+        const userPassword = text;
+        
+        this.setState({
+            userPassword:userPassword    
+        });  
+    }
+    
+    loginUser(){
+        const email = this.state.userEmail; 
+        const pass = this.state.userPassword;
+        const auth = firebase.auth();
+        //SignIn
+        const promise = auth.signInWithEmailAndPassword(email,pass);
+        promise.catch(e => alert(e.message));
+    }
+    
+    render() {
         return (
-            <View style={styles.viewContainer}>
-                <Image 
-                    style={styles.logo}
-                    source={require('../img/pin1.png')}
-                />
-                <View style={styles.inputContainer} >
-                    <Text style={styles.inputLabel} >Email</Text>
-                    <TextInput 
-                        keyboardType='email-address'
-                        returnKeyType='next'
-                        style={styles.input}
-                        placeholder='example@email.com'
-                        underlineColorAndroid='transparent'
-                        onSubmitEditing={() => this.passwordInput.focus()}
-                        autoCapitalize='none'
-                        autoCorrect={false}
+            <View>
+                <View style={styles.viewContainer}>
+                    <Image 
+                        style={styles.logo}
+                        source={require('../img/pin1.png')}
                     />
-                    <Text style={styles.inputLabel} >Password</Text>
-                    <TextInput 
-                        secureTextEntry
-                        returnKeyType='go'
-                        style={styles.input}
-                        placeholder='**********'
-                        underlineColorAndroid='transparent'
-                        ref={(input) => this.passwordInput = input}
-                    />  
+                    <View style={styles.inputContainer} >
+                        <Text style={styles.inputLabel} >Email</Text>
+                        <TextInput 
+                            keyboardType='email-address'
+                            returnKeyType='next'
+                            style={styles.input}
+                            placeholder='example@email.com'
+                            underlineColorAndroid='transparent'
+                            onSubmitEditing={() => this.passwordInput.focus()}
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            onChangeText={this.storeUserEmail}
+                        />
+                        <Text style={styles.inputLabel} >Password</Text>
+                        <TextInput 
+                            secureTextEntry
+                            returnKeyType='go'
+                            style={styles.input}
+                            placeholder='**********'
+                            underlineColorAndroid='transparent'
+                            ref={(input) => this.passwordInput = input}
+                            onChangeText={this.storeUserPassword}
+                        />  
+                    </View>
+                    <View style={styles.btnContainer}>
+                        <Button
+                            onPress={this.goToHome}
+                            title="Log In"
+                            color="#634198"
+                            accessibilityLabel="Learn more about this purple button"
+                            onPress={this.loginUser}
+                        />  
+                        <Button
+                            onPress={this.goToHome}
+                            title="Log In with Facebook"
+                            color="blue"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <Button
+                            onPress={this.goToHome}
+                            title="Log In with Google"
+                            color="red"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <TouchableOpacity>
+                            <Text style={styles.signupBtn}>sign up</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.btnContainer}>
-                    <Button
-                        onPress={this.goToHome}
-                        title="Log In"
-                        color="#634198"
-                        accessibilityLabel="Learn more about this purple button"
-                    />  
-                    <Button
-                        onPress={this.goToHome}
-                        title="Log In with Facebook"
-                        color="blue"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
-                    <Button
-                        onPress={this.goToHome}
-                        title="Log In with Google"
-                        color="red"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
-                    <TouchableOpacity>
-                        <Text style={styles.signupBtn}>sign up</Text>
-                    </TouchableOpacity>
-                </View>
-                
+                <SignUpScreen 
+                    style={styles.SignUpScreen} 
+                    transform([
+                        {translateY: -20},        
+                    ])/>
             </View>
         );
     }
@@ -120,6 +173,8 @@ const styles = StyleSheet.create({
     },
     signupBtn: {
         textAlign: 'center'
+    },
+    SignUpScreen: {
     }
 });
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
-
 import SignUpScreen from './SignUpScreen';
+import MenuScreen from './MenuScreen';
 
+//Firebase connection
 const firebaseConfig = {
     apiKey: "AIzaSyDs090vaNwGe-DzG4pM5pguQUGdOsuW55k",
     authDomain: "proxy-e0029.firebaseapp.com",
@@ -22,25 +23,29 @@ class LoginScreen extends Component {
         this.state = {
             openSignUp: false,
             userEmail: '',
-            userPassword: ''
+            userPassword: '',
         }
         
-        this.goToHome = this.goToHome.bind(this);
         this.storeUserEmail = this.storeUserEmail.bind(this);
         this.storeUserPassword = this.storeUserPassword.bind(this);
         this.loginUser = this.loginUser.bind(this);
-        this.triggerAnim = this.triggerAnim.bind(this);
+        this.triggerAnim = this.triggerAnim.bind(this);        
+        this.goToHome = this.goToHome.bind(this);
     } 
 
     goToHome(){
-        const { navigate } = this.props.navigation;
-        navigate('Home');
+        this.props.navigation.navigate('Home');
     }
     
     //Add realtime listener
-    componentDidMount() {
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                this.goToHome();   
+            }
+        });
+        
     }
-    
 
     storeUserEmail(text){
         const userEmail = text;
@@ -71,19 +76,52 @@ class LoginScreen extends Component {
         const email = this.state.userEmail; 
         const pass = this.state.userPassword;
         const auth = firebase.auth();
-        
         //SignIn
         const promise = auth.signInWithEmailAndPassword(email,pass);
         
-        const msg = promise.catch(e => alert(e.message));
-        msg;
-        
-        firebase.auth().onAuthStateChange(firebaseUser => {
-            if(firebaseUser){
-                this.goToHome();
+        promise.catch(error =>{
+            if(error.code == 'auth/invalid-email'){
+                Alert.alert('Wrong Email and/or Password');
+            }else if(error.code == 'auth/wrong-password'){
+                Alert.alert('Wrong Email and/or Password');
+            }else if(error.code == 'auth/user-disabled'){
+                Alert.alert('Wrong Email and/or Password');
+            }else if(error.code == 'auth/user-not-found'){
+                Alert.alert('Wrong Email and/or Password');
             }
         });
     }
+//        firebase.auth().onAuthStateChanged(user => {
+//            if(user){
+//                this.goToHome();   
+//            }
+//        }) 
+        
+//        promise.catch(error => alert(e.message))
+//        firebase.auth().signInWithEmailAndPassword(email, password)
+//            .catch(function(error) {
+//          // Handle Errors here.
+//          var errorCode = error.code;
+//          var errorMessage = error.message;
+//          if (errorCode === 'auth/wrong-password') {
+//            alert('Wrong password.');
+//          } else {
+//            alert(errorMessage);
+//          }
+//          console.log(error);
+//        });
+        
+        
+        
+        
+        
+        
+//        firebase.auth().onAuthStateChanged(firebaseUser => {
+//            if(firebaseUser){
+//                this.goToHome();
+//            }
+//        });
+   
                 
 //        if(msg != null){
 //            msg;

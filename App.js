@@ -15,8 +15,7 @@ export default Proxy = DrawerNavigator({
         drawerLockMode: 'locked-closed'
     })},
     Home: { screen: HomeScreen },
-    Settings: { screen: SettingsScreen },
-    
+    Settings: { screen: SettingsScreen }
 },
 {
     contentComponent: props => <DrawerMenu {...props} />   

@@ -25,7 +25,7 @@ class Map extends Component {
 
     //When map loads
     componentDidMount() {
-        setInterval(()=>{
+        var locRefresh = setInterval(()=>{
             if(this.watchID){
                 navigator.geolocation.clearWatch(this.watchID);
             }
@@ -70,8 +70,11 @@ class Map extends Component {
 //        }
     }
 
-    componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchID)
+    componentWillUnmount(){
+        navigator.geolocation.clearWatch(this.watchID);
+    }
+    componentDidUnMount(){
+        clearInterval(locRefresh);     
     }
 
     render() {

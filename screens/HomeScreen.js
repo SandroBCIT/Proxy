@@ -8,13 +8,7 @@ class HomeScreen extends Component {
     constructor(props){
         super(props);
         
-        this.goToLogin = this.goToLogin.bind(this);
         this.hamburgerFunction = this.hamburgerFunction.bind(this);
-    }
-    
-    goToLogin(){
-        const { navigate } = this.props.navigation;
-        navigate('Login');
     }
     
     hamburgerFunction(){

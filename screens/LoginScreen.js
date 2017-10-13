@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, AsyncStorage } from 'react-native';
+import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
 
 import SignUpScreen from './SignUpScreen';
@@ -13,14 +14,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-//Get Elements
 
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
-        
-        //bind 'this' to access props handler
-        this.goToHome = this.goToHome.bind(this);
         
         this.state = {
             openSignUp: false,
@@ -28,26 +25,22 @@ class LoginScreen extends Component {
             userPassword: ''
         }
         
+        this.goToHome = this.goToHome.bind(this);
         this.storeUserEmail = this.storeUserEmail.bind(this);
         this.storeUserPassword = this.storeUserPassword.bind(this);
         this.loginUser = this.loginUser.bind(this);
         this.triggerAnim = this.triggerAnim.bind(this);
-    }
-   
+    } 
 
-//Functions   
-    
-    goToHome() {
+    goToHome(){
         const { navigate } = this.props.navigation;
         navigate('Home');
     }
-
-    componentWillMount() {
-        if(this.state.isLoggedIn) {
-            const { navigate } = this.props.navigation;
-            navigate('Home');   
-        }
+    
+    //Add realtime listener
+    componentDidMount() {
     }
+    
 
     storeUserEmail(text){
         const userEmail = text;
@@ -65,14 +58,42 @@ class LoginScreen extends Component {
         });  
     }
     
+    //Realtime user listener
+//    firebase.auth().onAuthStateChange(user){
+//        if(user){
+//            
+//        }else{
+//            /*not logged in*/
+//        }
+//    }
+    
     loginUser(){
         const email = this.state.userEmail; 
         const pass = this.state.userPassword;
         const auth = firebase.auth();
+        
         //SignIn
         const promise = auth.signInWithEmailAndPassword(email,pass);
-        promise.catch(e => alert(e.message));
+        
+        const msg = promise.catch(e => alert(e.message));
+        msg;
+        
+        firebase.auth().onAuthStateChange(firebaseUser => {
+            if(firebaseUser){
+                this.goToHome();
+            }
+        });
     }
+                
+//        if(msg != null){
+//            msg;
+//        }else{
+////            this.goToHome();
+//            alert('logged in');
+//        }
+    
+    
+            
 
     triggerAnim(){
         this.setState({
@@ -103,10 +124,10 @@ class LoginScreen extends Component {
                             style={styles.input}
                             placeholder='example@email.com'
                             underlineColorAndroid='transparent'
-                            onSubmitEditing={() => this.passwordInput.focus()}
                             autoCapitalize='none'
                             autoCorrect={false}
                             onChangeText={this.storeUserEmail}
+                            onSubmitEditing={() => this.passwordInput.focus()}
                         />
                         <Text style={styles.inputLabel} >Password</Text>
                         <TextInput 
@@ -117,11 +138,11 @@ class LoginScreen extends Component {
                             underlineColorAndroid='transparent'
                             ref={(input) => this.passwordInput = input}
                             onChangeText={this.storeUserPassword}
+                            onSubmitEditing={this.loginUser}
                         />  
                     </View>
                     <View style={styles.btnContainer}>
                         <Button
-                            onPress={this.goToHome}
                             title='Log In'
                             color='#634198'
                             accessibilityLabel='Learn more about this purple button'

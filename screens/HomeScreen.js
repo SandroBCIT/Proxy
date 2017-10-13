@@ -7,7 +7,7 @@ import HamburgerBtn from './comp/HamburgerBtn';
 class HomeScreen extends Component {
     constructor(props){
         super(props);
-        //bind 'this' to access props handler
+        
         this.goToLogin = this.goToLogin.bind(this);
         this.hamburgerFunction = this.hamburgerFunction.bind(this);
     }

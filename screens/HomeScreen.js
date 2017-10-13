@@ -1,38 +1,39 @@
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, Image, Alert, TouchableHighlight } from 'react-native';
+import { Text, View, Button, StyleSheet, Image, Alert } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
-import MapComp from './comp/MapComp';
+import Map from './comp/Map';
+import HamburgerBtn from './comp/HamburgerBtn';
 
 class HomeScreen extends Component {
-    constructor(props) {
+    constructor(props){
         super(props);
         //bind 'this' to access props handler
         this.goToLogin = this.goToLogin.bind(this);
+        this.hamburgerFunction = this.hamburgerFunction.bind(this);
     }
     
-    goToLogin() {
+    goToLogin(){
         const { navigate } = this.props.navigation;
         navigate('Login');
     }
+    
+    hamburgerFunction(){
+        this.props.navigation.navigate('DrawerOpen');      
+    }
 
+//-------------------------------------------------------------------------
+    
     render() {
         return (
             <View style={styles.viewContainer}>
-                <MapComp />
-                <TouchableHighlight 
-                    onPress={() => this.props.navigation.navigate('DrawerOpen')} 
-                    style={{margin: 10, width: 40, height: 40}}
-                    underlayColor='rgba(0,0,0,0)'>
-                    
-                    <Image
-                        source={require('../img/hamburger.png')}
-                        style={{width: 40, height: 40}}
-                    />
-                </TouchableHighlight>   
+                <Map />
+                <HamburgerBtn whatToDo={this.hamburgerFunction} />
             </View>
         );
     }
 }
+
+//-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
     viewContainer: {
@@ -41,11 +42,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 24
     },
-    hamburgerBtn: {
-        left: 0,
-        top: 0,
-        position: 'absolute',
-    }
+    
 });
 
 export default HomeScreen;

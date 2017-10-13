@@ -9,7 +9,7 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.001
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
-class MapComp extends Component {
+class Map extends Component {
     constructor(props) {
         super(props);
         
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MapComp;
+export default Map;

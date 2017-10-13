@@ -23,14 +23,15 @@ class LoginScreen extends Component {
         this.goToHome = this.goToHome.bind(this);
         
         this.state = {
-            isLoggedIn:false,
-            userEmail:'',
-            userPassword:''
+            openSignUp: false,
+            userEmail: '',
+            userPassword: ''
         }
         
         this.storeUserEmail = this.storeUserEmail.bind(this);
         this.storeUserPassword = this.storeUserPassword.bind(this);
         this.loginUser = this.loginUser.bind(this);
+        this.triggerAnim = this.triggerAnim.bind(this);
     }
    
 
@@ -72,10 +73,23 @@ class LoginScreen extends Component {
         const promise = auth.signInWithEmailAndPassword(email,pass);
         promise.catch(e => alert(e.message));
     }
+
+    triggerAnim(){
+        this.setState({
+            openSignUp:true    
+        });
+        setTimeout(() => {
+            this.setState({
+                openSignUp:false    
+            });
+        }, 1400)
+    }
+
+//-------------------------------------------------------------------------
     
     render() {
         return (
-            <View>
+            <View style={styles.wrapper}>
                 <View style={styles.viewContainer}>
                     <Image 
                         style={styles.logo}
@@ -108,46 +122,49 @@ class LoginScreen extends Component {
                     <View style={styles.btnContainer}>
                         <Button
                             onPress={this.goToHome}
-                            title="Log In"
-                            color="#634198"
-                            accessibilityLabel="Learn more about this purple button"
+                            title='Log In'
+                            color='#634198'
+                            accessibilityLabel='Learn more about this purple button'
                             onPress={this.loginUser}
                         />  
                         <Button
                             onPress={this.goToHome}
-                            title="Log In with Facebook"
-                            color="blue"
-                            accessibilityLabel="Learn more about this purple button"
+                            title='Log In with Facebook'
+                            color='blue'
+                            accessibilityLabel='Learn more about this purple button'
                         />
                         <Button
                             onPress={this.goToHome}
-                            title="Log In with Google"
-                            color="red"
-                            accessibilityLabel="Learn more about this purple button"
+                            title='Log In with Google'
+                            color='red'
+                            accessibilityLabel='Learn more about this purple button'
                         />
-                        <TouchableOpacity>
-                            <Text style={styles.signupBtn}>sign up</Text>
+                        <TouchableOpacity onPress={this.triggerAnim}>
+                            <Text style={styles.signupText}>sign up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <SignUpScreen 
-                    style={styles.SignUpScreen} 
-                    transform([
-                        {translateY: -20},        
-                    ])/>
+                <SignUpScreen openSignUp={this.state.openSignUp} />
             </View>
         );
     }
 }
 
+//-------------------------------------------------------------------------
+
 const styles = StyleSheet.create({
+    wrapper: {
+        height: '100%',
+        width: '100%'
+    },
     viewContainer: {
         flex: 1,
         alignSelf: 'stretch',
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: '#FFEBEBEB',
-        paddingHorizontal: 50
+        paddingHorizontal: 50,
+        marginTop: 24
     },
     logo: {
         alignSelf: 'center',
@@ -171,10 +188,8 @@ const styles = StyleSheet.create({
         height: 180,
         justifyContent: 'space-between'
     },
-    signupBtn: {
+    signupText: {
         textAlign: 'center'
-    },
-    SignUpScreen: {
     }
 });
 

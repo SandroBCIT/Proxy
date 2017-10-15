@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, Image, Alert, TextInput } from 'react-native';
+import { Text, View, Button, StyleSheet, Image, TextInput } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import Map from './comp/Map';
 import HamburgerBtn from './comp/HamburgerBtn';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
 import SignUpScreen from './SignUpScreen';

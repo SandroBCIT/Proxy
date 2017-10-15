@@ -10,6 +10,7 @@ import DrawerMenu from './screens/MenuScreen';
 import TestScreen from './screens/TestScreen';
 
 export default Proxy = DrawerNavigator({
+//    Test: { screen: TestScreen },
     Home: { screen: HomeScreen },
     Login: { 
         screen: LoginScreen,

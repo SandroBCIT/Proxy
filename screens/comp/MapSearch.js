@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
-const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
+
+const {width,height} = Dimensions.get('window')
+const SCREENHEIGHT = height
+const SCREENWIDTH = width
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.01
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class MapSearch extends Component {
     
     constructor(props){
         super(props);
         
-        this.state = {
-            info: ''   
+        this.state = { 
         }
     }
-
+    
+    
 //-------------------------------------------------------------------------    
 
     render() {
         return (
             <View style={styles.mapSearch}>
                 <GooglePlacesAutocomplete
+            
                     placeholder='Search'
                     minLength={2} 
                     autoFocus={false}
@@ -32,11 +38,21 @@ class MapSearch extends Component {
                     onPress={(data, details = null) => {
 
                         var obj = Object.keys(details);
-                        var info = JSON.stringify(details['geometry']['location']['lat']);
-
+                        var lat = JSON.stringify(details['geometry']['location']['lat']);
+                        var long = JSON.stringify(details['geometry']['location']['lng']);
+                           
+                        var searchResult = {
+                            latitude: lat,
+                            longitude: long,
+                            latitudeDelta: LATITUDE_DELTA,
+                            longitudeDelta: LONGITUDE_DELTA
+                        }                
+            
                         this.setState({
-                            info:info    
+                            searchResult:searchResult
                         });
+            
+                        this.props.callbackFromParent(this.state.searchResult);
                     }}
 
                     getDefaultValue={() => ''}
@@ -50,7 +66,8 @@ class MapSearch extends Component {
                         textInputContainer: {backgroundColor: 'white', borderRadius: 10},
                         description: {fontWeight: 'bold'},
                         predefinedPlacesDescription: {color: '#1faadb'},
-                        listView: {backgroundColor: 'white', borderRadius: 10}
+                        listView: {backgroundColor: 'white', borderRadius: 10},
+                        poweredContainer: {display: 'none'}
                     }}
 
                     nearbyPlacesAPI='GooglePlacesSearch' 

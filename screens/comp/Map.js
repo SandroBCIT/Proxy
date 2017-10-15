@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text } from 'react-native';
+import MapSearch from './MapSearch';
 
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
 const SCREENWIDTH = width
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.001
+const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class Map extends Component {
@@ -14,25 +15,51 @@ class Map extends Component {
         super(props);
         
         this.state = {
-            locationPosition: {
+            screenPosition: {
+                latitude: 0,
+                longitude: 0,
+                latitudeDelta: 0,
+                longitudeDelta: 0
+            },
+            markerPosition: {
                 latitude: 0,
                 longitude: 0
-            }
-        }  
+            },
+        }
+        
+        this.myCallback = this.myCallback.bind(this);
     }
     
-    watchID: ?number = null
-
-    //When map loads
-    componentDidMount() {
-        var locRefresh = setInterval(()=>{
-            if(this.watchID){
-                navigator.geolocation.clearWatch(this.watchID);
-            }
-            
-            this.watchID  = navigator.geolocation.watchPosition((position) => {
+    componentWillMount() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                
                 var lat = parseFloat(position.coords.latitude)
                 var long = parseFloat(position.coords.longitude) 
+                
+                var initialRegion = {
+                    latitude: lat,
+                    longitude: long,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                }
+                
+                this.setState({
+                    screenPosition: initialRegion,
+                    markerPosition: initialRegion
+                });
+                
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+        
+        this.watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                
+                var lat = parseFloat(position.coords.latitude)
+                var long = parseFloat(position.coords.longitude) 
+                
                 
                 var lastRegion = {
                     latitude: lat,
@@ -40,42 +67,98 @@ class Map extends Component {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA
                 }
-
+                
                 this.setState({
                     screenPosition: lastRegion,
-                    locationPosition: lastRegion
+                    markerPosition: lastRegion
                 });
-                
-//              Lets you change the screenLocation
-                LATITUDE_DELTA = parseFloat(position.coords.latitudeDelta)
-                LONGITUDE_DELTA = parseFloat(position.coords.longitudeDelta)
-                
-                //alert("UPDATE");
-            }, (error)=> alert(error), {enableHighAccuracy: false, timeout: 1000, maximumAge:0, distanceFilter:0.1})
-            
-        }, 500);
+            },
+            (error) => alert(error),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 1 },
+        );
     }
-
+    
     componentWillUnmount(){
-        navigator.geolocation.clearWatch(this.watchID);
-        clearInterval(locRefresh);
+        navigator.geolocation.clearWatch(this.watchId);
     }
+    
+    myCallback(data){
+        
+        navigator.geolocation.clearWatch(this.watchId);
+        
+        var latData = parseFloat(data['latitude']);
+        var longData = parseFloat(data['longitude']);
+        var latDeltaData = LATITUDE_DELTA;
+        var longDeltaData = LONGITUDE_DELTA;
+        
+        var searchLocation = {
+            latitude: latData,
+            longitude: longData,
+            latitudeDelta: latDeltaData,
+            longitudeDelta: longDeltaData
+        }
+        
+        this.setState({
+            screenPosition:searchLocation    
+        });
+    }
+    
+    
+//    componentWillMount(){
+//        alert("mounted");
+//        var locRefresh = setInterval(()=>{
+//                if(this.watchID){
+//                    navigator.geolocation.clearWatch(this.watchID);
+//                }
+//
+//                this.watchID  = navigator.geolocation.watchPosition((position) => {
+//                    var lat = parseFloat(position.coords.latitude)
+//                    var long = parseFloat(position.coords.longitude) 
+//
+//                    var lastRegion = {
+//                        latitude: lat,
+//                        longitude: long,
+//                        latitudeDelta: LATITUDE_DELTA,
+//                        longitudeDelta: LONGITUDE_DELTA
+//                    }
+//
+//                    this.setState({
+//                        screenPosition: lastRegion,
+//                        markerPosition: lastRegion
+//                    });
+//
+//                    LATITUDE_DELTA = parseFloat(position.coords.latitudeDelta)
+//                    LONGITUDE_DELTA = parseFloat(position.coords.longitudeDelta)
+//
+//                }, (error)=> alert(error), {enableHighAccuracy: true, timeout: 1000, maximumAge:500})
+//        }, 500); 
+//    }
+//    
+//    componentWillUnmount(){
+//        clearInterval(1);
+//        alert("unmounted");
+//    }
+
+   
 
 //-------------------------------------------------------------------------
 
     render() {
         return (
+            <View style={styles.viewContainer}>
             <MapView
                 provider= 'google'
                 style={styles.map}
-                region={this.state.screenPosition}>
+                region={this.state.screenPosition} >
 
-                <MapView.Marker coordinate={this.state.locationPosition} >
+                <MapView.Marker coordinate={this.state.markerPosition} >
                     <View style={styles.locationRadius}>
                         <View style={styles.locationMarker} />
                     </View>
                 </MapView.Marker>
             </MapView>
+            <MapSearch callbackFromParent={this.myCallback} />
+            </View>
         );
     }
 }
@@ -83,6 +166,10 @@ class Map extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
+    viewContainer: {
+        height: '100%',
+        width: '100%'
+    },
     map: {
         left: 0,
         right: 0,

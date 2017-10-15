@@ -15,7 +15,6 @@ class MenuScreen extends Component {
         
         setTimeout(() => {this.props.navigation.navigate('DrawerClose')},500);
         setTimeout(() => {this.props.navigation.navigate('Login')},1000);
-        
     }
     
 //-------------------------------------------------------------------------

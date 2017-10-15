@@ -25,7 +25,7 @@ class MenuScreen extends Component {
             <View style={styles.viewContainer}>
                 <TouchableHighlight 
                     onPress={() => this.props.navigation.navigate('DrawerClose')} 
-                    style={{margin: 10, width: 40, height: 40}}
+                    style={styles.hamburgerBtn}
                     underlayColor='rgba(0,0,0,0)'>
                     
                     <Image
@@ -62,9 +62,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'stretch',
         flexDirection: 'column',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-around',
+        alignItems: 'center',
         backgroundColor: 'white',
         marginTop: 24
+    },
+    hamburgerBtn: {
+        position: 'absolute',
+        top: 5,
+        left: 5
     },
     menuButton: {
        height: 100,

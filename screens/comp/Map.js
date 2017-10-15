@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View } from 'react-native';
 
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
@@ -14,7 +14,7 @@ class Map extends Component {
         super(props);
         
         this.state = {
-            markerPosition: {
+            locationPosition: {
                 latitude: 0,
                 longitude: 0
             }
@@ -43,7 +43,7 @@ class Map extends Component {
 
                 this.setState({
                     screenPosition: lastRegion,
-                    markerPosition: lastRegion
+                    locationPosition: lastRegion
                 });
                 
 //              Lets you change the screenLocation
@@ -54,43 +54,33 @@ class Map extends Component {
             }, (error)=> alert(error), {enableHighAccuracy: false, timeout: 1000, maximumAge:0, distanceFilter:0.1})
             
         }, 500);
-        
-        
-//        if(this.state.initialPosition.latitude){
-//            Alert.alert(
-//                'Alert Title',
-//                'My Alert Msg',
-//                [
-//                {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-//                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-//                {text: 'OK', onPress: () => console.log('OK Pressed')},
-//                ],
-//                { cancelable: false }
-//            )
-//        }
     }
 
     componentWillUnmount(){
         navigator.geolocation.clearWatch(this.watchID);
+        clearInterval(locRefresh);
     }
-    componentDidUnMount(){
-        clearInterval(locRefresh);     
-    }
+
+//-------------------------------------------------------------------------
 
     render() {
         return (
-            <MapView 
+            <MapView
+                provider= 'google'
                 style={styles.map}
                 region={this.state.screenPosition}>
 
-                <MapView.Marker
-                    coordinate={this.state.markerPosition}
-                />
+                <MapView.Marker coordinate={this.state.locationPosition} >
+                    <View style={styles.locationRadius}>
+                        <View style={styles.locationMarker} />
+                    </View>
+                </MapView.Marker>
             </MapView>
-            
         );
     }
 }
+
+//-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
     map: {
@@ -98,7 +88,27 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         bottom: 0,
-        position: 'absolute'
+        position: 'absolute',
+    },
+    locationRadius: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 50,
+        width: 50,
+        borderRadius: 50/2,
+        overflow: 'hidden',
+        backgroundColor: 'rgba(0,122,255,0.1)',
+        borderWidth: 1,
+        borderColor: 'rgba(0,122,255,0.3)',
+    },
+    locationMarker: {
+        height: 20,
+        width: 20,
+        borderWidth: 1,
+        borderColor: 'white',
+        borderRadius: 20/2,
+        overflow: 'hidden',
+        backgroundColor: '#007AFF'
     }
 });
 

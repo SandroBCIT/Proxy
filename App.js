@@ -7,14 +7,15 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DrawerMenu from './screens/MenuScreen';
+import TestScreen from './screens/TestScreen';
 
 export default Proxy = DrawerNavigator({
+    Home: { screen: HomeScreen },
     Login: { 
         screen: LoginScreen,
         navigationOptions: ({navigation}) => ({
         drawerLockMode: 'locked-closed'
     })},
-    Home: { screen: HomeScreen },
     Settings: { screen: SettingsScreen }
 },
 {

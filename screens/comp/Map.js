@@ -68,9 +68,7 @@ class Map extends Component {
         }, 2000); 
     }
     
-    componentWillUnmount(){
-        clearInterval(locRefresh);
-    }
+    
 //    componentWillMount() {
 //        navigator.geolocation.getCurrentPosition(
 //            (position) => {
@@ -146,7 +144,9 @@ class Map extends Component {
         targetMarker = <MapView.Marker coordinate={this.state.targetMarkerPosition} ></MapView.Marker>;
     }
     
-    
+    componentWillUnmount(){
+        clearInterval(locRefresh);
+    }
 
    
 

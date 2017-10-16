@@ -143,6 +143,10 @@ class LoginScreen extends Component {
             });
         }, 1400)
     }
+    
+    alertMsg(){
+        alert("Feature not yet enabled");
+    }
 
 //-------------------------------------------------------------------------
     
@@ -187,13 +191,13 @@ class LoginScreen extends Component {
                             onPress={this.loginUser}
                         />  
                         <Button
-                            onPress={this.goToHome}
+                            onPress={this.alertMsg}
                             title='Log In with Facebook'
                             color='blue'
                             accessibilityLabel='Learn more about this purple button'
                         />
                         <Button
-                            onPress={this.goToHome}
+                            onPress={this.alertMsg}
                             title='Log In with Google'
                             color='red'
                             accessibilityLabel='Learn more about this purple button'

@@ -26,7 +26,7 @@ class MapSearch extends Component {
         return (
             <View style={styles.mapSearch}>
                 <GooglePlacesAutocomplete
-            
+                    
                     placeholder='Search'
                     minLength={2} 
                     autoFocus={false}
@@ -71,8 +71,6 @@ class MapSearch extends Component {
                     }}
 
                     nearbyPlacesAPI='GooglePlacesSearch' 
-                    GoogleReverseGeocodingQuery={{
-                    }}
                     GooglePlacesSearchQuery={{
                     rankby: 'distance',
                     }}

@@ -118,7 +118,6 @@ class SignUpScreen extends Component {
         };
         return (
             <Animated.View style={[styles.signUpArea, animatedStyle]}>
-                <HamburgerBtn whatToDo={this.closeAnim} />
                 <View style={styles.inputContainer} >
                     <Text style={styles.inputLabel} >Email</Text>
                     <TextInput 

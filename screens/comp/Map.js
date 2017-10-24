@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View, Text } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text, Button } from 'react-native';
 import MapSearch from './MapSearch';
 
 const {width,height} = Dimensions.get('window')
@@ -11,6 +11,8 @@ const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
 var locRefresh = null;
+var setRadiusBtn = null;
+var radiusMarker = null;
 
 class Map extends Component {
     constructor(props) {
@@ -23,12 +25,22 @@ class Map extends Component {
                 latitudeDelta: 0,
                 longitudeDelta: 0
             },
-            markerPosition: {
+            locationMarkerPosition: {
                 latitude: 0,
                 longitude: 0
             },
+            targetMarkerPosition: {  
+            },
+            circleRadius: 10,
+            circleIndex: 9999,
+            testPosition: {
+                latitude: 49.2827,
+                longitude: -123.1207
+            },
+            radiusToggle: false            
         }
         this.myCallback = this.myCallback.bind(this);
+        this.setRadius = this.setRadius.bind(this);
     }
     
     //before component gets rendered
@@ -41,8 +53,8 @@ class Map extends Component {
         locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
-                var lat = parseFloat(position.coords.latitude)
-                var long = parseFloat(position.coords.longitude)
+                var lat = /*49.2827*/ parseFloat(position.coords.latitude)
+                var long = /*-123.1207*/ parseFloat(position.coords.longitude)
                 var latDelta2 = latDelta
                 var longDelta2 = longDelta
                 
@@ -60,13 +72,24 @@ class Map extends Component {
 
                 this.setState({
                     screenPosition: lastScreenRegion,
-                    markerPosition: lastMarkerRegion
+                    locationMarkerPosition: lastMarkerRegion
                 });
 
                 latDelta = parseFloat(position.coords.latitudeDelta)
                 longDelta = parseFloat(position.coords.longitudeDelta)
 
             }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: false, timeout: 1000, maximumAge: 500})
+            
+            if(this.state.radiusToggle == true){
+                radiusMarker = <MapView.Circle 
+                                    center={this.state.locationMarkerPosition}
+                                    radius={this.state.circleRadius}
+                                    zIndex={this.state.circleIndex}
+                                />;
+                this.setState({
+                    radiusToggle: false    
+                });
+            }
         }, 2000); 
     }
     
@@ -83,12 +106,28 @@ class Map extends Component {
             latitudeDelta: latDeltaData,
             longitudeDelta: longDeltaData
         }
+        
         this.setState({
+            searchLocation:searchLocation,
             screenPosition:searchLocation,
             targetMarkerPosition:searchLocation
         });
         
-        targetMarker = <MapView.Marker coordinate={this.state.targetMarkerPosition} ></MapView.Marker>;
+        targetMarker =  <MapView.Marker 
+                            coordinate={this.state.targetMarkerPosition}
+                        />;
+        setRadiusBtn =  <Button
+                            style = {styles.setRadiusBtn}
+                            title='Set Radius'
+                            color='green'
+                            onPress={this.setRadius}
+                        />;  
+    }
+    
+    setRadius(){
+        this.setState({
+            radiusToggle: true
+        });   
     }
     
     //before component gets trashed
@@ -108,16 +147,26 @@ class Map extends Component {
                     style={styles.map}
                     region={this.state.screenPosition} 
                 >
-            
+                                <MapView.Circle 
+                                    center={this.state.screenPosition}
+                                    radius={this.state.circleRadius}
+                                    zIndex={this.state.circleIndex}
+                                    fillColor='green'
+                                />
+                    {radiusMarker}
                     {targetMarker}
             
-                    <MapView.Marker coordinate={this.state.markerPosition} >
+                    <MapView.Marker 
+                        coordinate={this.state.locationMarkerPosition}
+                        anchor={{ x: 0.5, y: 0.5 }}
+                    >
                         <View style={styles.locationRadius}>
                             <View style={styles.locationMarker} />
                         </View>
                     </MapView.Marker>
                 </MapView>
                 <MapSearch callbackFromParent={this.myCallback} />
+                {setRadiusBtn}
             </View>
         );
     }
@@ -138,8 +187,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
     locationRadius: {
-        alignItems: 'center',
-        justifyContent: 'center',
         height: 50,
         width: 50,
         borderRadius: 50/2,
@@ -147,6 +194,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,122,255,0.1)',
         borderWidth: 1,
         borderColor: 'rgba(0,122,255,0.3)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     locationMarker: {
         height: 20,
@@ -156,6 +205,9 @@ const styles = StyleSheet.create({
         borderRadius: 20/2,
         overflow: 'hidden',
         backgroundColor: '#007AFF'
+    },
+    setRadiusBtn: {
+           
     }
 });
 

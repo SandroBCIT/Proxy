@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
+import HamburgerBtn from './comp/HamburgerBtn';
 
 class MenuScreen extends Component {
     constructor(props){
         super(props);
         
         this.logOutUser = this.logOutUser.bind(this);
+        this.hamburgerFunction = this.hamburgerFunction.bind(this);
     }
     
     logOutUser(){
@@ -17,21 +19,15 @@ class MenuScreen extends Component {
         setTimeout(() => {this.props.navigation.navigate('Login')},1000);
     }
     
+    hamburgerFunction(){
+        this.props.navigation.navigate('DrawerClose');      
+    }
 //-------------------------------------------------------------------------
     
     render() {
         return (
             <View style={styles.viewContainer}>
-                <TouchableHighlight 
-                    onPress={() => this.props.navigation.navigate('DrawerClose')} 
-                    style={styles.hamburgerBtn}
-                    underlayColor='rgba(0,0,0,0)'>
-                    
-                    <Image
-                        source={require('../img/hamburger.png')}
-                        style={{width: 40, height: 40}}
-                    />
-                </TouchableHighlight>   
+                <HamburgerBtn whatToDo={this.hamburgerFunction} />
                 <Button
                     style={styles.menuButton}
                     onPress={() => this.props.navigation.navigate('DrawerClose')}

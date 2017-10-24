@@ -129,9 +129,7 @@ class LoginScreen extends Component {
 ////            this.goToHome();
 //            alert('logged in');
 //        }
-    
-    
-            
+           
 
     triggerAnim(){
         this.setState({

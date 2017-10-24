@@ -7,7 +7,7 @@ const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
 const SCREENWIDTH = width
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.01/*0.0005*/
+const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
 var locRefresh = null;
@@ -31,11 +31,13 @@ class Map extends Component {
         this.myCallback = this.myCallback.bind(this);
     }
     
+    //before component gets rendered
     componentWillMount(){
-        //only used for initial position
+        //only used for initial position - gets overwritten later in this function
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
         
+        //updates location marker (blue circle)
         locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
@@ -64,65 +66,11 @@ class Map extends Component {
                 latDelta = parseFloat(position.coords.latitudeDelta)
                 longDelta = parseFloat(position.coords.longitudeDelta)
 
-            }, (error)=> alert(error), {enableHighAccuracy: true, timeout: 1000, maximumAge:500})
+            }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: false, timeout: 1000, maximumAge: 500})
         }, 2000); 
     }
     
-    
-//    componentWillMount() {
-//        navigator.geolocation.getCurrentPosition(
-//            (position) => {
-//                
-//                var lat = parseFloat(position.coords.latitude)
-//                var long = parseFloat(position.coords.longitude) 
-//                
-//                var initialRegion = {
-//                    latitude: lat,
-//                    longitude: long,
-//                    latitudeDelta: LATITUDE_DELTA,
-//                    longitudeDelta: LONGITUDE_DELTA
-//                }
-//                
-//                this.setState({
-//                    screenPosition: initialRegion,
-//                    markerPosition: initialRegion
-//                });
-//                
-//            },
-//            (error) => this.setState({ error: error.message }),
-//            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-//        );
-//        
-//        this.watchId = navigator.geolocation.watchPosition(
-//            (position) => {
-//                
-//                var lat = parseFloat(position.coords.latitude)
-//                var long = parseFloat(position.coords.longitude) 
-//                var latDelta = parseFloat(position.coords.latitudeDelta)
-//                var longDelta = parseFloat(position.coords.longitudeDelta)
-//                
-//                var lastRegion = {
-//                    latitude: lat,
-//                    longitude: long,
-//                    latitudeDelta: latDelta,
-//                    longitudeDelta: longDelta
-//                }
-//                
-//                this.setState({
-//                    screenPosition: lastRegion,
-//                    markerPosition: lastRegion
-//                });
-//                
-//            },
-//            (error) => alert(error),
-//            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-//        );
-//    }
-//    
-//    componentWillUnmount(){
-//        navigator.geolocation.clearWatch(this.watchId);
-//    }
-    
+    //grabs location data (long/lat) from MapSearch component and updates screenPosition
     myCallback(data){
         navigator.geolocation.clearWatch(this.watchId);
         var latData = parseFloat(data['latitude']);
@@ -144,6 +92,7 @@ class Map extends Component {
         targetMarker = <MapView.Marker coordinate={this.state.targetMarkerPosition} ></MapView.Marker>;
     }
     
+    //before component gets trashed
     componentWillUnmount(){
         clearInterval(locRefresh);
     }

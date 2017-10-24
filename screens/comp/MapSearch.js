@@ -72,7 +72,7 @@ class MapSearch extends Component {
 
                     nearbyPlacesAPI='GooglePlacesSearch' 
                     GooglePlacesSearchQuery={{
-                    rankby: 'distance',
+                        rankby: 'distance',
                     }}
 
                     debounce={200} 

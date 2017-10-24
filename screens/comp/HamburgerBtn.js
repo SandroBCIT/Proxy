@@ -11,7 +11,7 @@ class HamburgerBtn extends Component {
     render() {
         return (
             <TouchableHighlight 
-                style= {styles.hamburerBtn}
+                style= {styles.hamburgerBtn}
                 onPress={this.props.whatToDo} 
                 underlayColor='rgba(0,0,0,0)'>
 
@@ -27,7 +27,7 @@ class HamburgerBtn extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    hamburerBtn: { 
+    hamburgerBtn: { 
         position: 'absolute',
         top: 5,
         left: 5,

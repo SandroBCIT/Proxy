@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
 const SCREENWIDTH = width

@@ -72,7 +72,6 @@ class Map extends Component {
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
     myCallback(data){
-        navigator.geolocation.clearWatch(this.watchId);
         var latData = parseFloat(data['latitude']);
         var longData = parseFloat(data['longitude']);
         var latDeltaData = LATITUDE_DELTA;

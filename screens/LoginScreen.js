@@ -129,9 +129,7 @@ class LoginScreen extends Component {
 ////            this.goToHome();
 //            alert('logged in');
 //        }
-    
-    
-            
+           
 
     triggerAnim(){
         this.setState({
@@ -196,7 +194,7 @@ class LoginScreen extends Component {
 						</TouchableOpacity>
                         <TouchableOpacity onPress={this.alertMsg}>
 							<View style={[styles.btn, styles.btnGoogle]}>
-								<Text style={[styles.baseText, styles.btnLabel]}>login wtih Google</Text>	
+								<Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
 							</View>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={this.triggerAnim}>

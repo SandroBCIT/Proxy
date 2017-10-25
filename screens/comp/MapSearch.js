@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
 const SCREENWIDTH = width
@@ -37,7 +36,7 @@ class MapSearch extends Component {
 				</TouchableHighlight>
                 <GooglePlacesAutocomplete
                     
-                    placeholder='Search'
+                    placeholder='where are you going?'
                     minLength={2} 
                     autoFocus={false}
                     returnKeyType={'search'} 
@@ -73,16 +72,16 @@ class MapSearch extends Component {
                     }}
 
                     styles={{
-                        textInputContainer: {backgroundColor: 'white', marginRight: 20, borderRadius: 5},
+                        textInputContainer: {backgroundColor: 'white', marginRight: 20, borderRadius: 5, height: 45,borderWidth: 1, borderColor: '#58378F'},
                         description: {fontWeight: 'bold'},
                         predefinedPlacesDescription: {color: '#1faadb'},
-                        listView: {backgroundColor: 'white', borderRadius: 10},
+                        listView: {backgroundColor: 'white', marginRight: 20, paddingRight: 20},
                         poweredContainer: {display: 'none'}
                     }}
 
                     nearbyPlacesAPI='GooglePlacesSearch' 
                     GooglePlacesSearchQuery={{
-                    rankby: 'distance',
+                        rankby: 'distance',
                     }}
 
                     debounce={200} 
@@ -97,13 +96,14 @@ class MapSearch extends Component {
 const styles = StyleSheet.create({
     mapSearch: {
 		flexDirection: 'row',
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		marginTop: 20
     },
 	hamburgerBtn: {
-		width: 22,
-		height: 20,
-		marginHorizontal: 20
+		width: 27,
+		height: 25,
+		marginHorizontal: 20,
+		marginTop: 10
 	}
 });
 

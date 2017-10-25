@@ -169,7 +169,7 @@ class Map extends Component {
                         </View>
                     </MapView.Marker>
                 </MapView>
-                <MapSearch callbackFromParent={this.myCallback} />
+                <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} />
             </View>
         );
     }

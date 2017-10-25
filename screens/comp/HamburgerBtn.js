@@ -11,13 +11,13 @@ class HamburgerBtn extends Component {
     render() {
         return (
             <TouchableHighlight 
-                style= {styles.hamburerBtn}
+                style= {styles.hamburgerBtnCont}
                 onPress={this.props.whatToDo} 
                 underlayColor='rgba(0,0,0,0)'>
 
                 <Image
-                    source={require('../../img/hamburger.png')}
-                    style={{width: 40, height: 40}}
+                    source={require('../../img/icon-p-menu.png')}
+                    style={styles.hamburgerBtn}
                 />
             </TouchableHighlight>
         );
@@ -27,13 +27,17 @@ class HamburgerBtn extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    hamburerBtn: { 
+    hamburgerBtnCont: { 
         position: 'absolute',
         top: 5,
         left: 5,
         width: 40, 
         height: 40   
     },
+	hamburgerBtn: {
+		width: 40,
+		height: 40
+	}
 });
 
 export default HamburgerBtn;

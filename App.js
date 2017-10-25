@@ -11,11 +11,11 @@ import TestScreen from './screens/TestScreen';
 
 export default Proxy = DrawerNavigator({
 //    Test: { screen: TestScreen },
-    Login: { 
-        screen: LoginScreen,
-        navigationOptions: ({navigation}) => ({
-        drawerLockMode: 'locked-closed'
-    })},
+//    Login: { 
+//        screen: LoginScreen,
+//        navigationOptions: ({navigation}) => ({
+//        drawerLockMode: 'locked-closed'
+//    })},
     Home: { screen: HomeScreen },
     Settings: { screen: SettingsScreen }
 },

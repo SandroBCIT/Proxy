@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 
@@ -17,14 +17,24 @@ class MapSearch extends Component {
         
         this.state = { 
         }
+		
+	
     }
-    
     
 //-------------------------------------------------------------------------    
 
     render() {
         return (
             <View style={styles.mapSearch}>
+				<TouchableHighlight 
+					onPress={this.props.hamburgerFunction} 
+					
+				>
+					<Image
+						source={require('../../img/icon-p-menu.png')}
+						style={styles.hamburgerBtn}
+					/>
+				</TouchableHighlight>
                 <GooglePlacesAutocomplete
                     
                     placeholder='Search'
@@ -63,7 +73,7 @@ class MapSearch extends Component {
                     }}
 
                     styles={{
-                        textInputContainer: {backgroundColor: 'white', borderRadius: 10},
+                        textInputContainer: {backgroundColor: 'white', marginRight: 20, borderRadius: 5},
                         description: {fontWeight: 'bold'},
                         predefinedPlacesDescription: {color: '#1faadb'},
                         listView: {backgroundColor: 'white', borderRadius: 10},
@@ -86,13 +96,15 @@ class MapSearch extends Component {
 
 const styles = StyleSheet.create({
     mapSearch: {
-        flex: 1,
-        alignSelf: 'flex-end',
-        height: '10%',
-        width: '80%',
-        marginTop: 5,
-        marginRight: 10
-    }
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 20
+    },
+	hamburgerBtn: {
+		width: 22,
+		height: 20,
+		marginHorizontal: 20
+	}
 });
 
 export default MapSearch;

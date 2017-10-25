@@ -25,8 +25,7 @@ class HomeScreen extends Component {
     render() {
         return (
             <View style={styles.viewContainer}>
-                <Map />
-                <HamburgerBtn whatToDo={this.hamburgerFunction} />
+                <Map hamburgerFunction={this.hamburgerFunction}/>
             </View>
         );
     }

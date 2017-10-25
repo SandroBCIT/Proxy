@@ -156,14 +156,14 @@ class LoginScreen extends Component {
                 <View style={styles.viewContainer}>
                     <Image 
                         style={styles.logo}
-                        source={require('../img/pin1.png')}
+                        source={require('../img/proxy-logo.png')}
                     />
                     <View style={styles.inputContainer} >
-                        <Text style={styles.inputLabel} >Email</Text>
+                        <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
                         <TextInput 
                             keyboardType='email-address'
                             returnKeyType='next'
-                            style={styles.input}
+                            style={[styles.baseText, styles.input]}
                             placeholder='example@email.com'
                             underlineColorAndroid='transparent'
                             autoCapitalize='none'
@@ -171,11 +171,11 @@ class LoginScreen extends Component {
                             onChangeText={this.storeUserEmail}
                             onSubmitEditing={() => this.passwordInput.focus()}
                         />
-                        <Text style={styles.inputLabel} >Password</Text>
+                        <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
                         <TextInput 
                             secureTextEntry
                             returnKeyType='go'
-                            style={styles.input}
+                            style={[styles.baseText, styles.input]}
                             placeholder='**********'
                             underlineColorAndroid='transparent'
                             ref={(input) => this.passwordInput = input}
@@ -184,26 +184,23 @@ class LoginScreen extends Component {
                         />  
                     </View>
                     <View style={styles.btnContainer}>
-                        <Button
-                            title='Log In'
-                            color='#634198'
-                            accessibilityLabel='Learn more about this purple button'
-                            onPress={this.loginUser}
-                        />  
-                        <Button
-                            onPress={this.alertMsg}
-                            title='Log In with Facebook'
-                            color='blue'
-                            accessibilityLabel='Learn more about this purple button'
-                        />
-                        <Button
-                            onPress={this.alertMsg}
-                            title='Log In with Google'
-                            color='red'
-                            accessibilityLabel='Learn more about this purple button'
-                        />
-                        <TouchableOpacity onPress={this.triggerAnim}>
-                            <Text style={styles.signupText}>sign up</Text>
+						<TouchableOpacity onPress={this.loginUser}>
+							<View style={[styles.btn, styles.btnLogin]}>
+								<Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={this.alertMsg}>
+							<View style={[styles.btn, styles.btnFacebook]}>
+								<Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
+							</View>
+						</TouchableOpacity>
+                        <TouchableOpacity onPress={this.alertMsg}>
+							<View style={[styles.btn, styles.btnGoogle]}>
+								<Text style={[styles.baseText, styles.btnLabel]}>login wtih Google</Text>	
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={this.triggerAnim}>
+                            <Text style={[styles.baseText, styles.signupText]}>sign up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -216,44 +213,69 @@ class LoginScreen extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    wrapper: {
-        height: '100%',
-        width: '100%'
-    },
-    viewContainer: {
-        flex: 1,
-        alignSelf: 'stretch',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: '#FFEBEBEB',
-        paddingHorizontal: 50,
-        marginTop: 24
-    },
-    logo: {
-        alignSelf: 'center',
-        width: 100,
-        height: 100
-    },
-    inputContainer: {
-        padding: 20     
-    },
-    inputLabel: {
-        marginVertical: 5
-    },
-    input: {
-        height: 40,
-        backgroundColor: 'rgba(255,255,255,1)',
-        marginBottom: 20,
-        paddingLeft: 20
-    },
-    btnContainer: {
-        paddingHorizontal: 20,
-        height: 180,
-        justifyContent: 'space-between'
-    },
-    signupText: {
-        textAlign: 'center'
-    }
+	wrapper: {
+		height: '100%',
+		width: '100%'
+	},
+	viewContainer: {
+		flex: 1,
+		alignSelf: 'stretch',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		backgroundColor: '#E9E9E9',
+		paddingHorizontal: 50,
+	},
+	baseText: {
+		fontFamily: 'Roboto'
+	},
+	logo: {
+		alignSelf: 'center',
+		width: 183,
+		height: 55
+	},
+	inputContainer: {
+		marginVertical: 20
+	},
+	inputLabel: {
+		marginVertical: 5,
+		paddingHorizontal: 15,
+		color: '#58378F'
+	},
+	input: {
+		height: 40,
+		backgroundColor: 'rgba(255,255,255,1)',
+		marginBottom: 10,
+		paddingLeft: 15,
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: '#58378F'
+	},
+	btnContainer: {
+		height: 180,
+		justifyContent: 'space-between'
+	},
+	btn: {
+		height: 35,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+	},
+	btnLabel: {
+		color: '#E9E9E9'
+	},
+	btnLogin: {
+		backgroundColor: '#58378F'
+	},
+	btnFacebook: {
+		backgroundColor: '#314E8F'
+	},
+	btnGoogle: {
+		backgroundColor: '#D7282D'
+	},
+	signupText: {
+		textAlign: 'center',
+		color: '#58378F'
+	}
 });
 
 export default LoginScreen;

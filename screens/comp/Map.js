@@ -158,6 +158,7 @@ class Map extends Component {
                     style={styles.map}
                     region={this.state.screenPosition}
                     rotateEnabled={false}
+                    loadingEnabled={true}
                     onLongPress={(data) => this.onLongPress(data)}
                 >
                 

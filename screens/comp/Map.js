@@ -31,16 +31,17 @@ class Map extends Component {
             },
             targetMarkerPosition: {  
             },
-            circleRadius: 10,
+            circleRadius: 300,
             circleIndex: 9999,
             testPosition: {
                 latitude: 49.2827,
                 longitude: -123.1207
-            },
-            radiusToggle: false            
+            }          
         }
+        
         this.myCallback = this.myCallback.bind(this);
         this.setRadius = this.setRadius.bind(this);
+        this.onLongPress = this.onLongPress.bind(this);
     }
     
     //before component gets rendered
@@ -78,19 +79,8 @@ class Map extends Component {
                 latDelta = parseFloat(position.coords.latitudeDelta)
                 longDelta = parseFloat(position.coords.longitudeDelta)
 
-            }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: false, timeout: 1000, maximumAge: 500})
-            
-            if(this.state.radiusToggle == true){
-                radiusMarker = <MapView.Circle 
-                                    center={this.state.locationMarkerPosition}
-                                    radius={this.state.circleRadius}
-                                    zIndex={this.state.circleIndex}
-                                />;
-                this.setState({
-                    radiusToggle: false    
-                });
-            }
-        }, 2000); 
+            }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
+        }, 500); 
     }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
@@ -124,11 +114,41 @@ class Map extends Component {
                         />;  
     }
     
-    setRadius(){
-        this.setState({
-            radiusToggle: true
-        });   
+    onLongPress(data){
+        //converts cyclic object into string 
+        data.myself = data
+
+        seen = []
+
+        json = JSON.stringify(data, function(key, val) {
+           if (typeof val == "object") {
+                if (seen.indexOf(val) >= 0)
+                    return
+                seen.push(val)
+            }
+            return val
+        })
+
+        alert(json);
+        
+        
+        
+        
+//        targetMarker =  <MapView.Marker 
+//                            coordinate={latitude: data.latitude, longitude: data.latitude}
+//                        />;   
     }
+    
+    setRadius(){
+        radiusMarker =  <MapView.Circle 
+                            center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
+                            radius={this.state.circleRadius}
+                            zIndex={this.state.circleIndex}
+                            fillColor='lightgreen'
+                        />;
+    }
+                            
+    
     
     //before component gets trashed
     componentWillUnmount(){
@@ -145,17 +165,15 @@ class Map extends Component {
                 <MapView
                     provider='google'
                     style={styles.map}
-                    region={this.state.screenPosition} 
+                    region={this.state.screenPosition}
+                    rotateEnabled={false}
+                    onLongPress={(data) => this.onLongPress(data)}
                 >
-                                <MapView.Circle 
-                                    center={this.state.screenPosition}
-                                    radius={this.state.circleRadius}
-                                    zIndex={this.state.circleIndex}
-                                    fillColor='green'
-                                />
+                
+            
                     {radiusMarker}
                     {targetMarker}
-            
+
                     <MapView.Marker 
                         coordinate={this.state.locationMarkerPosition}
                         anchor={{ x: 0.5, y: 0.5 }}
@@ -166,6 +184,7 @@ class Map extends Component {
                     </MapView.Marker>
                 </MapView>
                 <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} />
+                {setRadiusBtn}
             </View>
         );
     }
@@ -206,7 +225,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#007AFF'
     },
     setRadiusBtn: {
-           
+              
     }
 });
 

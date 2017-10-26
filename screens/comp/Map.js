@@ -29,8 +29,6 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            targetMarkerPosition: {  
-            },
             circleRadius: 300,
             circleIndex: 9999,
             testPosition: {
@@ -98,9 +96,9 @@ class Map extends Component {
         }
         
         this.setState({
-            searchLocation:searchLocation,
-            screenPosition:searchLocation,
-            targetMarkerPosition:searchLocation
+            searchLocation: searchLocation,
+            screenPosition: searchLocation,
+            targetMarkerPosition: searchLocation
         });
         
         targetMarker =  <MapView.Marker 
@@ -115,28 +113,21 @@ class Map extends Component {
     }
     
     onLongPress(data){
-        //converts cyclic object into string 
-        data.myself = data
-
-        seen = []
-
-        json = JSON.stringify(data, function(key, val) {
-           if (typeof val == "object") {
-                if (seen.indexOf(val) >= 0)
-                    return
-                seen.push(val)
-            }
-            return val
-        })
-
-        alert(json);
+        var longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
+        var longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
         
+        var newTargetMarker = {
+            latitude: longPressLat,
+            longitude: longPressLong,   
+        }
         
+        this.setState({
+            targetMarkerPosition: newTargetMarker
+        });
         
-        
-//        targetMarker =  <MapView.Marker 
-//                            coordinate={latitude: data.latitude, longitude: data.latitude}
-//                        />;   
+        targetMarker =  <MapView.Marker 
+                            coordinate={{latitude: longPressLat, longitude: longPressLong}}
+                        />;   
     }
     
     setRadius(){

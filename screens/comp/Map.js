@@ -252,6 +252,7 @@ class Map extends Component {
                             style = {styles.coverView}
                         />;
 
+        setRadiusBtn = null;
         removePinBtn = null;
     }
     
@@ -264,6 +265,11 @@ class Map extends Component {
         remRadiusBtn = null;
         coverView = null;
         
+        setRadiusBtn =  <Button
+                            title='Set Radius'
+                            color='green'
+                            onPress={this.setRadius}
+                        />;
         removePinBtn =  <Button
                             title='Remove Pin'
                             color='orangered'

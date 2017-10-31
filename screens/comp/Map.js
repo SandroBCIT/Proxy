@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View, Text, Button } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration } from 'react-native';
 import MapSearch from './MapSearch';
 
 const {width,height} = Dimensions.get('window')
@@ -12,7 +12,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
 var locRefresh = null;
 var setRadiusBtn = null;
+var remRadiusBtn = null;
 var radiusMarker = null;
+var removePinBtn = null;
+var coverView = null;
 
 class Map extends Component {
     constructor(props) {
@@ -29,21 +32,26 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleRadius: 300,
+            circleRadius: 10,//in METERS
             circleIndex: 9999,
             testPosition: {
                 latitude: 49.2827,
                 longitude: -123.1207
-            }          
+            },
+            checkDistance: false,
         }
         
         this.myCallback = this.myCallback.bind(this);
         this.setRadius = this.setRadius.bind(this);
+        this.remRadius = this.remRadius.bind(this);
         this.onLongPress = this.onLongPress.bind(this);
+        this.displayAlert = this.displayAlert.bind(this);
+        this.onPressPinRemover = this.onPressPinRemover.bind(this);
     }
     
     //before component gets rendered
     componentWillMount(){
+        
         //only used for initial position - gets overwritten later in this function
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
@@ -52,8 +60,8 @@ class Map extends Component {
         locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
-                var lat = /*49.2827*/ parseFloat(position.coords.latitude)
-                var long = /*-123.1207*/ parseFloat(position.coords.longitude)
+                var lat = parseFloat(position.coords.latitude)
+                var long = parseFloat(position.coords.longitude)
                 var latDelta2 = latDelta
                 var longDelta2 = longDelta
                 
@@ -78,11 +86,81 @@ class Map extends Component {
                 longDelta = parseFloat(position.coords.longitudeDelta)
 
             }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
+            
+            if(this.state.checkDistance == true){
+                //converts radius from meters to lat/long scale
+                var radius = (0.00001*(this.state.circleRadius));
+                
+                var xLoc = this.state.locationMarkerPosition['longitude'];
+                var yLoc = this.state.locationMarkerPosition['latitude'];
+                var xDest = this.state.targetMarkerPosition['longitude'];
+                var yDest = this.state.targetMarkerPosition['latitude'];
+
+                //calculates distance from location to targetMarker
+                var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
+                
+                if(distance <= radius){
+                    
+                    
+                    const DURATION = 5000
+                    const PATTERN = [0, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50,
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50,
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50]
+                    
+//                    fast version[0, 100, 400, 100, 100, 100, 100, 100, 400, 100, 900, 100, 400, 100]
+
+//                    Vibration.vibrate(DURATION)
+
+                    Vibration.vibrate(PATTERN)
+
+//                    Vibration.vibrate(PATTERN, true)
+
+//                    Vibration.cancel()
+                    
+                    this.displayAlert();
+                    
+                    //resetting variables
+                    this.setState({
+                        checkDistance: false        
+                    });
+
+                    radiusMarker = null;
+                    remRadiusBtn = null;
+                    coverView = null;
+                }   
+            }
+            
         }, 500); 
+    }
+    
+    displayAlert(){
+        Alert.alert(
+            'You have Arrived!!',
+            '',
+            [
+                {text: 'OK', onPress: () =>{
+                        Vibration.cancel()
+                        //resetting variables
+                        this.setState({
+                            checkDistance: false        
+                        });
+
+                        radiusMarker = null;
+                        remRadiusBtn = null;
+                        coverView = null;
+                    }
+                }
+            ],
+            { cancelable: false }
+            ) 
     }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
     myCallback(data){
+        radiusMarker = null;
+        
         var latData = parseFloat(data['latitude']);
         var longData = parseFloat(data['longitude']);
         var latDeltaData = LATITUDE_DELTA;
@@ -104,6 +182,7 @@ class Map extends Component {
         targetMarker =  <MapView.Marker 
                             coordinate={this.state.targetMarkerPosition}
                         />;
+        
         setRadiusBtn =  <Button
                             style = {styles.setRadiusBtn}
                             title='Set Radius'
@@ -127,21 +206,77 @@ class Map extends Component {
         
         targetMarker =  <MapView.Marker 
                             coordinate={{latitude: longPressLat, longitude: longPressLong}}
-                        />;   
+                        />; 
+
+        setRadiusBtn =  <Button
+                            title='Set Radius'
+                            color='green'
+                            onPress={this.setRadius}
+                        />; 
+
+        removePinBtn =  <Button
+                            title='RemovePin'
+                            color='orangered'
+                            onPress={this.onPressPinRemover}
+                        />;
     }
     
+    onPressPinRemover(){
+        if(targetMarker != null){
+            targetMarker = null;  
+            setRadiusBtn = null;
+            removePinBtn = null;
+        }
+    }
+           
     setRadius(){
+        this.setState({
+            checkDistance: true   
+        });
+        
         radiusMarker =  <MapView.Circle 
                             center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
                             radius={this.state.circleRadius}
                             zIndex={this.state.circleIndex}
                             fillColor='lightgreen'
                         />;
-    }
                             
+        remRadiusBtn =  <Button
+                            style = {styles.setRadiusBtn}
+                            title='Cancel'
+                            color='red'
+                            onPress={this.remRadius}
+                        />; 
+
+        coverView =     <View
+                            style = {styles.coverView}
+                        />;
+
+        setRadiusBtn = null;
+        removePinBtn = null;
+    }
     
+    remRadius(){
+        this.setState({
+            checkDistance: false   
+        });
+        
+        radiusMarker = null;
+        remRadiusBtn = null;
+        coverView = null;
+        
+        setRadiusBtn =  <Button
+                            title='Set Radius'
+                            color='green'
+                            onPress={this.setRadius}
+                        />;
+        removePinBtn =  <Button
+                            title='Remove Pin'
+                            color='orangered'
+                            onPress={this.onPressPinRemover}
+                        />;
+    }
     
-    //before component gets trashed
     componentWillUnmount(){
         clearInterval(locRefresh);
     }
@@ -160,8 +295,8 @@ class Map extends Component {
                     rotateEnabled={false}
                     loadingEnabled={true}
                     onLongPress={(data) => this.onLongPress(data)}
+                    onPress={this.onPressPinRemover}
                 >
-                
             
                     {radiusMarker}
                     {targetMarker}
@@ -176,7 +311,10 @@ class Map extends Component {
                     </MapView.Marker>
                 </MapView>
                 <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} />
+                {coverView}
                 {setRadiusBtn}
+                {removePinBtn}
+                {remRadiusBtn}
             </View>
         );
     }
@@ -216,9 +354,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: '#007AFF'
     },
-    setRadiusBtn: {
-              
+    coverView: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(0,0,0,0.2)'
     }
+    
 });
 
 export default Map;

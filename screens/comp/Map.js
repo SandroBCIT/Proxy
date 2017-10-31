@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View, Text, Button } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration } from 'react-native';
 import MapSearch from './MapSearch';
 
 const {width,height} = Dimensions.get('window')
@@ -14,6 +14,7 @@ var locRefresh = null;
 var setRadiusBtn = null;
 var remRadiusBtn = null;
 var radiusMarker = null;
+var removePinBtn = null;
 var coverView = null;
 
 class Map extends Component {
@@ -31,7 +32,7 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleRadius: 10,
+            circleRadius: 10,//in METERS
             circleIndex: 9999,
             testPosition: {
                 latitude: 49.2827,
@@ -44,10 +45,13 @@ class Map extends Component {
         this.setRadius = this.setRadius.bind(this);
         this.remRadius = this.remRadius.bind(this);
         this.onLongPress = this.onLongPress.bind(this);
+        this.displayAlert = this.displayAlert.bind(this);
+        this.onPressPinRemover = this.onPressPinRemover.bind(this);
     }
     
     //before component gets rendered
     componentWillMount(){
+        
         //only used for initial position - gets overwritten later in this function
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
@@ -96,18 +100,61 @@ class Map extends Component {
                 var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
                 
                 if(distance <= radius){
-                    alert('You have ARRIVED');
+                    
+                    
+                    const DURATION = 5000
+                    const PATTERN = [0, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50,
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50,
+                                     450, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50]
+                    
+//                    fast version[0, 100, 400, 100, 100, 100, 100, 100, 400, 100, 900, 100, 400, 100]
+
+//                    Vibration.vibrate(DURATION)
+
+                    Vibration.vibrate(PATTERN)
+
+//                    Vibration.vibrate(PATTERN, true)
+
+//                    Vibration.cancel()
+                    
+                    this.displayAlert();
+                    
+                    //resetting variables
                     this.setState({
                         checkDistance: false        
                     });
-        
+
                     radiusMarker = null;
                     remRadiusBtn = null;
                     coverView = null;
-                }
+                }   
             }
             
         }, 500); 
+    }
+    
+    displayAlert(){
+        Alert.alert(
+            'You have Arrived!!',
+            '',
+            [
+                {text: 'OK', onPress: () =>{
+                        Vibration.cancel()
+                        //resetting variables
+                        this.setState({
+                            checkDistance: false        
+                        });
+
+                        radiusMarker = null;
+                        remRadiusBtn = null;
+                        coverView = null;
+                    }
+                }
+            ],
+            { cancelable: false }
+            ) 
     }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
@@ -145,8 +192,6 @@ class Map extends Component {
     }
     
     onLongPress(data){
-        radiusMarker = null;  
-        
         var longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
         var longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
         
@@ -164,13 +209,26 @@ class Map extends Component {
                         />; 
 
         setRadiusBtn =  <Button
-                            style = {styles.setRadiusBtn}
                             title='Set Radius'
                             color='green'
                             onPress={this.setRadius}
-                        />;  
+                        />; 
+
+        removePinBtn =  <Button
+                            title='RemovePin'
+                            color='orangered'
+                            onPress={this.onPressPinRemover}
+                        />;
     }
     
+    onPressPinRemover(){
+        if(targetMarker != null){
+            targetMarker = null;  
+            setRadiusBtn = null;
+            removePinBtn = null;
+        }
+    }
+           
     setRadius(){
         this.setState({
             checkDistance: true   
@@ -193,6 +251,8 @@ class Map extends Component {
         coverView =     <View
                             style = {styles.coverView}
                         />;
+
+        removePinBtn = null;
     }
     
     remRadius(){
@@ -203,6 +263,12 @@ class Map extends Component {
         radiusMarker = null;
         remRadiusBtn = null;
         coverView = null;
+        
+        removePinBtn =  <Button
+                            title='Remove Pin'
+                            color='orangered'
+                            onPress={this.onPressPinRemover}
+                        />;
     }
     
     componentWillUnmount(){
@@ -223,6 +289,7 @@ class Map extends Component {
                     rotateEnabled={false}
                     loadingEnabled={true}
                     onLongPress={(data) => this.onLongPress(data)}
+                    onPress={this.onPressPinRemover}
                 >
             
                     {radiusMarker}
@@ -240,6 +307,7 @@ class Map extends Component {
                 <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} />
                 {coverView}
                 {setRadiusBtn}
+                {removePinBtn}
                 {remRadiusBtn}
             </View>
         );

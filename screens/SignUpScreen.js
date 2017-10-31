@@ -44,8 +44,7 @@ class SignUpScreen extends Component {
     openAnim(){
         Animated.timing(this.state.animVal, {
             toValue: 0,
-            duration: 1000,
-            easing: Easing.bounce
+            duration: 500
         }).start();
     }
     
@@ -119,7 +118,7 @@ class SignUpScreen extends Component {
         return (
             <Animated.View style={[styles.signUpArea, animatedStyle]}>
                 <View style={styles.inputContainer} >
-                    <Text style={styles.inputLabel} >Email</Text>
+                    <Text style={styles.inputLabel} >email</Text>
                     <TextInput 
                         keyboardType='email-address'
                         returnKeyType='next'
@@ -131,7 +130,7 @@ class SignUpScreen extends Component {
                         onChangeText={this.storeUserEmail2}
                         onSubmitEditing={() => this.passwordInput.focus()}
                     />
-                    <Text style={styles.inputLabel}>Password</Text>
+                    <Text style={styles.inputLabel}>password</Text>
                     <TextInput 
                         secureTextEntry
                         returnKeyType='next'
@@ -142,7 +141,7 @@ class SignUpScreen extends Component {
                         onChangeText={this.storeUserPassword2}
                         onSubmitEditing={() => this.passwordInputCheck.focus()}
                     /> 
-                    <Text style={styles.inputLabel}>Re-Enter Password
+                    <Text style={styles.inputLabel}>re-enter password
                             <Text style={styles.matchAlert}>{checkRes}</Text>
                     </Text>
                     <TextInput 
@@ -155,14 +154,14 @@ class SignUpScreen extends Component {
                         onChangeText={this.storeUserPasswordCheck}
                         onSubmitEditing={this.passCheck}
                     />
-                    <Button
-                        onPress={this.passCheck}
-                        title='Sign Up'
-                        color='#634198'
-                    /> 
-                    <TouchableOpacity onPress={this.closeAnim} style={styles.backToSignUp}>
+					<TouchableOpacity onPress={this.passCheck}>
+						<View style={styles.btn}>
+							<Text style={[styles.baseText, styles.btnLabel]}>sign up</Text>	
+						</View>
+					</TouchableOpacity>
+                    <TouchableOpacity onPress={this.closeAnim}>
                         <Text style={styles.loginText}>Already have an account?</Text>
-                        <Text style={styles.loginText}>Login here</Text>
+                        <Text style={[styles.loginText, styles.loginTextHighlight]}>Login here</Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>
@@ -173,35 +172,51 @@ class SignUpScreen extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    signUpArea: {
-        position: 'absolute',
-        backgroundColor: 'lightgrey',
-        width: width,
-        height: height,
-        marginTop: 24
-    },
-    inputContainer: {
-        padding: 20     
-    },
-    inputLabel: {
-        marginVertical: 5,
-        width: '100%',
-    },
-    input: {
-        height: 40,
-        backgroundColor: 'rgba(255,255,255,1)',
-        marginBottom: 20,
-        paddingLeft: 20
-    },
-    matchAlert: {
-        color: 'red',
-    },
-    backToSignUp: {
-        marginTop: 30
-    },
-    loginText: {
-        textAlign: 'center'
-    }
+	signUpArea: {
+		position: 'absolute',
+		backgroundColor: 'lightgrey',
+		width: width,
+		height: height,
+		marginTop: 24
+	},
+	inputContainer: {
+		paddingHorizontal: 50,
+		paddingTop: 50
+	},
+	inputLabel: {
+		marginVertical: 5,
+		paddingHorizontal: 15,
+		color: '#58378F'
+	},
+	input: {
+		height: 40,
+		backgroundColor: 'rgba(255,255,255,1)',
+		marginBottom: 10,
+		paddingLeft: 15,
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: '#58378F'
+	},
+	btn: {
+		height: 35,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+		backgroundColor: '#58378F',
+		marginVertical: 30
+	},
+	btnLabel: {
+		color: '#E9E9E9'
+	},
+	matchAlert: {
+		color: 'red',
+	},
+	loginText: {
+		textAlign: 'center'
+	},
+	loginTextHighlight: {
+		color: '#58378F'
+	}
 });
 
 export default SignUpScreen;

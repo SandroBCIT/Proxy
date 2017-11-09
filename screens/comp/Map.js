@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration } from 'react-native';
 import MapSearch from './MapSearch';
 
@@ -47,17 +47,22 @@ class Map extends Component {
         this.onLongPress = this.onLongPress.bind(this);
         this.displayAlert = this.displayAlert.bind(this);
         this.onPressPinRemover = this.onPressPinRemover.bind(this);
+        this.makeRefresh = this.makeRefresh.bind(this);
+        this.clearRefresh = this.clearRefresh.bind(this);
     }
     
-    //before component gets rendered
-    componentWillMount(){
-        
+    clearRefresh(){
+        console.log("clear");
+        clearInterval(this.locRefresh);
+    }
+    
+    makeRefresh(){
         //only used for initial position - gets overwritten later in this function
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
-        
+        var start = false;
         //updates location marker (blue circle)
-        locRefresh = setInterval(()=>{
+        this.locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
                 var lat = parseFloat(position.coords.latitude)
@@ -65,11 +70,18 @@ class Map extends Component {
                 var latDelta2 = latDelta
                 var longDelta2 = longDelta
                 
-                var lastScreenRegion = {
-                    latitude: lat,
-                    longitude: long,
-                    latitudeDelta: latDelta2,
-                    longitudeDelta: longDelta2
+                if(!start){
+                    start = true;
+                    var lastScreenRegion = {
+                        latitude: lat,
+                        longitude: long,
+                        latitudeDelta: latDelta2,
+                        longitudeDelta: longDelta2
+                    }
+                
+                    this.setState({
+                        screenPosition: lastScreenRegion
+                    });
                 }
 
                 var lastMarkerRegion = {
@@ -78,12 +90,8 @@ class Map extends Component {
                 }
 
                 this.setState({
-                    screenPosition: lastScreenRegion,
                     locationMarkerPosition: lastMarkerRegion
                 });
-
-                latDelta = parseFloat(position.coords.latitudeDelta)
-                longDelta = parseFloat(position.coords.longitudeDelta)
 
             }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
             
@@ -100,7 +108,6 @@ class Map extends Component {
                 var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
                 
                 if(distance <= radius){
-                    
                     
                     const DURATION = 5000
                     const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000]
@@ -131,6 +138,11 @@ class Map extends Component {
             }
             
         }, 500); 
+    }
+    //before component gets rendered
+    componentWillMount(){
+        
+        this.makeRefresh();
     }
     
     displayAlert(){
@@ -287,9 +299,12 @@ class Map extends Component {
         return (
             <View style={styles.viewContainer}>
                 <MapView
-                    provider='google'
+                    provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={this.state.screenPosition}
+                    onRegionChange={(reg)=>{
+                        this.setState({screenPosition:reg})
+                    }}
                     rotateEnabled={false}
                     loadingEnabled={true}
                     onLongPress={(data) => this.onLongPress(data)}
@@ -308,7 +323,10 @@ class Map extends Component {
                         </View>
                     </MapView.Marker>
                 </MapView>
-                <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} />
+                <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} 
+                    clear={this.clearRefresh}
+                    make={this.makeRefresh}
+                />
                 {coverView}
                 {setRadiusBtn}
                 {removePinBtn}

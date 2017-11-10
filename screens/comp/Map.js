@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration } from 'react-native';
 import MapSearch from './MapSearch';
+import HamburgerBtn from './HamburgerBtn';
 
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
@@ -310,7 +311,7 @@ class Map extends Component {
                     onLongPress={(data) => this.onLongPress(data)}
                     onPress={this.onPressPinRemover}
                 >
-            
+
                     {radiusMarker}
                     {targetMarker}
 
@@ -318,12 +319,13 @@ class Map extends Component {
                         coordinate={this.state.locationMarkerPosition}
                         anchor={{ x: 0.5, y: 0.5 }}
                     >
-                        <View style={styles.locationRadius}>
-                            <View style={styles.locationMarker} />
-                        </View>
+                    <View style={styles.locationRadius}>
+                        <View style={styles.locationMarker} />
+                    </View>
                     </MapView.Marker>
                 </MapView>
-                <MapSearch hamburgerFunction={this.props.hamburgerFunction} callbackFromParent={this.myCallback} 
+				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
+                <MapSearch callbackFromParent={this.myCallback} 
                     clear={this.clearRefresh}
                     make={this.makeRefresh}
                 />
@@ -341,7 +343,8 @@ class Map extends Component {
 const styles = StyleSheet.create({
     viewContainer: {
         height: '100%',
-        width: '100%'
+        width: '100%',
+        flexDirection: 'column'
     },
     map: {
         left: 0,

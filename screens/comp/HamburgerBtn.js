@@ -12,7 +12,7 @@ class HamburgerBtn extends Component {
         return (
             <TouchableHighlight 
                 style= {styles.hamburgerBtnCont}
-                onPress={this.props.whatToDo} 
+                onPress={this.props.hamburgerFunction} 
                 underlayColor='rgba(0,0,0,0)'>
 
                 <Image
@@ -29,15 +29,15 @@ class HamburgerBtn extends Component {
 const styles = StyleSheet.create({
     hamburgerBtnCont: { 
         position: 'absolute',
-        top: 5,
-        left: 5,
+        top: 30,
+        left: 20,
         width: 40, 
         height: 40   
     },
 	hamburgerBtn: {
-		width: 40,
-		height: 40
-	}
+		width: 27,
+		height: 25
+	},
 });
 
 export default HamburgerBtn;

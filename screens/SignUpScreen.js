@@ -4,8 +4,8 @@ import firebase from 'firebase';
 import HamburgerBtn from './comp/HamburgerBtn';
 
 const {height, width} = Dimensions.get('window');
-
 const animVal1 = new Animated.Value(height);
+var checkRes = null;
 
 class SignUpScreen extends Component {
     constructor(props){
@@ -14,18 +14,18 @@ class SignUpScreen extends Component {
         this.state = {
             openSignUp: this.props.openSignUp,
             animVal:new Animated.Value(height),
-            userEmail2:'',
-            userPassword2:'',
+            userEmail:'',
+            userPassword:'',
             userPasswordCheck:'',
             checkResult: ''
         } 
         
         this.openAnim = this.openAnim.bind(this);
         this.closeAnim = this.closeAnim.bind(this);
-        this.storeUserEmail2 = this.storeUserEmail2.bind(this);
-        this.storeUserPassword2 = this.storeUserPassword2.bind(this);
+        this.storeUserEmail = this.storeUserEmail.bind(this);
+        this.storeUserPassword = this.storeUserPassword.bind(this);
         this.storeUserPasswordCheck = this.storeUserPasswordCheck.bind(this);
-        this.passCheck = this.passCheck.bind(this);
+        this.signUserUp = this.signUserUp.bind(this);
     }
     
     componentDidMount(){
@@ -58,58 +58,56 @@ class SignUpScreen extends Component {
     }
     
     //stores Email in state
-    storeUserEmail2(text){
-        const userEmail2 = text;
-        
+    storeUserEmail(text){
         this.setState({
-            userEmail2:userEmail2    
-        });
+            userEmail:text    
+        })
     }
     
     //stores Password in state
-    storeUserPassword2(text){
-        const userPassword2 = text;
-        
+    storeUserPassword(text){
         this.setState({
-            userPassword2:userPassword2    
-        }); 
+            userPassword:text    
+        }) 
     }
     
     //stores Password to be checked in state
     storeUserPasswordCheck(text){
-        const userPasswordCheck = text;
-        
         this.setState({
-            userPasswordCheck:userPasswordCheck    
-        });
+            userPasswordCheck:text    
+        })
     }
     
-    //checks pasword 
-    passCheck(){
-        if(this.state.userPassword2 == this.state.userPasswordCheck){
-            //GetEmail and Pass
-            const email2 = this.state.userEmail2; 
-            const pass2 = this.state.userPassword2;
+    signUserUp(){
+        if(checkRes !== null){
+            alert('passwords do not match');
+        }else{
+        //GetEmail and Pass
+            const email = this.state.userEmail; 
+            const pass = this.state.userPassword;
             const auth = firebase.auth();
             //SignIn
-            const promise = auth.createUserWithEmailAndPassword(email2,pass2);
+            const promise = auth.createUserWithEmailAndPassword(email,pass);
             promise.catch(e => alert(e.message));
             
-            this.closeAnim();             
-        }else{
-            this.setState({
-                checkResult: '       Passwords do not match!'  
-            });   
-        }    
+            if(promise.catch === null){
+                this.closeAnim();
+            }
+        }
     }
     
 //-------------------------------------------------------------------------
     
     render(){
-        const checkRes = this.state.checkResult;
-        
         if(this.state.openSignUp){
             this.openAnim();   
+        }
+        
+        //Checks
+        if(this.state.userPasswordCheck !== '' && this.state.userPassword !== this.state.userPasswordCheck){
+            checkRes = 'Passwords do not match!';    
+        }else{
+            checkRes = null
         }
         
         const animatedStyle = { 
@@ -117,8 +115,8 @@ class SignUpScreen extends Component {
         };
         return (
             <Animated.View style={[styles.signUpArea, animatedStyle]}>
-                <View style={styles.inputContainer} >
-                    <Text style={styles.inputLabel} >email</Text>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.inputLabel}>email</Text>
                     <TextInput 
                         keyboardType='email-address'
                         returnKeyType='next'
@@ -127,7 +125,7 @@ class SignUpScreen extends Component {
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         autoCorrect={false}
-                        onChangeText={this.storeUserEmail2}
+                        onChangeText={this.storeUserEmail}
                         onSubmitEditing={() => this.passwordInput.focus()}
                     />
                     <Text style={styles.inputLabel}>password</Text>
@@ -138,12 +136,10 @@ class SignUpScreen extends Component {
                         placeholder='**********'
                         underlineColorAndroid='transparent'
                         ref={(input) => this.passwordInput = input}
-                        onChangeText={this.storeUserPassword2}
+                        onChangeText={this.storeUserPassword}
                         onSubmitEditing={() => this.passwordInputCheck.focus()}
                     /> 
-                    <Text style={styles.inputLabel}>re-enter password
-                            <Text style={styles.matchAlert}>{checkRes}</Text>
-                    </Text>
+                    <Text style={styles.inputLabel}>re-enter password</Text>
                     <TextInput 
                         secureTextEntry
                         returnKeyType='go'
@@ -152,9 +148,10 @@ class SignUpScreen extends Component {
                         underlineColorAndroid='transparent'
                         ref={(input) => this.passwordInputCheck = input}
                         onChangeText={this.storeUserPasswordCheck}
-                        onSubmitEditing={this.passCheck}
+                        onSubmitEditing={this.signUserUp}
                     />
-					<TouchableOpacity onPress={this.passCheck}>
+                    <Text style={styles.matchAlert}>{checkRes}</Text>
+					<TouchableOpacity onPress={this.signUserUp}>
 						<View style={styles.btn}>
 							<Text style={[styles.baseText, styles.btnLabel]}>sign up</Text>	
 						</View>

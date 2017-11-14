@@ -15,7 +15,6 @@ var setRadiusBtn = null;
 var remRadiusBtn = null;
 var radiusMarker = null;
 var removePinBtn = null;
-var coverView = null;
 
 class Map extends Component {
     constructor(props) {
@@ -37,7 +36,6 @@ class Map extends Component {
         
         this.myCallback = this.myCallback.bind(this);
         this.setRadius = this.setRadius.bind(this);
-        this.remRadius = this.remRadius.bind(this);
         this.onLongPress = this.onLongPress.bind(this);
         this.displayAlert = this.displayAlert.bind(this);
         this.onPressPinRemover = this.onPressPinRemover.bind(this);
@@ -48,6 +46,7 @@ class Map extends Component {
     
     componentWillMount(){
         this.locRefresh();
+        this.circleRefresh();
     }
     
     clearRefresh(){
@@ -55,6 +54,7 @@ class Map extends Component {
         clearInterval(this.circleRefresh);
     }
     
+    //to change circle radius
     circleRefresh(){
         var initVal = this.props.sliderValue;
         this.circleRefresh = setInterval(()=>{
@@ -66,10 +66,11 @@ class Map extends Component {
                                     fillColor='lightgreen'
                                 />; 
                 initVal = this.props.sliderValue;  
-            
-            console.log(this.props.sliderValue, initVal);
             }
-                                         
+            if(this.props.removeOldPin === true){
+                radiusMarker = null;
+                targetMarker = null;   
+            }
         }, 50);
     }
     
@@ -144,17 +145,17 @@ class Map extends Component {
                     this.displayAlert();
                     
                     //resetting variables
-                    this.props.stopCheckDistance(false);
+                    this.props.stopCheckDistance(false)
                     this.props.toggleSetupWindow(false)
+                    this.props.removeRunningWindow(false)
                     
-                    radiusMarker = null;
-                    remRadiusBtn = null;
-                    coverView = null;
-                    targetMarker = null;
+                    radiusMarker = null
+                    remRadiusBtn = null
+                    targetMarker = null
                 }   
             }
             
-        }, 1000); 
+        }, 1000) 
     }
     
     displayAlert(){
@@ -164,9 +165,8 @@ class Map extends Component {
             [
                 {text: 'OK', onPress: () =>{
                         Vibration.cancel()
-                        radiusMarker = null;
-                        remRadiusBtn = null;
-                        coverView = null;
+                        radiusMarker = null
+                        remRadiusBtn = null
                     }
                 }
             ],
@@ -176,12 +176,12 @@ class Map extends Component {
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
     myCallback(data){
-        radiusMarker = null;
+        radiusMarker = null
         
-        var latData = parseFloat(data['latitude']);
-        var longData = parseFloat(data['longitude']);
-        var latDeltaData = LATITUDE_DELTA;
-        var longDeltaData = LONGITUDE_DELTA;
+        var latData = parseFloat(data['latitude'])
+        var longData = parseFloat(data['longitude'])
+        var latDeltaData = LATITUDE_DELTA
+        var longDeltaData = LONGITUDE_DELTA
         
         var searchLocation = {
             latitude: latData,
@@ -209,6 +209,12 @@ class Map extends Component {
     }
     
     onLongPress(data){
+        if(targetMarker != null){
+            targetMarker = null; 
+            radiusMarker = null;
+            this.props.toggleSetupWindow(false);
+        }
+        
         var longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
         var longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
         
@@ -249,54 +255,23 @@ class Map extends Component {
     }
            
     setRadius(){
-        this.props.toggleSetupWindow(true);
-        this.circleRefresh();
+        this.props.toggleSetupWindow(true)
         
         radiusMarker =  <MapView.Circle 
                             center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
                             radius={this.props.sliderValue}
                             zIndex={this.state.circleIndex}
                             fillColor='lightgreen'
-                        />;
-                            
-//        remRadiusBtn =  <Button
-//                            style = {styles.setRadiusBtn}
-//                            title='Cancel'
-//                            color='red'
-//                            onPress={this.remRadius}
-//                        />; 
-
-//        coverView =     <View
-//                            style = {styles.coverView}
-//                        />;
-
-        setRadiusBtn = null;
-        removePinBtn = null;
-    }
-    
-    remRadius(){
-        this.setState({
-            checkDistance: false   
-        });
-        
-        radiusMarker = null;
-        remRadiusBtn = null;
-        coverView = null;
-        
-        setRadiusBtn =  <Button
-                            title='Set Radius'
-                            color='green'
-                            onPress={this.setRadius}
-                        />;
-        removePinBtn =  <Button
-                            title='Remove Pin'
-                            color='orangered'
-                            onPress={this.onPressPinRemover}
-                        />;
+                        />
+                                
+        setRadiusBtn = null
+        removePinBtn = null
     }
     
     componentWillUnmount(){
-        clearInterval(locRefresh);
+        clearInterval(this.locRefresh)
+        clearInterval(this.circleRefresh)
+        alert('unmounting')
     }
 
    
@@ -336,10 +311,8 @@ class Map extends Component {
                     clear={this.clearRefresh}
                     make={this.locRefresh}
                 />
-                {coverView}
                 {setRadiusBtn}
                 {removePinBtn}
-                {remRadiusBtn}
             </View>
         );
     }
@@ -379,14 +352,7 @@ const styles = StyleSheet.create({
         borderRadius: 20/2,
         overflow: 'hidden',
         backgroundColor: '#007AFF'
-    },
-    coverView: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(0,0,0,0.2)'
     }
-    
 });
 
 export default Map;

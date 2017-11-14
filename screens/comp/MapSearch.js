@@ -25,15 +25,6 @@ class MapSearch extends Component {
     render() {
         return (
             <View style={styles.mapSearch}>
-				<TouchableHighlight 
-					onPress={this.props.hamburgerFunction} 
-					
-				>
-					<Image
-						source={require('../../img/icon-p-menu.png')}
-						style={styles.hamburgerBtn}
-					/>
-				</TouchableHighlight>
                 <GooglePlacesAutocomplete
                     
                     placeholder='where are you going?'
@@ -97,7 +88,8 @@ const styles = StyleSheet.create({
     mapSearch: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
-		marginTop: 20
+		marginTop: 20,
+        marginLeft: '18%'
     },
 	hamburgerBtn: {
 		width: 27,

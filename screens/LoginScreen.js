@@ -44,7 +44,6 @@ class LoginScreen extends Component {
                 this.goToHome();   
             }
         });
-        
     }
 
     storeUserEmail(text){
@@ -110,9 +109,6 @@ class LoginScreen extends Component {
 //          }
 //          console.log(error);
 //        });
-        
-        
-        
         
         
         

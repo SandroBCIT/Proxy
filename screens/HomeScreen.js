@@ -14,7 +14,7 @@ class HomeScreen extends Component {
         this.state = {
             showSetupWindow: false,
             checkDistance: false,
-            sliderValue: 1000
+            sliderValue: 50
         }
         
         this.hamburgerFunction = this.hamburgerFunction.bind(this);
@@ -56,14 +56,23 @@ class HomeScreen extends Component {
     render() {
         var comp = null;
         if(this.state.showSetupWindow === true){
-            comp = <SetupWindow sliderValue={this.setSliderValue} checkDistance={this.startCheckDistance} />;   
+            comp =  <SetupWindow 
+                        sliderValue={this.setSliderValue} 
+                        checkDistance={this.startCheckDistance} 
+                    />;   
         }else if(this.state.showSetupWindow === false){
             comp = null;  
         }
         
         return (
             <View style={styles.viewContainer}>
-                <Map hamburgerFunction={this.hamburgerFunction} sliderValue={this.state.sliderValue} toggleSetupWindow={this.toggleSetupWindow} checkDistance={this.state.checkDistance} stopCheckDistance={this.stopCheckDistance} />
+                <Map 
+                    hamburgerFunction={this.hamburgerFunction} 
+                    sliderValue={this.state.sliderValue} 
+                    toggleSetupWindow={this.toggleSetupWindow} 
+                    checkDistance={this.state.checkDistance} 
+                    stopCheckDistance={this.stopCheckDistance}
+                />
                 {comp}
             </View>
         );

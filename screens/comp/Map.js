@@ -11,11 +11,6 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
-
-//refreshers
-var locRefresh = null;
-var circleSizeRefresh = null;
-
 var setRadiusBtn = null;
 var remRadiusBtn = null;
 var radiusMarker = null;
@@ -37,12 +32,7 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleRadius: this.props.sliderValue,//in METERS
-            circleIndex: 9999,
-            testPosition: {
-                latitude: 49.2827,
-                longitude: -123.1207
-            }
+            circleIndex: 9999
         }
         
         this.myCallback = this.myCallback.bind(this);
@@ -51,26 +41,44 @@ class Map extends Component {
         this.onLongPress = this.onLongPress.bind(this);
         this.displayAlert = this.displayAlert.bind(this);
         this.onPressPinRemover = this.onPressPinRemover.bind(this);
-        this.makeRefresh = this.makeRefresh.bind(this);
+        this.locRefresh = this.locRefresh.bind(this);
+        this.circleRefresh = this.circleRefresh.bind(this);
         this.clearRefresh = this.clearRefresh.bind(this);
     }
     
     componentWillMount(){
-        this.makeRefresh();
+        this.locRefresh();
     }
     
     clearRefresh(){
-        console.log("clear");
         clearInterval(this.locRefresh);
+        clearInterval(this.circleRefresh);
     }
     
-    makeRefresh(){
+    circleRefresh(){
+        var initVal = this.props.sliderValue;
+        this.circleRefresh = setInterval(()=>{
+            if(this.props.sliderValue !== initVal){
+                radiusMarker =  <MapView.Circle 
+                                    center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
+                                    radius={this.props.sliderValue}
+                                    zIndex={this.state.circleIndex}
+                                    fillColor='lightgreen'
+                                />; 
+                initVal = this.props.sliderValue;  
+            
+            console.log(this.props.sliderValue, initVal);
+            }
+                                         
+        }, 50);
+    }
+    
+    locRefresh(){
         //only used for initial position - gets overwritten later in this function
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
         var start = false;
-        
-        //updates location marker (green circle)
+        //updates location marker (blue circle)
         this.locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
@@ -104,11 +112,10 @@ class Map extends Component {
 
             }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
             
-            console.log(this.props.checkDistance);
             
             if(this.props.checkDistance === true){
                 //converts radius from meters to lat/long scale
-                var radius = (0.00001*(this.state.circleRadius));
+                var radius = (0.00001*(this.props.sliderValue));
                 
                 var xLoc = this.state.locationMarkerPosition['longitude'];
                 var yLoc = this.state.locationMarkerPosition['latitude'];
@@ -117,11 +124,6 @@ class Map extends Component {
 
                 //calculates distance from location to targetMarker
                 var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
-                
-                
-                console.log(distance)
-                console.log(radius)
-                
                 
                 if(distance <= radius){
                     
@@ -248,10 +250,11 @@ class Map extends Component {
            
     setRadius(){
         this.props.toggleSetupWindow(true);
+        this.circleRefresh();
         
         radiusMarker =  <MapView.Circle 
                             center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
-                            radius={this.state.circleRadius}
+                            radius={this.props.sliderValue}
                             zIndex={this.state.circleIndex}
                             fillColor='lightgreen'
                         />;
@@ -292,17 +295,6 @@ class Map extends Component {
                         />;
     }
     
-    this.circleSizeRefresh = setInterval(()=>{
-
-//    resizeRadiusMarker(){
-//        radiusMarker =  <MapView.Circle 
-//                            center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
-//                            radius={this.state.circleRadius}
-//                            zIndex={this.state.circleIndex}
-//                            fillColor='lightgreen'
-//                        />;       
-//    }
-
     componentWillUnmount(){
         clearInterval(locRefresh);
     }
@@ -342,7 +334,7 @@ class Map extends Component {
 				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
                 <MapSearch callbackFromParent={this.myCallback} 
                     clear={this.clearRefresh}
-                    make={this.makeRefresh}
+                    make={this.locRefresh}
                 />
                 {coverView}
                 {setRadiusBtn}

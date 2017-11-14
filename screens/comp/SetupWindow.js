@@ -8,7 +8,7 @@ class SetupWindow extends Component {
         super(props);
         
         this.state = {
-            sliderValue: 1000
+            sliderValue: 50
         }
         this.returnSliderValue = this.returnSliderValue.bind(this);
         this.startCheckDistance = this.startCheckDistance.bind(this);
@@ -20,9 +20,9 @@ class SetupWindow extends Component {
     
     returnSliderValue(data){
         this.setState({
-            sliderValue: data
+            sliderValue: data     
         })
-        this.props.sliderValue(this.state.sliderValue);
+        this.props.sliderValue(data);
     }
     
     startCheckDistance(){
@@ -38,10 +38,10 @@ class SetupWindow extends Component {
                     <Slider
                         style={styles.slider}
                         minimumTrackTintColor = 'green'
-                        maximumValue = {5000}
+                        maximumValue = {100}
                         onValueChange = {this.returnSliderValue}
-                        value = {1000}
-                        step = {100}
+                        value = {50}
+                        step = {10}
                     />  
                     <Text style={styles.text}>
                         {this.state.sliderValue} m

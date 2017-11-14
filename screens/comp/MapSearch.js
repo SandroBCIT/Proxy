@@ -16,8 +16,6 @@ class MapSearch extends Component {
         
         this.state = { 
         }
-		
-	
     }
     
 //-------------------------------------------------------------------------    
@@ -34,7 +32,8 @@ class MapSearch extends Component {
                     listViewDisplayed='auto'  
                     fetchDetails={true}
                     renderDescription={row => row.description} 
-
+                    giveLocation={this.props.giveLocation}
+            
                     onPress={(data, details = null) => {
 
                         var obj = Object.keys(details);

@@ -271,7 +271,6 @@ class Map extends Component {
     componentWillUnmount(){
         clearInterval(this.locRefresh)
         clearInterval(this.circleRefresh)
-        alert('unmounting')
     }
 
    
@@ -310,6 +309,7 @@ class Map extends Component {
                 <MapSearch callbackFromParent={this.myCallback} 
                     clear={this.clearRefresh}
                     make={this.locRefresh}
+                    giveLocation={this.state.locationMarkerPosition}
                 />
                 {setRadiusBtn}
                 {removePinBtn}

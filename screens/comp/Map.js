@@ -11,7 +11,11 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
+
+//refreshers
 var locRefresh = null;
+var circleSizeRefresh = null;
+
 var setRadiusBtn = null;
 var remRadiusBtn = null;
 var radiusMarker = null;
@@ -33,13 +37,12 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleRadius: 30,//in METERS
+            circleRadius: this.props.sliderValue,//in METERS
             circleIndex: 9999,
             testPosition: {
                 latitude: 49.2827,
                 longitude: -123.1207
-            },
-            checkDistance: false,
+            }
         }
         
         this.myCallback = this.myCallback.bind(this);
@@ -52,6 +55,10 @@ class Map extends Component {
         this.clearRefresh = this.clearRefresh.bind(this);
     }
     
+    componentWillMount(){
+        this.makeRefresh();
+    }
+    
     clearRefresh(){
         console.log("clear");
         clearInterval(this.locRefresh);
@@ -62,7 +69,8 @@ class Map extends Component {
         var latDelta = LATITUDE_DELTA
         var longDelta = LONGITUDE_DELTA
         var start = false;
-        //updates location marker (blue circle)
+        
+        //updates location marker (green circle)
         this.locRefresh = setInterval(()=>{
             
             navigator.geolocation.getCurrentPosition((position) => {
@@ -96,7 +104,9 @@ class Map extends Component {
 
             }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
             
-            if(this.state.checkDistance == true){
+            console.log(this.props.checkDistance);
+            
+            if(this.props.checkDistance === true){
                 //converts radius from meters to lat/long scale
                 var radius = (0.00001*(this.state.circleRadius));
                 
@@ -108,9 +118,14 @@ class Map extends Component {
                 //calculates distance from location to targetMarker
                 var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
                 
+                
+                console.log(distance)
+                console.log(radius)
+                
+                
                 if(distance <= radius){
                     
-                    const DURATION = 5000
+//                    const DURATION = 1000
                     const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000]
                     
 //                    fast version[0, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 450]
@@ -127,10 +142,9 @@ class Map extends Component {
                     this.displayAlert();
                     
                     //resetting variables
-                    this.setState({
-                        checkDistance: false        
-                    });
-
+                    this.props.stopCheckDistance(false);
+                    this.props.toggleSetupWindow(false)
+                    
                     radiusMarker = null;
                     remRadiusBtn = null;
                     coverView = null;
@@ -138,12 +152,7 @@ class Map extends Component {
                 }   
             }
             
-        }, 500); 
-    }
-    //before component gets rendered
-    componentWillMount(){
-        
-        this.makeRefresh();
+        }, 1000); 
     }
     
     displayAlert(){
@@ -153,11 +162,6 @@ class Map extends Component {
             [
                 {text: 'OK', onPress: () =>{
                         Vibration.cancel()
-                        //resetting variables
-                        this.setState({
-                            checkDistance: false        
-                        });
-
                         radiusMarker = null;
                         remRadiusBtn = null;
                         coverView = null;
@@ -237,13 +241,13 @@ class Map extends Component {
             targetMarker = null;  
             setRadiusBtn = null;
             removePinBtn = null;
+            radiusMarker = null;
+            this.props.toggleSetupWindow(false);
         }
     }
            
     setRadius(){
-        this.setState({
-            checkDistance: true   
-        });
+        this.props.toggleSetupWindow(true);
         
         radiusMarker =  <MapView.Circle 
                             center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
@@ -252,16 +256,16 @@ class Map extends Component {
                             fillColor='lightgreen'
                         />;
                             
-        remRadiusBtn =  <Button
-                            style = {styles.setRadiusBtn}
-                            title='Cancel'
-                            color='red'
-                            onPress={this.remRadius}
-                        />; 
+//        remRadiusBtn =  <Button
+//                            style = {styles.setRadiusBtn}
+//                            title='Cancel'
+//                            color='red'
+//                            onPress={this.remRadius}
+//                        />; 
 
-        coverView =     <View
-                            style = {styles.coverView}
-                        />;
+//        coverView =     <View
+//                            style = {styles.coverView}
+//                        />;
 
         setRadiusBtn = null;
         removePinBtn = null;
@@ -288,6 +292,17 @@ class Map extends Component {
                         />;
     }
     
+    this.circleSizeRefresh = setInterval(()=>{
+
+//    resizeRadiusMarker(){
+//        radiusMarker =  <MapView.Circle 
+//                            center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
+//                            radius={this.state.circleRadius}
+//                            zIndex={this.state.circleIndex}
+//                            fillColor='lightgreen'
+//                        />;       
+//    }
+
     componentWillUnmount(){
         clearInterval(locRefresh);
     }

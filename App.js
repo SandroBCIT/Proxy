@@ -9,12 +9,14 @@ import DrawerMenu from './screens/MenuScreen';
 
 
 export default DrawerNavigator({
+    Home: { 
+        screen: HomeScreen 
+    },
     Login: { 
         screen: LoginScreen,
         navigationOptions: ({navigation}) => ({
         drawerLockMode: 'locked-closed'
     })},
-    Home: { screen: HomeScreen },
     Settings: { screen: SettingsScreen }
 },
 {

@@ -31,7 +31,8 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleIndex: 9999
+            circleIndex: 9999,
+//            editingInput: false
         }
         
         this.myCallback = this.myCallback.bind(this);
@@ -39,20 +40,43 @@ class Map extends Component {
         this.onLongPress = this.onLongPress.bind(this);
         this.displayAlert = this.displayAlert.bind(this);
         this.onPressPinRemover = this.onPressPinRemover.bind(this);
+//        this.mainRefresh = this.mainRefresh.bind(this);
+        this.startRefresh = this.startRefresh.bind(this);
         this.locRefresh = this.locRefresh.bind(this);
         this.circleRefresh = this.circleRefresh.bind(this);
         this.clearRefresh = this.clearRefresh.bind(this);
+        this.editingInput = this.editingInput.bind(this);
     }
     
     componentWillMount(){
+        this.startRefresh();
+    }
+    
+    startRefresh(){
         this.locRefresh();
-        this.circleRefresh();
+        this.circleRefresh(); 
+//        this.mainRefresh();
     }
     
     clearRefresh(){
         clearInterval(this.locRefresh);
         clearInterval(this.circleRefresh);
+//        clearInterval(this.mainRefresh);
     }
+    
+//    mainRefresh(){
+//        this.circleRefresh = setInterval(()=>{
+//            if(this.state.editingInput === true){
+//                clearInterval(this.locRefresh)
+//                clearInterval(this.circleRefresh) 
+//                alert('cleared intervals')
+//            }else{
+//                this.startRefresh()
+//                
+//                alert('started intervals')
+//            }           
+//        }, 1000)              
+//    }
     
     //to change circle radius
     circleRefresh(){
@@ -268,9 +292,15 @@ class Map extends Component {
         removePinBtn = null
     }
     
+    //checks whether or not you're editing text input
+    editingInput(data){
+        this.setState({
+            editingInput: data
+        })   
+    }
+    
     componentWillUnmount(){
-        clearInterval(this.locRefresh)
-        clearInterval(this.circleRefresh)
+        this.clearRefresh()
     }
 
    
@@ -310,6 +340,7 @@ class Map extends Component {
                     clear={this.clearRefresh}
                     make={this.locRefresh}
                     giveLocation={this.state.locationMarkerPosition}
+                    editingInput={this.editingInput}
                 />
                 {setRadiusBtn}
                 {removePinBtn}

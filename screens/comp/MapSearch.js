@@ -32,7 +32,10 @@ class MapSearch extends Component {
                     listViewDisplayed='auto'  
                     fetchDetails={true}
                     renderDescription={row => row.description} 
+            
+                    //custom props
                     giveLocation={this.props.giveLocation}
+                    editingInput={this.props.editingInput}
             
                     onPress={(data, details = null) => {
 

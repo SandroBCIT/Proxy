@@ -13,6 +13,7 @@ class RunningWind extends Component {
     
     toggleRunningWindow(){
         this.props.toggleRunningWindow(false);
+        this.props.disableFunctions(false);
     }
 //-------------------------------------------------------------------------    
 

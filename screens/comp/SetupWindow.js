@@ -29,6 +29,7 @@ class SetupWindow extends Component {
         this.props.checkDistance(true);
         this.props.toggleSetupWindow(false);
         this.props.toggleRunningWindow(true);
+        this.props.disableFunctions(true);
     }
     
 //-------------------------------------------------------------------------    

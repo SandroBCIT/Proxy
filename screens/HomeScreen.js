@@ -25,6 +25,7 @@ class HomeScreen extends Component {
         this.toggleRunningWindow = this.toggleRunningWindow.bind(this);
         this.startCheckDistance = this.startCheckDistance.bind(this);
         this.stopCheckDistance = this.stopCheckDistance.bind(this);
+        this.disableFunctions = this.disableFunctions.bind(this);
     }
     
     hamburgerFunction(){
@@ -72,6 +73,12 @@ class HomeScreen extends Component {
             checkDistance: data
         })      
     }
+    
+    disableFunctions(data){
+        this.setState({
+            disableFunctions: data
+        })    
+    }
 //-------------------------------------------------------------------------
     
     render() {
@@ -82,6 +89,7 @@ class HomeScreen extends Component {
                             checkDistance={this.startCheckDistance}
                             toggleSetupWindow={this.toggleSetupWindow}
                             toggleRunningWindow={this.toggleRunningWindow}
+                            disableFunctions={this.disableFunctions}
                         />;   
         }else if(this.state.showSetupWindow === false){
             setupWind = null;  
@@ -90,7 +98,8 @@ class HomeScreen extends Component {
         var runningWind = null;
         if(this.state.showRunningWindow === true){
             runningWind =   <RunningWindow
-                                toggleRunningWindow={this.toggleRunningWindow}             
+                                toggleRunningWindow={this.toggleRunningWindow}
+                                disableFunctions={this.disableFunctions}
                             />;   
         }else if(this.state.showSetupWindow === false){
             runningWind = null;  
@@ -106,6 +115,7 @@ class HomeScreen extends Component {
                     stopCheckDistance={this.stopCheckDistance}
                     removeOldPin={this.state.removeOldPin}
                     removeRunningWindow={this.toggleRunningWindow}
+                    disableFunctions={this.state.disableFunctions}
                 />
                 {setupWind}
                 {runningWind}

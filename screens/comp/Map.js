@@ -269,7 +269,7 @@ class Map extends Component {
     }
     
     onPressPinRemover(){
-        if(targetMarker != null){
+        if(targetMarker != null && this.props.disableFunctions === false){
             targetMarker = null;  
             setRadiusBtn = null;
             removePinBtn = null;

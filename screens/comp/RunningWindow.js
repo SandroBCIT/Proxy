@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
 	viewContainer: {
 		position: 'absolute',
         left: '50%',
-        top: '80%',
+        top: '85%',
 	},
     wrapper: {
         position: 'relative',
         left: '-50%',
         top: '-50%',
-        height: 100,
+        height: 35,
         width: 300,
         backgroundColor: 'lightgray'
     },

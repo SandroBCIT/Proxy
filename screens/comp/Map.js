@@ -10,13 +10,14 @@ const SCREENWIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-var targetMarker = null;
-var remRadiusBtn = null;
-var radiusMarker = null;
-var removePinBtn = null;
-var locRefresh = null;
-var latDelta = null;
-var longDelta = null;
+var remRadiusBtn = null
+var radiusCircle = null
+var removePinBtn = null
+var locRefresh = null
+var latDelta = null
+var longDelta = null
+var longPressLat = null
+var longPressLong = null
 
 class Map extends Component {
     constructor(props) {
@@ -131,7 +132,8 @@ class Map extends Component {
                     this.props.removeRunningWindow(false)
                     
                     this.setState({
-                        showRadiusMarker: false
+                        showRadiusCircle: false,
+                        showRadius: false
                     })
                     remRadiusBtn = null
                     targetMarker = null
@@ -150,7 +152,7 @@ class Map extends Component {
                         Vibration.cancel()
                         remRadiusBtn = null
                         this.setState({
-                            showRadiusMarker: false
+                            showRadius: false
                         })
                     }
                 }
@@ -162,7 +164,7 @@ class Map extends Component {
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
     myCallback = (data)=>{
         this.setState({
-            showRadiusMarker: false
+            showRadius: false
         })
         
         var latData = parseFloat(data['latitude'])
@@ -195,33 +197,28 @@ class Map extends Component {
     
     //when long pressing map 
     onLongPress = (data)=>{
-        if(targetMarker != null){
-            targetMarker = null; 
+        if(targetMarker != null){ 
             this.setState({
-                showRadiusMarker: false
+                showTargetMarker: false,
+                showRadiusCircle: false
             })
             this.props.toggleSetupWindow(false);
         }
         
-        var longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
-        var longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
-        
+        //grabs details about where the map is pressed on
+        longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
+        longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
         var newTargetMarker = {
             latitude: longPressLat,
             longitude: longPressLong,   
         }
-        
         this.setState({
             targetMarkerPosition: newTargetMarker
         });
-        
-        targetMarker =  <MapView.Marker 
-                            coordinate={{latitude: longPressLat, longitude: longPressLong}}
-                            image={require("../../img/pin-01.png")}
-                        />; 
 
         this.props.toggleSetupWindow(true);
         this.setState({
+            showTargetMarker: true,
             showRadius: true
         })
     }
@@ -229,25 +226,22 @@ class Map extends Component {
     onMapPress = ()=>{
         if(targetMarker !== null){
             targetMarker = null;  
-            this.setState({
-                showSetRadiusBtn: false
-            })
             removePinBtn = null;
             this.setState({
-                showRadiusMarker: false
+                showRadius: false
             })
             this.props.toggleSetupWindow(false);
         }
         
+        //unfocuses from the map search
         this.setState({
             blurProp: true
         })
-        
         setInterval(()=>{
             this.setState({
                 blurProp: false
             })
-        }, 3000)
+        }, 100)
     }
            
     setRadius = ()=>{
@@ -256,37 +250,32 @@ class Map extends Component {
             showRadius: true
         })
                                
-        this.setState({
-            showSetRadiusBtn: false
-        })
         removePinBtn = null
     }
     
     componentWillUnmount(){
         this.clearRefresh()
     }
-   
 
 //-------------------------------------------------------------------------
 
     render() {
-        //Set Radius Button
-        var setRadiusBtn = null
-        if(this.state.showSetRadiusBtn === true){
-            setRadiusBtn = 
-                <Button
-                    title='Set Radius'
-                    color='green'
-                    onPress={this.setRadius}
+        //Target Marker
+        var targetMarker = null
+        if(this.state.showTargetMarker === true){
+            targetMarker = 
+                <MapView.Marker 
+                    coordinate={{latitude: longPressLat, longitude: longPressLong}}
+                    image={require("../../img/pin-01.png")}
                 />
-        }else if(this.state.showSetRadiusBtn === false){
-            setRadiusBtn = null   
+        }else if(this.state.showTargetMarker === false){
+            targetMarker = null   
         }
         
         //Radius Circle
-        var radiusMarker =  null
-        if(this.state.showRadius === true){
-            radiusMarker = 
+        var radiusCircle =  null
+        if(this.state.showRadiusCircle === true){
+            radiusCircle = 
                 <MapView.Circle 
                     center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
                     radius={this.props.sliderValue}
@@ -295,11 +284,8 @@ class Map extends Component {
                     strokeWidth={0}
                 />
         }else if(this.state.showRadius === false){
-            radiusMarker = null   
+            radiusCircle = null   
         }
-        
-        
-        
         
         return (
             <View style={styles.viewContainer}>
@@ -316,18 +302,19 @@ class Map extends Component {
                     onPress={this.onMapPress}
                 >
 
-                    {radiusMarker}
+                    {radiusCircle}
                     {targetMarker}
 
                     <MapView.Marker 
                         coordinate={this.state.locationMarkerPosition}
                         anchor={{ x: 0.5, y: 0.5 }}
                     >
-                    <View style={styles.locationRadius}>
-                        <View style={styles.locationMarker} />
-                    </View>
+                        <View style={styles.locationRadius}>
+                            <View style={styles.locationMarker} />
+                        </View>
                     </MapView.Marker>
                 </MapView>
+
 				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
                 <MapSearch 
                     callbackFromParent={this.myCallback} 
@@ -337,8 +324,6 @@ class Map extends Component {
                     startRefresh={this.startRefresh}
                     blurProp={this.state.blurProp}
                 />
-                {setRadiusBtn}
-                {removePinBtn}
             </View>
         );
     }

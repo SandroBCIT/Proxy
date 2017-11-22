@@ -72,7 +72,6 @@ class MapSearch extends Component {
 
                     styles={{
                         textInputContainer: {backgroundColor: 'white', marginRight: 20, borderRadius: 5, height: 45,borderWidth: 1, borderColor: '#58378F'},
-                        description: {fontWeight: 'bold'},
                         predefinedPlacesDescription: {color: '#1faadb'},
                         listView: {backgroundColor: 'white', marginRight: 20, paddingRight: 20},
                         poweredContainer: {display: 'none'}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, TouchableOpacity } from 'react-native';
 
 class RunningWind extends Component {
     
@@ -20,12 +20,11 @@ class RunningWind extends Component {
     render() {
         return (
             <View style={styles.viewContainer}>
-                <View style={styles.wrapper}>
-                    <Button 
-                        title = 'Cancel'
-                        onPress = {this.toggleRunningWindow}
-                    />
-                </View>
+                <TouchableOpacity onPress={this.toggleRunningWindow}>
+                    <View style={[styles.cancelBut, styles.shadowSm]}>
+                        <Text style={[styles.baseText, styles.btnLabel]}>cancel</Text>	
+                    </View>
+                </TouchableOpacity>
             </View>
         );                             
     }
@@ -36,22 +35,37 @@ class RunningWind extends Component {
 const styles = StyleSheet.create({
 	viewContainer: {
 		position: 'absolute',
-        left: '50%',
-        top: '85%',
+        bottom: '5%',
+        width: '100%'
 	},
     wrapper: {
-        position: 'relative',
-        left: '-50%',
-        top: '-50%',
-        height: 35,
-        width: 300,
-        backgroundColor: 'lightgray'
+        
     },
     slider: {
         marginTop: '5%'    
     },
     text: {
         textAlign: 'center'
+    },
+    shadowSm: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.75,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    cancelBut: {
+        height: 35,
+        width:'70%',
+		justifyContent: 'center',
+		alignItems: 'center',
+        alignSelf: 'center',
+		borderRadius: 5,
+        backgroundColor: '#58378F',
+        marginVertical: 20,
+    },
+    btnLabel: {
+        color: '#E9E9E9'
     }
 });
 

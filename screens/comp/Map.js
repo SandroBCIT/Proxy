@@ -11,7 +11,6 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 var targetMarker = null;
-var setRadiusBtn = null;
 var remRadiusBtn = null;
 var radiusMarker = null;
 var removePinBtn = null;
@@ -89,16 +88,12 @@ class Map extends Component {
     }
     
     locRefresh = ()=>{
-        //only used for initial position - gets overwritten later in this function
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
-//        var start = false;
         
-        //updates location marker (blue circle)
         locRefresh = setInterval(()=>{
             
             this.findLocation();
-            
             
             if(this.props.checkDistance === true){
                 //converts radius from meters to lat/long scale
@@ -193,14 +188,12 @@ class Map extends Component {
                             image={require("../../img/pin-01.png")}
                         />;
         
-        setRadiusBtn =  <Button
-                            style = {styles.setRadiusBtn}
-                            title='Set Radius'
-                            color='green'
-                            onPress={this.setRadius}
-                        />;  
+        this.setState({
+            showSetRadiusBtn: true
+        })  
     }
     
+    //when long pressing map 
     onLongPress = (data)=>{
         if(targetMarker != null){
             targetMarker = null; 
@@ -227,29 +220,18 @@ class Map extends Component {
                             image={require("../../img/pin-01.png")}
                         />; 
 
-        setRadiusBtn =  <Button
-                            title='Set Radius'
-                            color='green'
-                            onPress={this.setRadius}
-                        />; 
-
-        removePinBtn =  <Button
-                            title='RemovePin'
-                            color='orangered'
-                            onPress={this.onMapPress}
-                        />;
-    }
-    
-    removePinFunc = ()=>{
-        targetMarker = null;  
-        setRadiusBtn = null;
-        removePinBtn = null;   
+        this.props.toggleSetupWindow(true);
+        this.setState({
+            showRadius: true
+        })
     }
     
     onMapPress = ()=>{
         if(targetMarker !== null){
             targetMarker = null;  
-            setRadiusBtn = null;
+            this.setState({
+                showSetRadiusBtn: false
+            })
             removePinBtn = null;
             this.setState({
                 showRadiusMarker: false
@@ -274,7 +256,9 @@ class Map extends Component {
             showRadius: true
         })
                                
-        setRadiusBtn = null
+        this.setState({
+            showSetRadiusBtn: false
+        })
         removePinBtn = null
     }
     
@@ -313,6 +297,7 @@ class Map extends Component {
         }else if(this.state.showRadius === false){
             radiusMarker = null   
         }
+        
         
         
         

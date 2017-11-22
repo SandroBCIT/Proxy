@@ -190,6 +190,7 @@ class Map extends Component {
         
         targetMarker =  <MapView.Marker 
                             coordinate={this.state.targetMarkerPosition}
+                            image={require("../../img/pin-01.png")}
                         />;
         
         setRadiusBtn =  <Button
@@ -223,6 +224,7 @@ class Map extends Component {
         
         targetMarker =  <MapView.Marker 
                             coordinate={{latitude: longPressLat, longitude: longPressLong}}
+                            image={require("../../img/pin-01.png")}
                         />; 
 
         setRadiusBtn =  <Button
@@ -305,7 +307,8 @@ class Map extends Component {
                     center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
                     radius={this.props.sliderValue}
                     zIndex={this.state.circleIndex}
-                    fillColor='lightgreen'
+                    fillColor='rgba(88,55,143,0.3)'
+                    strokeWidth={0}
                 />
         }else if(this.state.showRadius === false){
             radiusMarker = null   
@@ -376,9 +379,7 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 50/2,
         overflow: 'hidden',
-        backgroundColor: 'rgba(0,122,255,0.1)',
-        borderWidth: 1,
-        borderColor: 'rgba(0,122,255,0.3)',
+        backgroundColor: 'rgba(42,174,120,0.3)',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -386,10 +387,10 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: '#58378F',
         borderRadius: 20/2,
         overflow: 'hidden',
-        backgroundColor: '#007AFF'
+        backgroundColor: 'rgba(88,55,1430,0.7)'
     }
 });
 

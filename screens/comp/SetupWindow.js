@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text, Slider } from 'react-native';
+import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native';
 
 
 class SetupWindow extends Component {
@@ -8,7 +8,7 @@ class SetupWindow extends Component {
         super(props);
         
         this.state = {
-            sliderValue: 50
+            sliderValue: 250
         }
         this.returnSliderValue = this.returnSliderValue.bind(this);
         this.startCheckDistance = this.startCheckDistance.bind(this);
@@ -37,22 +37,24 @@ class SetupWindow extends Component {
     render() {
         return (
             <View style={styles.viewContainer}>
-                <View style={styles.wrapper}>
+                <View style={[styles.wrapper, styles.shadowBig]}>
                     <Slider
                         style={styles.slider}
-                        minimumTrackTintColor = 'green'
-                        maximumValue = {100}
+                        minimumTrackTintColor = '#2AAE78'
+                        thumbTintColor = '#2AAE78'
+                        maximumValue = {500}
                         onValueChange = {this.returnSliderValue}
-                        value = {50}
-                        step = {10}
+                        value = {250}
+                        step = {50}
                     />  
                     <Text style={styles.text}>
                         {this.state.sliderValue} m
                     </Text>
-                    <Button 
-                        title = 'GO'
-                        onPress = {this.startCheckDistance}
-                    />
+                    <TouchableOpacity onPress={this.startCheckDistance}>
+                        <View style={[styles.confirmBut, styles.shadowSm]}>
+                            <Text style={[styles.baseText, styles.btnLabel]}>start</Text>	
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );                             
@@ -65,21 +67,48 @@ const styles = StyleSheet.create({
 	viewContainer: {
 		position: 'absolute',
         left: '50%',
-        top: '80%',
+        top: '80%'
 	},
     wrapper: {
         position: 'relative',
         left: '-50%',
         top: '-50%',
-        height: 100,
         width: 300,
-        backgroundColor: 'lightgray'
+        backgroundColor: '#E9E9E9',
+        borderRadius: 5,
+    },
+    shadowBig: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 4,  
+    },
+    shadowSm: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.75,
+        shadowRadius: 2,
+        elevation: 2,
     },
     slider: {
-        marginTop: '5%'    
+        marginVertical: 20    
     },
     text: {
         textAlign: 'center'
+    },
+    confirmBut: {
+        height: 35,
+        width:'80%',
+		justifyContent: 'center',
+		alignItems: 'center',
+        alignSelf: 'center',
+		borderRadius: 5,
+        backgroundColor: '#58378F',
+        marginVertical: 20,
+    },
+    btnLabel: {
+        color: '#E9E9E9'
     }
 });
 

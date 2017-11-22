@@ -114,17 +114,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	homeBtnIcon: {
-		width: 33,
-		height: 35,
+		width: 45,
+		height: 45,
 		marginRight: 20,
 	},
 	settingsBtnIcon: {
-		width: 33,
-		height: 33,
+		width: 45,
+		height: 45,
 		marginRight: 20,
 	},
 	logOutLabel: {
-		paddingLeft: 53
+		paddingLeft: 65
 	}
 });
 

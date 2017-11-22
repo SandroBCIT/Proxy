@@ -183,7 +183,7 @@ class LoginScreen extends Component {
 								<Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.alertMsg}>
+						<TouchableOpacity onPress={this.alertFunc}>
 							<View style={[styles.btn, styles.btnFacebook]}>
 								<Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
 							</View>

@@ -18,6 +18,8 @@ class MapSearch extends Component {
         }
     }
     
+    
+    
 //-------------------------------------------------------------------------    
 
     render() {
@@ -35,9 +37,13 @@ class MapSearch extends Component {
             
                     //custom props
                     giveLocation={this.props.giveLocation}
-                    editingInput={this.props.editingInput}
-            
+                    blurProp={this.props.blurProp}  
+                    stopRefresh={this.props.stopRefresh}
+                    startRefresh={this.props.startRefresh}
+                
                     onPress={(data, details = null) => {
+            
+                        this.props.stopRefresh;
 
                         var obj = Object.keys(details);
                         var lat = JSON.stringify(details['geometry']['location']['lat']);

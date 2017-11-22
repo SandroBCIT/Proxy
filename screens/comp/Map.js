@@ -98,37 +98,6 @@ class Map extends Component {
         locRefresh = setInterval(()=>{
             
             this.findLocation();
-//            navigator.geolocation.getCurrentPosition((position) => {
-//                var lat = parseFloat(position.coords.latitude)
-//                var long = parseFloat(position.coords.longitude)
-//                var latDelta2 = latDelta
-//                var longDelta2 = longDelta
-//                
-//                if(!start){
-//                    start = true;
-//                    var lastScreenRegion = {
-//                        latitude: lat,
-//                        longitude: long,
-//                        latitudeDelta: latDelta2,
-//                        longitudeDelta: longDelta2
-//                    }
-//                    
-//                    
-//                    this.setState({
-//                        screenPosition: lastScreenRegion
-//                    });
-//                }
-//
-//                var lastMarkerRegion = {
-//                    latitude: lat,
-//                    longitude: long
-//                }
-//
-//                this.setState({
-//                    locationMarkerPosition: lastMarkerRegion
-//                });
-//
-//            }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
             
             
             if(this.props.checkDistance === true){
@@ -315,6 +284,20 @@ class Map extends Component {
 //-------------------------------------------------------------------------
 
     render() {
+        //Set Radius Button
+        var setRadiusBtn = null
+        if(this.state.showSetRadiusBtn === true){
+            setRadiusBtn = 
+                <Button
+                    title='Set Radius'
+                    color='green'
+                    onPress={this.setRadius}
+                />
+        }else if(this.state.showSetRadiusBtn === false){
+            setRadiusBtn = null   
+        }
+        
+        //Radius Circle
         var radiusMarker =  null
         if(this.state.showRadius === true){
             radiusMarker = 
@@ -327,6 +310,9 @@ class Map extends Component {
         }else if(this.state.showRadius === false){
             radiusMarker = null   
         }
+        
+        
+        
         return (
             <View style={styles.viewContainer}>
                 <MapView

@@ -16,6 +16,8 @@ var remRadiusBtn = null;
 var radiusMarker = null;
 var removePinBtn = null;
 var locRefresh = null;
+var latDelta = null;
+var longDelta = null;
 
 class Map extends Component {
     constructor(props) {
@@ -38,6 +40,9 @@ class Map extends Component {
     
     componentWillMount(){
         this.startRefresh();
+        this.setState({
+            initialize: true
+        })
     }
     
     startRefresh = ()=>{
@@ -55,19 +60,21 @@ class Map extends Component {
             var latDelta2 = latDelta
             var longDelta2 = longDelta
 
-//            if(!start){
-//                start = true;
-                var lastScreenRegion = {
-                    latitude: lat,
-                    longitude: long,
-                    latitudeDelta: latDelta2,
-                    longitudeDelta: longDelta2
+                if(this.state.initialize === true){
+                    var lastScreenRegion = {
+                        latitude: lat,
+                        longitude: long,
+                        latitudeDelta: latDelta2,
+                        longitudeDelta: longDelta2
+                    }
+                    this.setState({
+                        screenPosition: lastScreenRegion
+                    });
                 }
-
                 this.setState({
-                    screenPosition: lastScreenRegion
-                });
-//            }
+                    initialize: false
+                })
+                
 
             var lastMarkerRegion = {
                 latitude: lat,
@@ -83,15 +90,14 @@ class Map extends Component {
     
     locRefresh = ()=>{
         //only used for initial position - gets overwritten later in this function
-        var latDelta = LATITUDE_DELTA
-        var longDelta = LONGITUDE_DELTA
+        latDelta = LATITUDE_DELTA
+        longDelta = LONGITUDE_DELTA
 //        var start = false;
         
         //updates location marker (blue circle)
         locRefresh = setInterval(()=>{
             
             this.findLocation();
-            
 //            navigator.geolocation.getCurrentPosition((position) => {
 //                var lat = parseFloat(position.coords.latitude)
 //                var long = parseFloat(position.coords.longitude)

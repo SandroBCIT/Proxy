@@ -10,7 +10,7 @@ const SCREENWIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-var remRadiusBtn = null
+var targetMarker = null
 var radiusCircle = null
 var removePinBtn = null
 var locRefresh = null
@@ -128,21 +128,20 @@ class Map extends Component {
                     
                     //resetting variables
                     this.props.stopCheckDistance(false)
-                    this.props.toggleSetupWindow(false)
                     this.props.removeRunningWindow(false)
                     
+                    //hides target marker and radius circle
                     this.setState({
-                        showRadiusCircle: false,
-                        showRadius: false
+                        showTargetMarker: false,
+                        showRadiusCircle: false
                     })
-                    remRadiusBtn = null
-                    targetMarker = null
                 }   
             }
             
         }, 1000) 
     }
     
+    //shows on screen alert (NOT alarm)
     displayAlert = ()=>{
         Alert.alert(
             'You have Arrived!!',
@@ -162,47 +161,51 @@ class Map extends Component {
     }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
-    myCallback = (data)=>{
-        this.setState({
-            showRadius: false
-        })
+    mapSearchFunc = (data)=>{
+        //removes preexisting target marker and circle radius
+        if(this.state.showTargetMarker === true){ 
+            this.setState({
+                showTargetMarker: false,
+                showRadiusCircle: false
+            })
+            this.props.toggleInitialWindow(false)
+            this.props.toggleSetupWindow(false)
+        }
         
+        //updates new target marker and circle radius location
         var latData = parseFloat(data['latitude'])
         var longData = parseFloat(data['longitude'])
         var latDeltaData = LATITUDE_DELTA
         var longDeltaData = LONGITUDE_DELTA
-        
         var searchLocation = {
             latitude: latData,
             longitude: longData,
             latitudeDelta: latDeltaData,
             longitudeDelta: longDeltaData
         }
-        
         this.setState({
-            searchLocation: searchLocation,
             screenPosition: searchLocation,
             targetMarkerPosition: searchLocation
         });
         
-        targetMarker =  <MapView.Marker 
-                            coordinate={this.state.targetMarkerPosition}
-                            image={require("../../img/pin-01.png")}
-                        />;
-        
+        //displays target marker and circle radius
         this.setState({
-            showSetRadiusBtn: true
-        })  
+            showTargetMarker: true,
+            showRadiusCircle: true
+        })
+        this.props.toggleSetupWindow(true);
+         
     }
     
     //when long pressing map 
     onLongPress = (data)=>{
-        if(targetMarker != null){ 
+        if(this.state.showTargetMarker === true){ 
             this.setState({
                 showTargetMarker: false,
                 showRadiusCircle: false
             })
-            this.props.toggleSetupWindow(false);
+            this.props.toggleInitialWindow(false)
+            this.props.toggleSetupWindow(false)
         }
         
         //grabs details about where the map is pressed on
@@ -216,41 +219,42 @@ class Map extends Component {
             targetMarkerPosition: newTargetMarker
         });
 
-        this.props.toggleSetupWindow(true);
+        //displays target marker, radius circle and initial window
         this.setState({
-            showTargetMarker: true,
-            showRadius: true
+            showTargetMarker: true
         })
+        this.props.toggleInitialWindow(true)
     }
     
+    //when tapping on map
     onMapPress = ()=>{
-        if(targetMarker !== null){
-            targetMarker = null;  
-            removePinBtn = null;
+        if(this.state.showTargetMarker === true){
             this.setState({
-                showRadius: false
+                showTargetMarker: false,
+                showRadiusCircle: false
             })
-            this.props.toggleSetupWindow(false);
+            this.props.toggleInitialWindow(false)
+            this.props.toggleSetupWindow(false)
         }
         
-        //unfocuses from the map search
+        //unfocuses from the map search & removes search suggestions
         this.setState({
             blurProp: true
         })
-        setInterval(()=>{
-            this.setState({
-                blurProp: false
-            })
-        }, 100)
     }
-           
-    setRadius = ()=>{
-        this.props.toggleSetupWindow(true)
+    
+    resetBlurProp = (data)=>{
         this.setState({
-            showRadius: true
-        })
-                               
-        removePinBtn = null
+            blurProp: data
+        })   
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.delayedRadius === true){
+            this.setState({
+                showRadiusCircle: true
+            })
+        }
     }
     
     componentWillUnmount(){
@@ -265,7 +269,11 @@ class Map extends Component {
         if(this.state.showTargetMarker === true){
             targetMarker = 
                 <MapView.Marker 
-                    coordinate={{latitude: longPressLat, longitude: longPressLong}}
+                    coordinate=
+                        {{
+                         latitude: this.state.targetMarkerPosition.latitude, 
+                         longitude: this.state.targetMarkerPosition.longitude
+                        }}
                     image={require("../../img/pin-01.png")}
                 />
         }else if(this.state.showTargetMarker === false){
@@ -277,13 +285,17 @@ class Map extends Component {
         if(this.state.showRadiusCircle === true){
             radiusCircle = 
                 <MapView.Circle 
-                    center={{latitude: this.state.targetMarkerPosition.latitude, longitude: this.state.targetMarkerPosition.longitude}}
+                    center=
+                        {{
+                         latitude: this.state.targetMarkerPosition.latitude, 
+                         longitude: this.state.targetMarkerPosition.longitude
+                        }}
                     radius={this.props.sliderValue}
                     zIndex={this.state.circleIndex}
                     fillColor='rgba(88,55,143,0.3)'
                     strokeWidth={0}
                 />
-        }else if(this.state.showRadius === false){
+        }else if(this.state.showRadiusCircle === false){
             radiusCircle = null   
         }
         
@@ -317,12 +329,13 @@ class Map extends Component {
 
 				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
                 <MapSearch 
-                    callbackFromParent={this.myCallback} 
+                    callbackFromParent={this.mapSearchFunc} 
                     giveLocation={this.state.locationMarkerPosition}
                     editingInput={this.editingInput}
                     stopRefresh={this.clearRefresh}
                     startRefresh={this.startRefresh}
                     blurProp={this.state.blurProp}
+                    resetBlurProp={this.resetBlurProp}
                 />
             </View>
         );

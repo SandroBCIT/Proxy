@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, Image, TextInput } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
-import Map from './comp/Map';
-import HamburgerBtn from './comp/HamburgerBtn';
-import SetupWindow from './comp/SetupWindow';
-import RunningWindow from './comp/RunningWindow';
+import React, { Component } from 'react'
+import { Text, View, Button, StyleSheet, Image, TextInput } from 'react-native'
+import { DrawerNavigator } from 'react-navigation'
+import Map from './comp/Map'
+import HamburgerBtn from './comp/HamburgerBtn'
+import SetupWindow from './comp/SetupWindow'
+import RunningWindow from './comp/RunningWindow'
+import InitialWindow from './comp/InitialWindow'
 
 //AIzaSyAO_IeKD3FDszoc7l_A8YM75Bysg9kGAA0
 
@@ -18,33 +19,31 @@ class HomeScreen extends Component {
             sliderValue: 50,
             removeOldPin: false
         }
-        
-        this.hamburgerFunction = this.hamburgerFunction.bind(this);
-        this.setSliderValue = this.setSliderValue.bind(this);
-        this.toggleSetupWindow = this.toggleSetupWindow.bind(this);
-        this.toggleRunningWindow = this.toggleRunningWindow.bind(this);
-        this.startCheckDistance = this.startCheckDistance.bind(this);
-        this.stopCheckDistance = this.stopCheckDistance.bind(this);
-        this.disableFunctions = this.disableFunctions.bind(this);
     }
     
-    hamburgerFunction(){
+    hamburgerFunction = ()=>{
         this.props.navigation.navigate('DrawerOpen');      
     }
     
-    setSliderValue(data){
+    setSliderValue = (data)=>{
         this.setState({
             sliderValue: data
         })
     }
     
-    toggleSetupWindow(data){
+    toggleInitialWindow = (data)=>{
+        this.setState({
+            showInitialWindow: data
+        })
+    }
+    
+    toggleSetupWindow = (data)=>{
         this.setState({
             showSetupWindow: data
         })
     }
     
-    toggleRunningWindow(data){
+    toggleRunningWindow = (data)=>{
         this.setState({
             showRunningWindow: data
         })  
@@ -62,47 +61,67 @@ class HomeScreen extends Component {
         }
     }
     
-    startCheckDistance(data){
+    startCheckDistance = (data)=>{
         this.setState({
             checkDistance: data
         }) 
     }
     
-    stopCheckDistance(data){
+    stopCheckDistance = (data)=>{
         this.setState({
             checkDistance: data
         })      
     }
     
-    disableFunctions(data){
+    disableFunctions = (data)=>{
         this.setState({
             disableFunctions: data
         })    
     }
+    
+    delayedRadius = (data)=>{
+        this.setState({
+            delayedRadius: data
+        })
+    }
 //-------------------------------------------------------------------------
     
     render() {
-        var setupWind = null;
-        if(this.state.showSetupWindow === true){
-            setupWind = <SetupWindow 
-                            sliderValue={this.setSliderValue} 
-                            checkDistance={this.startCheckDistance}
-                            toggleSetupWindow={this.toggleSetupWindow}
-                            toggleRunningWindow={this.toggleRunningWindow}
-                            disableFunctions={this.disableFunctions}
-                        />;   
-        }else if(this.state.showSetupWindow === false){
-            setupWind = null;  
+        var initialWindow = null;
+        if(this.state.showInitialWindow === true){
+            initialWindow = 
+                <InitialWindow 
+                    toggleInitialWindow={this.toggleInitialWindow}
+                    toggleSetupWindow={this.toggleSetupWindow}
+                    disableFunctions={this.disableFunctions}
+                    delayedRadius={this.delayedRadius}
+                />   
+        }else if(this.state.showInitialWindow === false){
+            initialWindow = null;  
         }
         
-        var runningWind = null;
-        if(this.state.showRunningWindow === true){
-            runningWind =   <RunningWindow
-                                toggleRunningWindow={this.toggleRunningWindow}
-                                disableFunctions={this.disableFunctions}
-                            />;   
+        var setupWindow = null;
+        if(this.state.showSetupWindow === true){
+            setupWindow = 
+                <SetupWindow 
+                    sliderValue={this.setSliderValue} 
+                    checkDistance={this.startCheckDistance}
+                    toggleSetupWindow={this.toggleSetupWindow}
+                    toggleRunningWindow={this.toggleRunningWindow}
+                />  
         }else if(this.state.showSetupWindow === false){
-            runningWind = null;  
+            setupWindow = null  
+        }
+        
+        var runningWindow = null
+        if(this.state.showRunningWindow === true){
+            runningWindow =   
+                <RunningWindow
+                    toggleRunningWindow={this.toggleRunningWindow}
+                    disableFunctions={this.disableFunctions}
+                />   
+        }else if(this.state.showSetupWindow === false){
+            runningWindow = null  
         }
         
         return (
@@ -110,15 +129,18 @@ class HomeScreen extends Component {
                 <Map 
                     hamburgerFunction={this.hamburgerFunction} 
                     sliderValue={this.state.sliderValue} 
+                    toggleInitialWindow={this.toggleInitialWindow} 
                     toggleSetupWindow={this.toggleSetupWindow} 
                     checkDistance={this.state.checkDistance} 
                     stopCheckDistance={this.stopCheckDistance}
                     removeOldPin={this.state.removeOldPin}
                     removeRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.state.disableFunctions}
+                    delayedRadius={this.state.delayedRadius}
                 />
-                {setupWind}
-                {runningWind}
+                {initialWindow}
+                {setupWindow}
+                {runningWindow}
             </View>
         );
     }

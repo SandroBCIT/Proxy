@@ -37,7 +37,8 @@ class MapSearch extends Component {
             
                     //custom props
                     giveLocation={this.props.giveLocation}
-                    blurProp={this.props.blurProp}  
+                    blurProp={this.props.blurProp}
+                    resetBlurProp={this.props.resetBlurProp}
                     stopRefresh={this.props.stopRefresh}
                     startRefresh={this.props.startRefresh}
                 

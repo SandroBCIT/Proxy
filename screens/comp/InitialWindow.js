@@ -1,33 +1,47 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native';
 
-
-class SetupWindow extends Component {
+class InitialWindow extends Component {
     
     constructor(props){
         super(props);
         
         this.state = {
-            sliderValue: 250
         }
     }
     
-    componentWillMount(){
-        this.props.sliderValue(this.state.sliderValue); 
-    }
-    
-    returnSliderValue = (data)=>{
+    setToAlarm = ()=>{
         this.setState({
-            sliderValue: data     
-        })
-        this.props.sliderValue(data);
+            myMethod: 1
+        })   
+        this.toggleWindow()
     }
     
-    startCheckDistance = ()=>{
-        this.props.checkDistance(true);
-        this.props.toggleSetupWindow(false);
-        this.props.toggleRunningWindow(true);
+    setToNotification = ()=>{
+        this.setState({
+            myMethod: 2
+        })  
+        this.toggleWindow()
     }
+    
+    setToMessage = ()=>{
+        this.setState({
+            myMethod: 3
+        })  
+        this.toggleWindow()
+    }
+    
+    toggleWindow = ()=>{
+        this.props.toggleInitialWindow(false)
+        this.props.toggleSetupWindow(true)
+        this.props.disableFunctions(true)
+        //to show radius in map component
+        this.props.delayedRadius(true)
+        setTimeout(()=>{   
+            this.props.delayedRadius(false)
+        }, 50)
+    }
+    
     
 //-------------------------------------------------------------------------    
 
@@ -35,23 +49,22 @@ class SetupWindow extends Component {
         return (
             <View style={styles.viewContainer}>
                 <View style={[styles.wrapper, styles.shadowBig]}>
-                    <Slider
-                        style={styles.slider}
-                        minimumTrackTintColor = '#2AAE78'
-                        thumbTintColor = '#2AAE78'
-                        maximumValue = {500}
-                        onValueChange = {this.returnSliderValue}
-                        value = {250}
-                        step = {50}
-                    />  
-                    <Text style={styles.text}>
-                        {this.state.sliderValue} m
-                    </Text>
-                    <TouchableOpacity onPress={this.startCheckDistance}>
+                    <Text style={styles.baseText}>choose your action</Text>
+                    <TouchableOpacity onPress={this.setToAlarm}>
                         <View style={[styles.confirmBut, styles.shadowSm]}>
-                            <Text style={[styles.baseText, styles.btnLabel]}>start</Text>	
+                            <Text style={[styles.baseText, styles.btnLabel]}>alarm</Text>	
                         </View>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={this.setToNotification}>
+                        <View style={[styles.confirmBut, styles.shadowSm]}>
+                            <Text style={[styles.baseText, styles.btnLabel]}>notification</Text>	
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.setToMessage}>
+                        <View style={[styles.confirmBut, styles.shadowSm]}>
+                            <Text style={[styles.baseText, styles.btnLabel]}>message</Text>	
+                        </View>
+                    </TouchableOpacity> 
                 </View>
             </View>
         );                             
@@ -88,10 +101,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 2,
     },
-    slider: {
-        marginVertical: 20    
-    },
-    text: {
+    baseText: {
         textAlign: 'center'
     },
     confirmBut: {
@@ -109,4 +119,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SetupWindow;
+export default InitialWindow;

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 	viewContainer: {
 		position: 'absolute',
         left: '50%',
-        top: '80%'
+        top: '75%'
 	},
     wrapper: {
         position: 'relative',
@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
         width: 300,
         backgroundColor: '#E9E9E9',
         borderRadius: 5,
+        paddingTop: 15,
+        paddingBottom: 5
     },
     shadowBig: {
         shadowColor: '#000',
@@ -102,7 +104,8 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     baseText: {
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#58378F'
     },
     confirmBut: {
         height: 35,
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
 		borderRadius: 5,
         backgroundColor: '#58378F',
-        marginVertical: 20,
+        marginVertical: 10,
     },
     btnLabel: {
         color: '#E9E9E9'

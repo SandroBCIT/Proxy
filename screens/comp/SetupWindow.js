@@ -42,7 +42,7 @@ class SetupWindow extends Component {
                         maximumValue = {500}
                         onValueChange = {this.returnSliderValue}
                         value = {250}
-                        step = {50}
+                        step = {5}
                     />  
                     <Text style={styles.text}>
                         {this.state.sliderValue} m

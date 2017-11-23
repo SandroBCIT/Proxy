@@ -111,7 +111,7 @@ class Map extends Component {
                 if(distance <= radius){
                     
 //                    const DURATION = 1000
-                    const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000, 300, 1000]
+                    const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
                     
 //                    fast version[0, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 450]
 //                    slow version[0, 100, 400, 100, 100, 100, 100, 100, 400, 100, 900, 100, 400, 100,400]
@@ -125,6 +125,19 @@ class Map extends Component {
 //                    Vibration.cancel()
                     
                     this.displayAlert();
+                    
+                    //Expo Notification
+                    var localNotification = {
+                        title: 'You have arrived!!',
+                        body: 'This is Proxy. You are close to your set destination!',
+                        ios: {
+                            sound: true
+                        },
+                        android: {
+                            sound: true
+                        }
+                    }
+                    Expo.Notifications.presentLocalNotificationAsync(localNotification)
                     
                     //resetting variables
                     this.props.stopCheckDistance(false)

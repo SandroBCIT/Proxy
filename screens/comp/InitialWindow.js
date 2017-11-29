@@ -28,7 +28,9 @@ class InitialWindow extends Component {
         this.setState({
             myMethod: 3
         })  
-        this.toggleWindow()
+//        this.toggleWindow()
+        
+        
     }
     
     toggleWindow = ()=>{

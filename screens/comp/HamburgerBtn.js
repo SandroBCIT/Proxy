@@ -12,7 +12,7 @@ class HamburgerBtn extends Component {
         return (
             <TouchableHighlight 
                 style= {styles.hamburgerBtnCont}
-                onPress={this.props.hamburgerFunction} 
+                onPress={()=>{this.props.hamburgerFunction(); this.props.onMapPress();}}
                 underlayColor='rgba(0,0,0,0)'>
 
                 <Image

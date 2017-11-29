@@ -133,8 +133,8 @@ class LoginScreen extends Component {
     }
     
     unFocus = ()=>{
-        this.refs.textInputEmail.blur()
-        this.refs.textInputPassword.blur()
+        this.refs.emailInput.blur()
+        this.refs.passwordInput.blur()
     }
 
 //-------------------------------------------------------------------------
@@ -151,7 +151,7 @@ class LoginScreen extends Component {
                     <View style={styles.inputContainer} >
                         <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
                         <TextInput 
-                            ref='textInputEmail'
+                            ref='emailInput'
                             keyboardType='email-address'
                             returnKeyType='next'
                             style={[styles.baseText, styles.input]}
@@ -160,17 +160,16 @@ class LoginScreen extends Component {
                             autoCapitalize='none'
                             autoCorrect={false}
                             onChangeText={this.storeUserEmail}
-                            onSubmitEditing={() => this.passwordInput.focus()}
+                            onSubmitEditing={() => this.refs.passwordInput.focus()}
                         />
                         <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
                         <TextInput 
-                            ref='textInputPassword'
                             secureTextEntry
                             returnKeyType='go'
                             style={[styles.baseText, styles.input]}
                             placeholder='**********'
                             underlineColorAndroid='transparent'
-                            ref={(input) => this.passwordInput = input}
+                            ref='passwordInput'
                             onChangeText={this.storeUserPassword}
                             onSubmitEditing={this.loginUser}
                         />  

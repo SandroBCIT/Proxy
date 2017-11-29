@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
+import Expo from 'expo';
+
 import SignUpScreen from './SignUpScreen';
 import MenuScreen from './MenuScreen';
 
@@ -90,43 +92,42 @@ class LoginScreen extends Component {
             }
         });
     }
-//        firebase.auth().onAuthStateChanged(user => {
-//            if(user){
-//                this.goToHome();   
-//            }
-//        }) 
-        
-//        promise.catch(error => alert(e.message))
-//        firebase.auth().signInWithEmailAndPassword(email, password)
-//            .catch(function(error) {
-//          // Handle Errors here.
-//          var errorCode = error.code;
-//          var errorMessage = error.message;
-//          if (errorCode === 'auth/wrong-password') {
-//            alert('Wrong password.');
-//          } else {
-//            alert(errorMessage);
-//          }
-//          console.log(error);
-//        });
-        
-        
-        
-//        firebase.auth().onAuthStateChanged(firebaseUser => {
-//            if(firebaseUser){
-//                this.goToHome();
-//            }
-//        });
-   
-                
-//        if(msg != null){
-//            msg;
-//        }else{
-////            this.goToHome();
-//            alert('logged in');
-//        }
-           
+    
+    async fbLogin() {
+        const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+            '738055276391547',
+            { permissions: ['public_profile', 'email'] }
+        );
 
+        if (type === 'success') {
+            const credential = firebase.auth.FacebookAuthProvider.credential(token);
+            console.log(credential);
+            firebase.auth().signInWithCredential(credential).catch((error) => {
+                alert(error);
+            });
+        }
+    }
+    
+    async googleLogin() {
+        try {
+            const result = await Expo.Google.logInAsync({
+                androidClientId: '294902702977-52kehrqpuvv6hefebqcqccc2muetbahf.apps.googleusercontent.com',
+                iosClientId: '294902702977-3loqo1r883iodhrou17ie76egmuks4fo.apps.googleusercontent.com',
+                scopes: ['profile', 'email'],
+            });
+
+            if (result.type === 'success') {
+                const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken);
+                firebase.auth().signInWithCredential(credential).catch((error) => {
+                    alert(error);
+                });
+            }
+        } catch(e) {
+            alert(e);
+        }
+    }
+
+    
     triggerAnim(){
         this.setState({
             openSignUp:true    
@@ -183,12 +184,12 @@ class LoginScreen extends Component {
 								<Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.alertFunc}>
+						<TouchableOpacity onPress={this.fbLogin}>
 							<View style={[styles.btn, styles.btnFacebook]}>
 								<Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
 							</View>
 						</TouchableOpacity>
-                        <TouchableOpacity onPress={this.alertMsg}>
+                        <TouchableOpacity onPress={this.googleLogin}>
 							<View style={[styles.btn, styles.btnGoogle]}>
 								<Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
 							</View>

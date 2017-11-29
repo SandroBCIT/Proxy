@@ -27,15 +27,9 @@ class LoginScreen extends Component {
             userEmail: '',
             userPassword: '',
         }
-        
-        this.storeUserEmail = this.storeUserEmail.bind(this);
-        this.storeUserPassword = this.storeUserPassword.bind(this);
-        this.loginUser = this.loginUser.bind(this);
-        this.triggerAnim = this.triggerAnim.bind(this);        
-        this.goToHome = this.goToHome.bind(this);
     } 
 
-    goToHome(){
+    goToHome = ()=>{
         this.props.navigation.navigate('Home');
     }
     
@@ -48,7 +42,7 @@ class LoginScreen extends Component {
         });
     }
 
-    storeUserEmail(text){
+    storeUserEmail = (text)=>{
         const userEmail = text;
         
         this.setState({
@@ -56,7 +50,7 @@ class LoginScreen extends Component {
         });
     }
     
-    storeUserPassword(text){
+    storeUserPassword = (text)=>{
         const userPassword = text;
         
         this.setState({
@@ -73,7 +67,7 @@ class LoginScreen extends Component {
 //        }
 //    }
     
-    loginUser(){
+    loginUser = ()=>{
         const email = this.state.userEmail; 
         const pass = this.state.userPassword;
         const auth = firebase.auth();
@@ -93,7 +87,7 @@ class LoginScreen extends Component {
         });
     }
     
-    async fbLogin() {
+    async fbLogin(){
         const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
             '738055276391547',
             { permissions: ['public_profile', 'email'] }
@@ -108,7 +102,7 @@ class LoginScreen extends Component {
         }
     }
     
-    async googleLogin() {
+    async googleLogin(){
         try {
             const result = await Expo.Google.logInAsync({
                 androidClientId: '294902702977-52kehrqpuvv6hefebqcqccc2muetbahf.apps.googleusercontent.com',
@@ -126,9 +120,8 @@ class LoginScreen extends Component {
             alert(e);
         }
     }
-
     
-    triggerAnim(){
+    triggerAnim = ()=>{
         this.setState({
             openSignUp:true    
         });
@@ -139,14 +132,16 @@ class LoginScreen extends Component {
         }, 1400)
     }
     
-    alertMsg(){
-        alert("Feature not yet enabled");
+    unFocus = ()=>{
+        this.refs.textInputEmail.blur()
+        this.refs.textInputPassword.blur()
     }
 
 //-------------------------------------------------------------------------
     
     render() {
         return (
+            <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
             <View style={styles.wrapper}>
                 <View style={styles.viewContainer}>
                     <Image 
@@ -156,6 +151,7 @@ class LoginScreen extends Component {
                     <View style={styles.inputContainer} >
                         <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
                         <TextInput 
+                            ref='textInputEmail'
                             keyboardType='email-address'
                             returnKeyType='next'
                             style={[styles.baseText, styles.input]}
@@ -168,6 +164,7 @@ class LoginScreen extends Component {
                         />
                         <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
                         <TextInput 
+                            ref='textInputPassword'
                             secureTextEntry
                             returnKeyType='go'
                             style={[styles.baseText, styles.input]}
@@ -201,6 +198,7 @@ class LoginScreen extends Component {
                 </View>
                 <SignUpScreen openSignUp={this.state.openSignUp} />
             </View>
+            </TouchableHighlight>
         );
     }
 }

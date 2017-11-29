@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, TouchableOpacity } from 'react-native';
 import MapSearch from './MapSearch';
 import HamburgerBtn from './HamburgerBtn';
 
@@ -34,7 +34,8 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleIndex: 9999
+            circleIndex: 9999,
+            searchActive: false
         }
     }
     
@@ -274,11 +275,23 @@ class Map extends Component {
         this.clearRefresh()
     }
 
+    searchActive = () => {
+        this.setState({
+            searchActive: true
+        })
+    }
+    
+    searchInactive = () => {
+        this.setState({
+            searchActive: false
+        })
+    }
+
 //-------------------------------------------------------------------------
 
     render() {
         //Target Marker
-        var targetMarker = null
+        let targetMarker = null
         if(this.state.showTargetMarker === true){
             targetMarker = 
                 <MapView.Marker 
@@ -294,7 +307,7 @@ class Map extends Component {
         }
         
         //Radius Circle
-        var radiusCircle =  null
+        let radiusCircle =  null
         if(this.state.showRadiusCircle === true){
             radiusCircle = 
                 <MapView.Circle 
@@ -310,6 +323,17 @@ class Map extends Component {
                 />
         }else if(this.state.showRadiusCircle === false){
             radiusCircle = null   
+        }
+
+        //Search Active Background View
+        let bgView = null;
+        if (this.state.searchActive === true) {
+            bgView =    <TouchableOpacity
+                            style={styles.searchEscView}
+                            onPress={this.searchInactive}
+                        />;
+        } else {
+            bgView = null;
         }
         
         return (
@@ -339,6 +363,7 @@ class Map extends Component {
                         </View>
                     </MapView.Marker>
                 </MapView>
+                {bgView}
 
 				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
                 <MapSearch 
@@ -349,6 +374,8 @@ class Map extends Component {
                     startRefresh={this.startRefresh}
                     blurProp={this.state.blurProp}
                     resetBlurProp={this.resetBlurProp}
+                    searchActive={this.searchActive}
+                    searchInactive={this.searchInactive}
                 />
             </View>
         );
@@ -387,6 +414,12 @@ const styles = StyleSheet.create({
         borderRadius: 20/2,
         overflow: 'hidden',
         backgroundColor: 'rgba(88,55,1430,0.7)'
+    },
+    searchEscView: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.3)'
     }
 });
 

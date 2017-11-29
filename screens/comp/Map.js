@@ -34,8 +34,7 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleIndex: 9999,
-            searchActive: false
+            circleIndex: 9999
         }
     }
     
@@ -275,18 +274,6 @@ class Map extends Component {
         this.clearRefresh()
     }
 
-    searchActive = () => {
-        this.setState({
-            searchActive: true
-        })
-    }
-    
-    searchInactive = () => {
-        this.setState({
-            searchActive: false
-        })
-    }
-
 //-------------------------------------------------------------------------
 
     render() {
@@ -365,7 +352,7 @@ class Map extends Component {
                 </MapView>
                 {bgView}
 
-				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} />
+				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
                 <MapSearch 
                     callbackFromParent={this.mapSearchFunc} 
                     giveLocation={this.state.locationMarkerPosition}
@@ -374,8 +361,6 @@ class Map extends Component {
                     startRefresh={this.startRefresh}
                     blurProp={this.state.blurProp}
                     resetBlurProp={this.resetBlurProp}
-                    searchActive={this.searchActive}
-                    searchInactive={this.searchInactive}
                 />
             </View>
         );
@@ -414,12 +399,6 @@ const styles = StyleSheet.create({
         borderRadius: 20/2,
         overflow: 'hidden',
         backgroundColor: 'rgba(88,55,1430,0.7)'
-    },
-    searchEscView: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.3)'
     }
 });
 

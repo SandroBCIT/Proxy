@@ -701,6 +701,7 @@ export default class GooglePlacesAutocomplete extends Component {
               style={[defaultStyles.textInput, this.props.styles.textInput]}
               value={this.state.text}
               placeholder={this.props.placeholder}
+              selectTextOnFocus={true}
 
               placeholderTextColor={this.props.placeholderTextColor}
               /*onFocus={onFocus ? () => {this._onFocus(); onFocus()} : this._onFocus}*/

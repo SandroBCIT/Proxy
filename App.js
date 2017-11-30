@@ -7,7 +7,6 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DrawerMenu from './screens/MenuScreen';
 
-
 export default DrawerNavigator({
     Login: { 
         screen: LoginScreen,

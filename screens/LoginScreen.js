@@ -67,16 +67,7 @@ class LoginScreen extends Component {
         });  
     }
     
-    //Realtime user listener
-//    firebase.auth().onAuthStateChange(user){
-//        if(user){
-//            
-//        }else{
-//            /*not logged in*/
-//        }
-//    }
-    
-    loginUser = ()=>{
+    loginUser = () => {
         const email = this.state.userEmail; 
         const pass = this.state.userPassword;
         const auth = firebase.auth();
@@ -130,7 +121,7 @@ class LoginScreen extends Component {
         }
     }
     
-    triggerAnim = ()=>{
+    triggerAnim = () => {
         this.setState({
             openSignUp:true    
         });
@@ -141,7 +132,7 @@ class LoginScreen extends Component {
         }, 1400)
     }
     
-    unFocus = ()=>{
+    unFocus = () => {
         this.refs.emailInput.blur()
         this.refs.passwordInput.blur()
     }

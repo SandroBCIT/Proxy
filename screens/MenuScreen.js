@@ -8,11 +8,9 @@ class MenuScreen extends Component {
     constructor(props){
         super(props);
         
-        this.logOutUser = this.logOutUser.bind(this);
-        this.hamburgerFunction = this.hamburgerFunction.bind(this);
-        
         this.state = {
-            fontReady: false
+            fontReady: false,
+            itemHighlight: 'home'
         }
     }
     
@@ -24,19 +22,42 @@ class MenuScreen extends Component {
         this.setState({ fontReady: true });
     }
     
-    logOutUser(){
+    logOutUser = () => {
         firebase.auth().signOut(); 
         
-        setTimeout(() => {this.props.navigation.navigate('DrawerClose')},500);
-        setTimeout(() => {this.props.navigation.navigate('Login')},1000);
+        this.props.navigation.navigate('DrawerClose');
+        this.props.navigation.navigate('Login');
+        this.setState({ itemHighlight: 'home' });
     }
     
-    hamburgerFunction(){
+    handleHome = () => {
+        this.setState({ itemHighlight: 'home' });
+        this.props.navigation.navigate('DrawerClose');
+        this.props.navigation.navigate('Home');
+    }
+    
+    handleSettings = () => {
+        this.setState({ itemHighlight: 'settings' });
+        this.props.navigation.navigate('DrawerClose');
+        this.props.navigation.navigate('Settings');
+    }
+    
+    hamburgerFunction = () => {
         this.props.navigation.navigate('DrawerClose');      
     }
 //-------------------------------------------------------------------------
     
     render() {
+        
+        let homeStyles = styles.menuBtn,
+            settingsStyles = styles.menuBtn;
+        
+        if (this.state.itemHighlight === 'home') {
+            homeStyles = [styles.menuBtn, styles.menuBtnActive];
+        } else {
+            settingsStyles = [styles.menuBtn, styles.menuBtnActive];
+        }
+        
         if (this.state.fontReady) {
             return (
                 <View style={styles.viewContainer}>
@@ -54,9 +75,8 @@ class MenuScreen extends Component {
                     />
                     <View style={styles.menuBtnCont}>
                         <TouchableOpacity
-                            style={styles.menuBtn}
-                            onPress={() => this.props.navigation.navigate('DrawerClose')}
-                            onPress={() => this.props.navigation.navigate('Home')}
+                            style={homeStyles}
+                            onPress={this.handleHome}
                         >
                             <Image
                                 source={require('../img/icon-g-travels.png')}
@@ -65,9 +85,8 @@ class MenuScreen extends Component {
                             <Text style={styles.baseText}>home</Text>	
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.menuBtn}
-                            onPress={() => this.props.navigation.navigate('DrawerClose')}
-                            onPress={() => this.props.navigation.navigate('Settings')}
+                            style={settingsStyles}
+                            onPress={this.handleSettings}
                         >
                             <Image
                                 source={require('../img/icon-g-settings.png')}
@@ -123,14 +142,18 @@ const styles = StyleSheet.create({
 		marginVertical: 40
 	},
 	menuBtnCont: {
-		width: '80%'
+		width: '100%'
 	},
 	menuBtn: {
+        paddingHorizontal: '10%',
 		height: 60,
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
+    menuBtnActive: {
+        backgroundColor: 'rgba(0,0,0,0.2)'
+    },
 	homeBtnIcon: {
 		width: 45,
 		height: 45,

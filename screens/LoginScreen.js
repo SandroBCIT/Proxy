@@ -158,6 +158,7 @@ class LoginScreen extends Component {
                                     returnKeyType='next'
                                     style={[styles.baseText, styles.input]}
                                     placeholder='example@email.com'
+                                    placeholderTextColor='#58378F'
                                     underlineColorAndroid='transparent'
                                     autoCapitalize='none'
                                     autoCorrect={false}
@@ -170,6 +171,7 @@ class LoginScreen extends Component {
                                     returnKeyType='go'
                                     style={[styles.baseText, styles.input]}
                                     placeholder='**********'
+                                    placeholderTextColor='#58378F'
                                     underlineColorAndroid='transparent'
                                     ref='passwordInput'
                                     onChangeText={this.storeUserPassword}
@@ -243,8 +245,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(255,255,255,1)',
 		marginBottom: 10,
 		paddingLeft: 15,
-		borderRadius: 5,
-		borderWidth: 1,
+		borderBottomWidth: 2,
 		borderColor: '#58378F'
 	},
 	btnContainer: {
@@ -255,7 +256,6 @@ const styles = StyleSheet.create({
 		height: 35,
 		justifyContent: 'center',
 		alignItems: 'center',
-		borderRadius: 5,
 	},
 	btnLabel: {
 		color: '#E9E9E9'

@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
         bottom: '5%',
         width: '100%'
 	},
+    baseText: {
+        fontFamily: 'open-sans-light'
+    },
     wrapper: {
         
     },

@@ -44,7 +44,8 @@ const defaultStyles = {
     marginLeft: 8,
     marginRight: 8,
     fontSize: 15,
-    flex: 1
+    flex: 1,
+    fontFamily: 'open-sans-light'
   },
   poweredContainer: {
     justifyContent: 'flex-end',
@@ -53,7 +54,6 @@ const defaultStyles = {
   },
   powered: {},
   listView: {
-    // flex: 1,
   },
   row: {
     padding: 13,
@@ -64,7 +64,9 @@ const defaultStyles = {
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#c8c7cc',
   },
-  description: {},
+  description: {
+    fontFamily: 'open-sans-light'
+  },
   loader: {
     // flex: 1,
     flexDirection: 'row',

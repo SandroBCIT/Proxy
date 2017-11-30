@@ -44,7 +44,7 @@ class SetupWindow extends Component {
                         value = {250}
                         step = {5}
                     />  
-                    <Text style={styles.text}>
+                    <Text style={[styles.baseText, styles.text]}>
                         {this.state.sliderValue} m
                     </Text>
                     <TouchableOpacity onPress={this.startCheckDistance}>
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
         left: '50%',
         top: '80%'
 	},
+    baseText: {
+        fontFamily: 'open-sans-light'
+    },
     wrapper: {
         position: 'relative',
         left: '-50%',

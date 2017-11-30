@@ -71,12 +71,7 @@ class MapSearch extends Component {
                         language: 'en'
                     }}
 
-                    styles={{
-                        textInputContainer: {backgroundColor: 'white', marginRight: 20, borderRadius: 5, height: 45,borderWidth: 1, borderColor: '#58378F'},
-                        predefinedPlacesDescription: {color: '#1faadb'},
-                        listView: {backgroundColor: 'white', marginRight: 20, paddingRight: 20},
-                        poweredContainer: {display: 'none'}
-                    }}
+                    styles={searchStyles}
 
                     nearbyPlacesAPI='GooglePlacesSearch' 
                     GooglePlacesSearchQuery={{
@@ -106,5 +101,23 @@ const styles = StyleSheet.create({
 		marginTop: 10
 	}
 });
+
+const searchStyles = {
+    textInputContainer: {
+        backgroundColor: 'white',
+        marginRight: 20,
+        borderRadius: 5,
+        height: 45,
+        borderWidth: 1,
+        borderColor: '#58378F'
+    },
+    predefinedPlacesDescription: { color: '#1faadb' },
+    listView: {
+        backgroundColor: 'white',
+        marginRight: 20,
+        paddingRight: 20
+    },
+    poweredContainer: { display: 'none' }
+}
 
 export default MapSearch;

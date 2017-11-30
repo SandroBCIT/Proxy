@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Button, Text, Slider, TouchableOpacity, Animated, Easing } from 'react-native'
 
 class InitialWindow extends Component {
     
@@ -8,6 +8,22 @@ class InitialWindow extends Component {
         
         this.state = {
         }
+    }
+    
+    componentWillMount() {
+        this.animatedPosition = new Animated.Value(50);
+        this.animatedOpacity = new Animated.Value(0);
+    }
+    
+    componentDidMount() {
+        Animated.timing(this.animatedPosition, {
+            toValue: 0,
+            duration: 200
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 200
+        }).start()
     }
     
     setToAlarm = ()=>{
@@ -46,9 +62,14 @@ class InitialWindow extends Component {
 //-------------------------------------------------------------------------    
 
     render() {
+        const animatedStyle = {
+            transform: [{translateY: this.animatedPosition}],
+            opacity: this.animatedOpacity
+        }
+        
         return (
             <View style={styles.viewContainer}>
-                <View style={[styles.wrapper, styles.shadowBig]}>
+                <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
                     <Text style={styles.baseText}>choose your action</Text>
                     <TouchableOpacity onPress={this.setToAlarm}>
                         <View style={[styles.confirmBut, styles.shadowSm]}>
@@ -65,7 +86,7 @@ class InitialWindow extends Component {
                             <Text style={[styles.baseText, styles.btnLabel]}>message</Text>	
                         </View>
                     </TouchableOpacity> 
-                </View>
+                </Animated.View>
             </View>
         );                             
     }
@@ -105,7 +126,8 @@ const styles = StyleSheet.create({
     },
     baseText: {
         textAlign: 'center',
-        color: '#58378F'
+        color: '#58378F',
+        fontFamily: 'open-sans-light'
     },
     confirmBut: {
         height: 35,

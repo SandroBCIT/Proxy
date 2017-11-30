@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react'
+import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native'
 
 class InitialWindow extends Component {
     
@@ -28,9 +28,7 @@ class InitialWindow extends Component {
         this.setState({
             myMethod: 3
         })  
-//        this.toggleWindow()
-        
-        
+        this.toggleWindow()
     }
     
     toggleWindow = ()=>{

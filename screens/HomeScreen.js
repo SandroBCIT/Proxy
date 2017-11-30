@@ -95,7 +95,6 @@ class HomeScreen extends Component {
                     toggleSetupWindow={this.toggleSetupWindow}
                     disableFunctions={this.disableFunctions}
                     delayedRadius={this.delayedRadius}
-                    removePin={this.removePin}
                 />   
         }else if(this.state.showInitialWindow === false){
             initialWindow = null;  

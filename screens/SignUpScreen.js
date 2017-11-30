@@ -116,11 +116,11 @@ class SignUpScreen extends Component {
         return (
             <Animated.View style={[styles.signUpArea, animatedStyle]}>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>email</Text>
+                    <Text style={[styles.inputLabel, styles.baseText]}>email</Text>
                     <TextInput 
                         keyboardType='email-address'
                         returnKeyType='next'
-                        style={styles.input}
+                        style={[styles.input, styles.baseText]}
                         placeholder='example@email.com'
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
@@ -128,36 +128,36 @@ class SignUpScreen extends Component {
                         onChangeText={this.storeUserEmail}
                         onSubmitEditing={() => this.passwordInput.focus()}
                     />
-                    <Text style={styles.inputLabel}>password</Text>
+                    <Text style={[styles.inputLabel, styles.baseText]}>password</Text>
                     <TextInput 
                         secureTextEntry
                         returnKeyType='next'
-                        style={styles.input}
+                        style={[styles.input, styles.baseText]}
                         placeholder='**********'
                         underlineColorAndroid='transparent'
                         ref={(input) => this.passwordInput = input}
                         onChangeText={this.storeUserPassword}
                         onSubmitEditing={() => this.passwordInputCheck.focus()}
                     /> 
-                    <Text style={styles.inputLabel}>re-enter password</Text>
+                    <Text style={[styles.inputLabel, styles.baseText]}>re-enter password</Text>
                     <TextInput 
                         secureTextEntry
                         returnKeyType='go'
-                        style={styles.input}
+                        style={[styles.input, styles.baseText]}
                         placeholder='**********'
                         underlineColorAndroid='transparent'
                         ref={(input) => this.passwordInputCheck = input}
                         onChangeText={this.storeUserPasswordCheck}
                         onSubmitEditing={this.signUserUp}
                     />
-                    <Text style={styles.matchAlert}>{checkRes}</Text>
+                    <Text style={[styles.matchAlert, styles.baseText]}>{checkRes}</Text>
 					<TouchableOpacity onPress={this.signUserUp}>
 						<View style={styles.btn}>
 							<Text style={[styles.baseText, styles.btnLabel]}>sign up</Text>	
 						</View>
 					</TouchableOpacity>
                     <TouchableOpacity onPress={this.closeAnim}>
-                        <Text style={styles.loginText}>Already have an account?</Text>
+                        <Text style={[styles.loginText, styles.baseText]}>Already have an account?</Text>
                         <Text style={[styles.loginText, styles.loginTextHighlight]}>Login here</Text>
                     </TouchableOpacity>
                 </View>
@@ -180,6 +180,9 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 50,
 		paddingTop: 50
 	},
+    baseText: {
+        fontFamily: 'open-sans-light'
+    },
 	inputLabel: {
 		marginVertical: 5,
 		paddingHorizontal: 15,

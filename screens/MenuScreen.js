@@ -10,6 +10,18 @@ class MenuScreen extends Component {
         
         this.logOutUser = this.logOutUser.bind(this);
         this.hamburgerFunction = this.hamburgerFunction.bind(this);
+        
+        this.state = {
+            fontReady: false
+        }
+    }
+    
+    async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('../Assets/font/OpenSans-Light.ttf'),
+        });
+
+        this.setState({ fontReady: true });
     }
     
     logOutUser(){
@@ -25,52 +37,57 @@ class MenuScreen extends Component {
 //-------------------------------------------------------------------------
     
     render() {
-        return (
-            <View style={styles.viewContainer}>
-                <View style={styles.menuTop}>
-                	<TouchableHighlight onPress={this.hamburgerFunction}>
-						<Image
-							source={require('../img/icon-g-menu.png')}
-							style={styles.hamburgerBtn}
-						/>
-					</TouchableHighlight>
+        if (this.state.fontReady) {
+            return (
+                <View style={styles.viewContainer}>
+                    <View style={styles.menuTop}>
+                        <TouchableHighlight onPress={this.hamburgerFunction}>
+                            <Image
+                                source={require('../img/icon-g-menu.png')}
+                                style={styles.hamburgerBtn}
+                            />
+                        </TouchableHighlight>
+                    </View>
+                    <Image 
+                        style={styles.logo}
+                        source={require('../img/proxy-logo-white.png')}
+                    />
+                    <View style={styles.menuBtnCont}>
+                        <TouchableOpacity
+                            style={styles.menuBtn}
+                            onPress={() => this.props.navigation.navigate('DrawerClose')}
+                            onPress={() => this.props.navigation.navigate('Home')}
+                        >
+                            <Image
+                                source={require('../img/icon-g-travels.png')}
+                                style={styles.homeBtnIcon}
+                            />
+                            <Text style={styles.baseText}>home</Text>	
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.menuBtn}
+                            onPress={() => this.props.navigation.navigate('DrawerClose')}
+                            onPress={() => this.props.navigation.navigate('Settings')}
+                        >
+                            <Image
+                                source={require('../img/icon-g-settings.png')}
+                                style={styles.settingsBtnIcon}
+                            />
+                            <Text style={styles.baseText}>settings</Text>	
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.menuBtn}
+                            onPress={this.logOutUser}
+                        >
+                            <Text style={[styles.baseText, styles.logOutLabel]}>log out</Text>	
+                        </TouchableOpacity>
+                    </View>        
                 </View>
-				<Image 
-					style={styles.logo}
-					source={require('../img/proxy-logo-white.png')}
-				/>
-                <View style={styles.menuBtnCont}>
-					<TouchableOpacity
-						style={styles.menuBtn}
-						onPress={() => this.props.navigation.navigate('DrawerClose')}
-						onPress={() => this.props.navigation.navigate('Home')}
-					>
-						<Image
-							source={require('../img/icon-g-travels.png')}
-							style={styles.homeBtnIcon}
-						/>
-						<Text style={styles.baseText}>home</Text>	
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.menuBtn}
-						onPress={() => this.props.navigation.navigate('DrawerClose')}
-						onPress={() => this.props.navigation.navigate('Settings')}
-					>
-						<Image
-							source={require('../img/icon-g-settings.png')}
-							style={styles.settingsBtnIcon}
-						/>
-						<Text style={styles.baseText}>settings</Text>	
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.menuBtn}
-						onPress={this.logOutUser}
-					>
-						<Text style={[styles.baseText, styles.logOutLabel]}>log out</Text>	
-					</TouchableOpacity>
-                </View>        
-            </View>
-        );
+            );
+        } else {
+            return null;
+        }
+        
     }
 }
 
@@ -87,6 +104,7 @@ const styles = StyleSheet.create({
 		marginTop: 24
 	},
 	baseText: {
+        fontFamily: 'open-sans-light',
 		color: '#36D994'
 	},
 	menuTop: {

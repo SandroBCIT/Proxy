@@ -45,6 +45,14 @@ class Map extends Component {
         })
     }
     
+    async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('../../Assets/font/OpenSans-Light.ttf'),
+        });
+
+        this.setState({ fontReady: true });
+    }
+    
     startRefresh = ()=>{
         this.locRefresh();
     }
@@ -322,48 +330,52 @@ class Map extends Component {
         } else {
             bgView = null;
         }
-        
-        return (
-            <View style={styles.viewContainer}>
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={styles.map}
-                    region={this.state.screenPosition}
-                    onRegionChange={(reg)=>{
-                        this.setState({screenPosition:reg})
-                    }}
-                    rotateEnabled={false}
-                    loadingEnabled={true}
-                    onLongPress={(data) => this.onLongPress(data)}
-                    onPress={this.onMapPress}
-                >
 
-                    {radiusCircle}
-                    {targetMarker}
-
-                    <MapView.Marker 
-                        coordinate={this.state.locationMarkerPosition}
-                        anchor={{ x: 0.5, y: 0.5 }}
+        if (this.state.fontReady) {
+            return (
+                <View style={styles.viewContainer}>
+                    <MapView
+                        provider={PROVIDER_GOOGLE}
+                        style={styles.map}
+                        region={this.state.screenPosition}
+                        onRegionChange={(reg)=>{
+                            this.setState({screenPosition:reg})
+                        }}
+                        rotateEnabled={false}
+                        loadingEnabled={true}
+                        onLongPress={(data) => this.onLongPress(data)}
+                        onPress={this.onMapPress}
                     >
-                        <View style={styles.locationRadius}>
-                            <View style={styles.locationMarker} />
-                        </View>
-                    </MapView.Marker>
-                </MapView>
-                {bgView}
 
-				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
-                <MapSearch 
-                    callbackFromParent={this.mapSearchFunc} 
-                    giveLocation={this.state.locationMarkerPosition}
-                    editingInput={this.editingInput}
-                    stopRefresh={this.clearRefresh}
-                    startRefresh={this.startRefresh}
-                    blurProp={this.state.blurProp}
-                    resetBlurProp={this.resetBlurProp}
-                />
-            </View>
-        );
+                        {radiusCircle}
+                        {targetMarker}
+
+                        <MapView.Marker 
+                            coordinate={this.state.locationMarkerPosition}
+                            anchor={{ x: 0.5, y: 0.5 }}
+                        >
+                            <View style={styles.locationRadius}>
+                                <View style={styles.locationMarker} />
+                            </View>
+                        </MapView.Marker>
+                    </MapView>
+                    {bgView}
+
+                    <HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
+                    <MapSearch 
+                        callbackFromParent={this.mapSearchFunc} 
+                        giveLocation={this.state.locationMarkerPosition}
+                        editingInput={this.editingInput}
+                        stopRefresh={this.clearRefresh}
+                        startRefresh={this.startRefresh}
+                        blurProp={this.state.blurProp}
+                        resetBlurProp={this.resetBlurProp}
+                    />
+                </View>
+            );
+        } else {
+            return null;
+        }
     }
 }
 

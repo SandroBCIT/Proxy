@@ -26,6 +26,7 @@ class LoginScreen extends Component {
             openSignUp: false,
             userEmail: '',
             userPassword: '',
+            fontReady: false
         }
     } 
 
@@ -40,6 +41,14 @@ class LoginScreen extends Component {
                 this.goToHome();   
             }
         });
+    }
+
+    async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('../Assets/font/OpenSans-Light.ttf'),
+        });
+
+        this.setState({ fontReady: true });
     }
 
     storeUserEmail = (text)=>{
@@ -140,65 +149,70 @@ class LoginScreen extends Component {
 //-------------------------------------------------------------------------
     
     render() {
-        return (
-            <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
-            <View style={styles.wrapper}>
-                <View style={styles.viewContainer}>
-                    <Image 
-                        style={styles.logo}
-                        source={require('../img/proxy-logo.png')}
-                    />
-                    <View style={styles.inputContainer} >
-                        <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
-                        <TextInput 
-                            ref='emailInput'
-                            keyboardType='email-address'
-                            returnKeyType='next'
-                            style={[styles.baseText, styles.input]}
-                            placeholder='example@email.com'
-                            underlineColorAndroid='transparent'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            onChangeText={this.storeUserEmail}
-                            onSubmitEditing={() => this.refs.passwordInput.focus()}
-                        />
-                        <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
-                        <TextInput 
-                            secureTextEntry
-                            returnKeyType='go'
-                            style={[styles.baseText, styles.input]}
-                            placeholder='**********'
-                            underlineColorAndroid='transparent'
-                            ref='passwordInput'
-                            onChangeText={this.storeUserPassword}
-                            onSubmitEditing={this.loginUser}
-                        />  
+        
+        if (this.state.fontReady) {
+            return (
+                <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
+                    <View style={styles.wrapper}>
+                        <View style={styles.viewContainer}>
+                            <Image 
+                                style={styles.logo}
+                                source={require('../img/proxy-logo.png')}
+                            />
+                            <View style={styles.inputContainer} >
+                                <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
+                                <TextInput 
+                                    ref='emailInput'
+                                    keyboardType='email-address'
+                                    returnKeyType='next'
+                                    style={[styles.baseText, styles.input]}
+                                    placeholder='example@email.com'
+                                    underlineColorAndroid='transparent'
+                                    autoCapitalize='none'
+                                    autoCorrect={false}
+                                    onChangeText={this.storeUserEmail}
+                                    onSubmitEditing={() => this.refs.passwordInput.focus()}
+                                />
+                                <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
+                                <TextInput 
+                                    secureTextEntry
+                                    returnKeyType='go'
+                                    style={[styles.baseText, styles.input]}
+                                    placeholder='**********'
+                                    underlineColorAndroid='transparent'
+                                    ref='passwordInput'
+                                    onChangeText={this.storeUserPassword}
+                                    onSubmitEditing={this.loginUser}
+                                />  
+                            </View>
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity onPress={this.loginUser}>
+                                    <View style={[styles.btn, styles.btnLogin]}>
+                                        <Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.fbLogin}>
+                                    <View style={[styles.btn, styles.btnFacebook]}>
+                                        <Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.googleLogin}>
+                                    <View style={[styles.btn, styles.btnGoogle]}>
+                                        <Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.triggerAnim}>
+                                    <Text style={[styles.baseText, styles.signupText]}>sign up</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <SignUpScreen openSignUp={this.state.openSignUp} />
                     </View>
-                    <View style={styles.btnContainer}>
-						<TouchableOpacity onPress={this.loginUser}>
-							<View style={[styles.btn, styles.btnLogin]}>
-								<Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={this.fbLogin}>
-							<View style={[styles.btn, styles.btnFacebook]}>
-								<Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
-							</View>
-						</TouchableOpacity>
-                        <TouchableOpacity onPress={this.googleLogin}>
-							<View style={[styles.btn, styles.btnGoogle]}>
-								<Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={this.triggerAnim}>
-                            <Text style={[styles.baseText, styles.signupText]}>sign up</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <SignUpScreen openSignUp={this.state.openSignUp} />
-            </View>
-            </TouchableHighlight>
-        );
+                </TouchableHighlight>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -218,7 +232,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 50,
 	},
 	baseText: {
-		fontFamily: 'Roboto'
+		fontFamily: 'open-sans-light'
 	},
 	logo: {
 		alignSelf: 'center',

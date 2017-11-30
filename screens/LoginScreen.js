@@ -141,7 +141,10 @@ class LoginScreen extends Component {
     
     render() {
         return (
-            <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
+            <TouchableHighlight 
+                onPress={this.unFocus} 
+                activeOpacity={1} 
+            >
             <View style={styles.wrapper}>
                 <View style={styles.viewContainer}>
                     <Image 

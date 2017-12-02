@@ -27,30 +27,18 @@ class InitialWindow extends Component {
     }
     
     setToAlarm = ()=>{
-        this.setState({
-            myMethod: 1
-        })   
         this.toggleWindow()
+        this.props.alertMethod(1)
     }
     
-    setToNotification = ()=>{
-        this.setState({
-            myMethod: 2
-        })  
+    setToNotification = ()=>{ 
         this.toggleWindow()
-    }
-    
-    setToMessage = ()=>{
-        this.setState({
-            myMethod: 3
-        })  
-        this.toggleWindow()
+        this.props.alertMethod(2)
     }
     
     toggleWindow = ()=>{
         this.props.toggleInitialWindow(false)
         this.props.toggleSetupWindow(true)
-        this.props.disableFunctions(true)
         //to show radius in map component
         this.props.delayedRadius(true)
         setTimeout(()=>{   
@@ -81,11 +69,6 @@ class InitialWindow extends Component {
                             <Text style={[styles.baseText, styles.btnLabel]}>notification</Text>	
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.setToMessage}>
-                        <View style={[styles.confirmBut, styles.shadowSm]}>
-                            <Text style={[styles.baseText, styles.btnLabel]}>message</Text>	
-                        </View>
-                    </TouchableOpacity> 
                 </Animated.View>
             </View>
         );                             

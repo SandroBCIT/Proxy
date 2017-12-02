@@ -17,7 +17,8 @@ class HomeScreen extends Component {
             showSetupWindow: false,
             checkDistance: false,
             sliderValue: 50,
-            removeOldPin: false
+            removeOldPin: false,
+            disableFunctions: false
         }
     }
     
@@ -48,16 +49,7 @@ class HomeScreen extends Component {
             showRunningWindow: data
         })  
         if(data === false){
-            this.stopCheckDistance(false);
-            this.setState({
-                removeOldPin: true
-            })
-            //to prevent perma removal of future pins
-            setTimeout(()=>{
-                this.setState({
-                    removeOldPin: false
-                })        
-            }, 50)
+            this.stopCheckDistance(false)
         }
     }
     
@@ -79,10 +71,28 @@ class HomeScreen extends Component {
         })    
     }
     
+    disableFunctionsRemote = (data)=>{
+        this.setState({
+            disableFunctions: data
+        })    
+    }
+    
     delayedRadius = (data)=>{
         this.setState({
             delayedRadius: data
         })
+    }
+    
+    removeOldPin = (data)=>{
+        this.setState({
+            removeOldPin: data
+        })   
+    }
+    
+    alertMethod = (data)=>{
+        this.setState({
+            alertMethod: data
+        }) 
     }
 //-------------------------------------------------------------------------
     
@@ -93,8 +103,8 @@ class HomeScreen extends Component {
                 <InitialWindow 
                     toggleInitialWindow={this.toggleInitialWindow}
                     toggleSetupWindow={this.toggleSetupWindow}
-                    disableFunctions={this.disableFunctions}
                     delayedRadius={this.delayedRadius}
+                    alertMethod={this.alertMethod}
                 />   
         }else if(this.state.showInitialWindow === false){
             initialWindow = null;  
@@ -108,6 +118,7 @@ class HomeScreen extends Component {
                     checkDistance={this.startCheckDistance}
                     toggleSetupWindow={this.toggleSetupWindow}
                     toggleRunningWindow={this.toggleRunningWindow}
+                    disableFunctions={this.disableFunctions}
                 />  
         }else if(this.state.showSetupWindow === false){
             setupWindow = null  
@@ -119,6 +130,7 @@ class HomeScreen extends Component {
                 <RunningWindow
                     toggleRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.disableFunctions}
+                    removeOldPin={this.removeOldPin}
                 />   
         }else if(this.state.showSetupWindow === false){
             runningWindow = null  
@@ -136,7 +148,9 @@ class HomeScreen extends Component {
                     removeOldPin={this.state.removeOldPin}
                     removeRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.state.disableFunctions}
+                    disableFunctionsRemote={this.disableFunctionsRemote}
                     delayedRadius={this.state.delayedRadius}
+                    alertMethod={this.state.alertMethod}
                 />
                 {initialWindow}
                 {setupWindow}

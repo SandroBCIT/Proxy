@@ -12,8 +12,12 @@ class RunningWind extends Component {
     }
     
     toggleRunningWindow(){
-        this.props.toggleRunningWindow(false);
-        this.props.disableFunctions(false);
+        this.props.toggleRunningWindow(false)
+        this.props.disableFunctions(false)
+        this.props.removeOldPin(true)
+        setTimeout(()=>{   
+            this.props.removeOldPin(false)
+        }, 50)
     }
 //-------------------------------------------------------------------------    
 

@@ -132,20 +132,23 @@ class Map extends Component {
 
 //                    Vibration.cancel()
                     
-                    this.displayAlert();
-                    
-                    //Expo Notification
-                    var localNotification = {
-                        title: 'You have arrived!!',
-                        body: 'This is Proxy. You are close to your set destination!',
-                        ios: {
-                            sound: true
-                        },
-                        android: {
-                            sound: true
+    
+                    if(this.props.alertMethod === 1){
+                        this.displayAlert()
+                    }else if(this.props.alertMethod === 2){
+                        //Expo Notification
+                        var localNotification = {
+                            title: 'You have arrived!!',
+                            body: 'This is Proxy. You are close to your set destination!',
+                            ios: {
+                                sound: true
+                            },
+                            android: {
+                                sound: true
+                            }
                         }
+                        Expo.Notifications.presentLocalNotificationAsync(localNotification)
                     }
-                    Expo.Notifications.presentLocalNotificationAsync(localNotification)
                     
                     //resetting variables
                     this.props.stopCheckDistance(false)
@@ -156,6 +159,9 @@ class Map extends Component {
                         showTargetMarker: false,
                         showRadiusCircle: false
                     })
+                    
+                    //enables functions
+                    this.props.disableFunctionsRemote(false)
                 }   
             }
             
@@ -220,48 +226,52 @@ class Map extends Component {
     
     //when long pressing map 
     onLongPress = (data)=>{
-        if(this.state.showTargetMarker === true){ 
-            this.setState({
-                showTargetMarker: false,
-                showRadiusCircle: false
-            })
-            this.props.toggleInitialWindow(false)
-            this.props.toggleSetupWindow(false)
-        }
-        
-        //grabs details about where the map is pressed on
-        longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
-        longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
-        var newTargetMarker = {
-            latitude: longPressLat,
-            longitude: longPressLong,   
-        }
-        this.setState({
-            targetMarkerPosition: newTargetMarker
-        });
+        if(this.props.disableFunctions === false){
+            if(this.state.showTargetMarker === true){ 
+                this.setState({
+                    showTargetMarker: false,
+                    showRadiusCircle: false
+                })
+                this.props.toggleInitialWindow(false)
+                this.props.toggleSetupWindow(false)
+            }
 
-        //displays target marker, radius circle and initial window
-        this.setState({
-            showTargetMarker: true
-        })
-        this.props.toggleInitialWindow(true)
+            //grabs details about where the map is pressed on
+            longPressLat = parseFloat(JSON.stringify(data.nativeEvent.coordinate['latitude']));
+            longPressLong = parseFloat(JSON.stringify(data.nativeEvent.coordinate['longitude']));
+            var newTargetMarker = {
+                latitude: longPressLat,
+                longitude: longPressLong,   
+            }
+            this.setState({
+                targetMarkerPosition: newTargetMarker
+            });
+
+            //displays target marker, radius circle and initial window
+            this.setState({
+                showTargetMarker: true
+            })
+            this.props.toggleInitialWindow(true)
+        }
     }
     
     //when tapping on map
     onMapPress = ()=>{
-        if(this.state.showTargetMarker === true){
+        if(this.props.disableFunctions === false){
+            if(this.state.showTargetMarker === true){
+                this.setState({
+                    showTargetMarker: false,
+                    showRadiusCircle: false
+                })
+                this.props.toggleInitialWindow(false)
+                this.props.toggleSetupWindow(false)
+            }
+
+            //unfocuses from the map search & removes search suggestions
             this.setState({
-                showTargetMarker: false,
-                showRadiusCircle: false
+                blurProp: true
             })
-            this.props.toggleInitialWindow(false)
-            this.props.toggleSetupWindow(false)
         }
-        
-        //unfocuses from the map search & removes search suggestions
-        this.setState({
-            blurProp: true
-        })
     }
     
     resetBlurProp = (data)=>{
@@ -275,6 +285,12 @@ class Map extends Component {
             this.setState({
                 showRadiusCircle: true
             })
+        }
+        if(nextProps.removeOldPin === true){
+            this.setState({
+                showTargetMarker: false,
+                showRadiusCircle: false
+            })   
         }
     }
     

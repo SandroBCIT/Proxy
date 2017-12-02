@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react'
+import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native'
 
 
 class SetupWindow extends Component {
     
     constructor(props){
-        super(props);
+        super(props)
         
         this.state = {
             sliderValue: 250
@@ -20,13 +20,14 @@ class SetupWindow extends Component {
         this.setState({
             sliderValue: data     
         })
-        this.props.sliderValue(data);
+        this.props.sliderValue(data)
     }
     
     startCheckDistance = ()=>{
-        this.props.checkDistance(true);
-        this.props.toggleSetupWindow(false);
-        this.props.toggleRunningWindow(true);
+        this.props.checkDistance(true)
+        this.props.toggleSetupWindow(false)
+        this.props.toggleRunningWindow(true)
+        this.props.disableFunctions(true)
     }
     
 //-------------------------------------------------------------------------    

@@ -143,7 +143,7 @@ class LoginScreen extends Component {
         
         if (this.state.fontReady) {
             return (
-                <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
+                <TouchableOpacity onPress={this.unFocus} activeOpacity={1} >
                     <View style={styles.wrapper}>
                         <View style={styles.viewContainer}>
                             <Image 
@@ -201,7 +201,7 @@ class LoginScreen extends Component {
                         </View>
                         <SignUpScreen openSignUp={this.state.openSignUp} />
                     </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
             );
         } else {
             return null;

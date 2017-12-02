@@ -9,7 +9,7 @@ var checkRes = null;
 
 class SignUpScreen extends Component {
     constructor(props){
-        super(props);
+        super(props)
         
         this.state = {
             openSignUp: this.props.openSignUp,
@@ -19,81 +19,80 @@ class SignUpScreen extends Component {
             userPasswordCheck:'',
             checkResult: ''
         } 
-        
-        this.openAnim = this.openAnim.bind(this);
-        this.closeAnim = this.closeAnim.bind(this);
-        this.storeUserEmail = this.storeUserEmail.bind(this);
-        this.storeUserPassword = this.storeUserPassword.bind(this);
-        this.storeUserPasswordCheck = this.storeUserPasswordCheck.bind(this);
-        this.signUserUp = this.signUserUp.bind(this);
     }
     
     componentDidMount(){
-        this.checker();    
+        this.checker()  
     }
        
-    checker(){
+    checker = ()=>{
         var checking = setInterval(() => {   
             if(this.props.openSignUp == true){
-                this.openAnim();
-                clearInterval(checking);
+                this.openAnim()
+                clearInterval(checking)
             }
-        }, 50);
+        }, 50)
     }
     
-    openAnim(){
+    openAnim = ()=>{
         Animated.timing(this.state.animVal, {
             toValue: 0,
             duration: 500
-        }).start();
+        }).start()
     }
     
-    closeAnim(){
+    closeAnim = ()=>{
         Animated.timing(this.state.animVal, {
             toValue: height,
             duration: 500
-        }).start();
-        this.props.openSignUp=false;
-        this.checker();
+        }).start()
+        this.props.openSignUp=false
+        this.checker()
     }
     
     //stores Email in state
-    storeUserEmail(text){
+    storeUserEmail = (text)=>{
         this.setState({
             userEmail:text    
         })
     }
     
     //stores Password in state
-    storeUserPassword(text){
+    storeUserPassword = (text)=>{
         this.setState({
             userPassword:text    
         }) 
     }
     
     //stores Password to be checked in state
-    storeUserPasswordCheck(text){
+    storeUserPasswordCheck = (text)=>{
         this.setState({
             userPasswordCheck:text    
         })
     }
     
-    signUserUp(){
+    signUserUp = ()=>{
         if(checkRes !== null){
-            alert('passwords do not match');
+            alert('passwords do not match')
         }else{
         //GetEmail and Pass
-            const email = this.state.userEmail; 
-            const pass = this.state.userPassword;
-            const auth = firebase.auth();
+            const email = this.state.userEmail
+            const pass = this.state.userPassword
+            const auth = firebase.auth()
             //SignIn
             const promise = auth.createUserWithEmailAndPassword(email,pass);
-            promise.catch(e => alert(e.message));
+            promise.catch(e => alert(e.message))
             
             if(promise.catch === null){
-                this.closeAnim();
+                this.closeAnim()
             }
         }
+    }
+    
+    unFocus = () => {
+        this.refs.emailInput.blur()
+        this.refs.pwInput.blur()
+        this.refs.pw2Input.blur()
     }
     
 //-------------------------------------------------------------------------
@@ -115,52 +114,55 @@ class SignUpScreen extends Component {
         };
         return (
             <Animated.View style={[styles.signUpArea, animatedStyle]}>
-                <View style={styles.inputContainer}>
-                    <Text style={[styles.inputLabel, styles.baseText]}>email</Text>
-                    <TextInput 
-                        keyboardType='email-address'
-                        returnKeyType='next'
-                        style={[styles.input, styles.baseText]}
-                        placeholder='example@email.com'
-                        underlineColorAndroid='transparent'
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        onChangeText={this.storeUserEmail}
-                        onSubmitEditing={() => this.passwordInput.focus()}
-                    />
-                    <Text style={[styles.inputLabel, styles.baseText]}>password</Text>
-                    <TextInput 
-                        secureTextEntry
-                        returnKeyType='next'
-                        style={[styles.input, styles.baseText]}
-                        placeholder='**********'
-                        underlineColorAndroid='transparent'
-                        ref={(input) => this.passwordInput = input}
-                        onChangeText={this.storeUserPassword}
-                        onSubmitEditing={() => this.passwordInputCheck.focus()}
-                    /> 
-                    <Text style={[styles.inputLabel, styles.baseText]}>re-enter password</Text>
-                    <TextInput 
-                        secureTextEntry
-                        returnKeyType='go'
-                        style={[styles.input, styles.baseText]}
-                        placeholder='**********'
-                        underlineColorAndroid='transparent'
-                        ref={(input) => this.passwordInputCheck = input}
-                        onChangeText={this.storeUserPasswordCheck}
-                        onSubmitEditing={this.signUserUp}
-                    />
-                    <Text style={[styles.matchAlert, styles.baseText]}>{checkRes}</Text>
-					<TouchableOpacity onPress={this.signUserUp}>
-						<View style={styles.btn}>
-							<Text style={[styles.baseText, styles.btnLabel]}>sign up</Text>	
-						</View>
-					</TouchableOpacity>
-                    <TouchableOpacity onPress={this.closeAnim}>
-                        <Text style={[styles.loginText, styles.baseText]}>Already have an account?</Text>
-                        <Text style={[styles.loginText, styles.loginTextHighlight]}>Login here</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={this.unFocus} activeOpacity={1} >
+                    <View style={styles.inputContainer}>
+                        <Text style={[styles.inputLabel, styles.baseText]}>email</Text>
+                        <TextInput 
+                            ref='emailInput'
+                            keyboardType='email-address'
+                            returnKeyType='next'
+                            style={[styles.input, styles.baseText]}
+                            placeholder='example@email.com'
+                            underlineColorAndroid='transparent'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            onChangeText={this.storeUserEmail}
+                            onSubmitEditing={() => this.refs.pwInput.focus()}
+                        />
+                        <Text style={[styles.inputLabel, styles.baseText]}>password</Text>
+                        <TextInput 
+                            ref='pwInput'
+                            secureTextEntry
+                            returnKeyType='next'
+                            style={[styles.input, styles.baseText]}
+                            placeholder='**********'
+                            underlineColorAndroid='transparent'
+                            onChangeText={this.storeUserPassword}
+                            onSubmitEditing={() => this.refs.pw2Input.focus()}
+                        /> 
+                        <Text style={[styles.inputLabel, styles.baseText]}>re-enter password</Text>
+                        <TextInput 
+                            ref='pw2Input'
+                            secureTextEntry
+                            returnKeyType='go'
+                            style={[styles.input, styles.baseText]}
+                            placeholder='**********'
+                            underlineColorAndroid='transparent'
+                            onChangeText={this.storeUserPasswordCheck}
+                            onSubmitEditing={this.signUserUp}
+                        />
+                        <Text style={[styles.matchAlert, styles.baseText]}>{checkRes}</Text>
+                        <TouchableOpacity onPress={this.signUserUp}>
+                            <View style={styles.btn}>
+                                <Text style={[styles.baseText, styles.btnLabel]}>sign up</Text>	
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.closeAnim}>
+                            <Text style={[styles.loginText, styles.baseText]}>Already have an account?</Text>
+                            <Text style={[styles.loginText, styles.loginTextHighlight]}>Login here</Text>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableOpacity>
             </Animated.View>
         );    
     }

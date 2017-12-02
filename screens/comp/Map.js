@@ -117,21 +117,12 @@ class Map extends Component {
                 var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
                 
                 if(distance <= radius){
-                    
 //                    const DURATION = 1000
                     const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
-                    
-//                    fast version[0, 50, 200, 50, 50, 50, 50, 50, 200, 50, 450, 50, 200, 50, 450]
-//                    slow version[0, 100, 400, 100, 100, 100, 100, 100, 400, 100, 900, 100, 400, 100,400]
-
 //                    Vibration.vibrate(DURATION)
-
                     Vibration.vibrate(PATTERN)
-
 //                    Vibration.vibrate(PATTERN, true)
-
 //                    Vibration.cancel()
-                    
     
                     if(this.props.alertMethod === 1){
                         this.displayAlert()

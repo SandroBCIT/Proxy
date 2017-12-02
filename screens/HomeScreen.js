@@ -97,7 +97,8 @@ class HomeScreen extends Component {
 //-------------------------------------------------------------------------
     
     render() {
-        var initialWindow = null;
+        //1st
+        let initialWindow = null;
         if(this.state.showInitialWindow === true){
             initialWindow = 
                 <InitialWindow 
@@ -110,7 +111,8 @@ class HomeScreen extends Component {
             initialWindow = null;  
         }
         
-        var setupWindow = null;
+        //2nd
+        let setupWindow = null;
         if(this.state.showSetupWindow === true){
             setupWindow = 
                 <SetupWindow 
@@ -124,7 +126,8 @@ class HomeScreen extends Component {
             setupWindow = null  
         }
         
-        var runningWindow = null
+        //3rd
+        let runningWindow = null
         if(this.state.showRunningWindow === true){
             runningWindow =   
                 <RunningWindow
@@ -135,6 +138,8 @@ class HomeScreen extends Component {
         }else if(this.state.showSetupWindow === false){
             runningWindow = null  
         }
+        
+        //
         
         return (
             <View style={styles.viewContainer}>

@@ -8,7 +8,7 @@ class SetupWindow extends Component {
         super(props)
         
         this.state = {
-            sliderValue: 250
+            sliderValue: 1000
         }
     }
     
@@ -40,9 +40,9 @@ class SetupWindow extends Component {
                         style={styles.slider}
                         minimumTrackTintColor = '#2AAE78'
                         thumbTintColor = '#2AAE78'
-                        maximumValue = {500}
+                        maximumValue = {10000}
                         onValueChange = {this.returnSliderValue}
-                        value = {250}
+                        value = {1000}
                         step = {5}
                     />  
                     <Text style={[styles.baseText, styles.text]}>

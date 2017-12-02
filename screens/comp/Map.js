@@ -4,20 +4,22 @@ import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, Touchable
 import MapSearch from './MapSearch';
 import HamburgerBtn from './HamburgerBtn';
 
-const {width,height} = Dimensions.get('window')
-const SCREENHEIGHT = height
-const SCREENWIDTH = width
-const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.01
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-var targetMarker = null
-var radiusCircle = null
-var removePinBtn = null
-var locRefresh = null
-var latDelta = null
-var longDelta = null
-var longPressLat = null
-var longPressLong = null
+const {width,height} = Dimensions.get('window');
+const SCREENHEIGHT = height;
+const SCREENWIDTH = width;
+const ASPECT_RATIO = width / height;
+//Zoom lvl
+const LATITUDE_DELTA = 0.05;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+var targetMarker = null;
+var radiusCircle = null;
+var removePinBtn = null;
+var locRefresh = null;
+var latDelta = null;
+var longDelta = null;
+var longPressLat = null;
+var longPressLong = null;
+var counter = 0;
 
 class Map extends Component {
     constructor(props) {
@@ -34,7 +36,9 @@ class Map extends Component {
                 latitude: 0,
                 longitude: 0
             },
-            circleIndex: 9999
+            circleIndex: 9999,
+            showFollowLocBtn: false,
+            followLoc: false
         }
     }
     
@@ -65,15 +69,13 @@ class Map extends Component {
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
             var long = parseFloat(position.coords.longitude)
-            var latDelta2 = latDelta
-            var longDelta2 = longDelta
 
-                if(this.state.initialize === true){
+                if(this.state.initialize === true || this.state.followLoc === true){
                     var lastScreenRegion = {
                         latitude: lat,
                         longitude: long,
-                        latitudeDelta: latDelta2,
-                        longitudeDelta: longDelta2
+                        latitudeDelta: latDelta,
+                        longitudeDelta: longDelta
                     }
                     this.setState({
                         screenPosition: lastScreenRegion
@@ -104,59 +106,63 @@ class Map extends Component {
             
             this.findLocation();
             
-            if(this.props.checkDistance === true){
-                //converts radius from meters to lat/long scale
-                var radius = (0.00001*(this.props.sliderValue));
-                
-                var xLoc = this.state.locationMarkerPosition['longitude'];
-                var yLoc = this.state.locationMarkerPosition['latitude'];
-                var xDest = this.state.targetMarkerPosition['longitude'];
-                var yDest = this.state.targetMarkerPosition['latitude'];
+            //to have distanceChecker only run every 10th loop (1s)
+            if(counter === 10){
+                if(this.props.checkDistance === true){
+                    //converts radius from meters to lat/long scale
+                    var radius = (0.00001*(this.props.sliderValue));
 
-                //calculates distance from location to targetMarker
-                var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
-                
-                if(distance <= radius){
-//                    const DURATION = 1000
-                    const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
-//                    Vibration.vibrate(DURATION)
-                    Vibration.vibrate(PATTERN)
-//                    Vibration.vibrate(PATTERN, true)
-//                    Vibration.cancel()
-    
-                    if(this.props.alertMethod === 1){
-                        this.displayAlert()
-                    }else if(this.props.alertMethod === 2){
-                        //Expo Notification
-                        var localNotification = {
-                            title: 'You have arrived!!',
-                            body: 'This is Proxy. You are close to your set destination!',
-                            ios: {
-                                sound: true
-                            },
-                            android: {
-                                sound: true
+                    var xLoc = this.state.locationMarkerPosition['longitude'];
+                    var yLoc = this.state.locationMarkerPosition['latitude'];
+                    var xDest = this.state.targetMarkerPosition['longitude'];
+                    var yDest = this.state.targetMarkerPosition['latitude'];
+
+                    //calculates distance from location to targetMarker
+                    var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
+
+                    if(distance <= radius){
+    //                    const DURATION = 1000
+                        const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
+    //                    Vibration.vibrate(DURATION)
+                        Vibration.vibrate(PATTERN)
+    //                    Vibration.vibrate(PATTERN, true)
+    //                    Vibration.cancel()
+
+                        if(this.props.alertMethod === 1){
+                            this.displayAlert()
+                        }else if(this.props.alertMethod === 2){
+                            //Expo Notification
+                            var localNotification = {
+                                title: 'You have arrived!!',
+                                body: 'This is Proxy. You are close to your set destination!',
+                                ios: {
+                                    sound: true
+                                },
+                                android: {
+                                    sound: true
+                                }
                             }
+                            Expo.Notifications.presentLocalNotificationAsync(localNotification)
                         }
-                        Expo.Notifications.presentLocalNotificationAsync(localNotification)
+
+                        //resetting variables
+                        this.props.stopCheckDistance(false)
+                        this.props.removeRunningWindow(false)
+
+                        //hides target marker and radius circle
+                        this.setState({
+                            showTargetMarker: false,
+                            showRadiusCircle: false
+                        })
+
+                        //enables functions
+                        this.props.disableFunctionsRemote(false)
                     }
-                    
-                    //resetting variables
-                    this.props.stopCheckDistance(false)
-                    this.props.removeRunningWindow(false)
-                    
-                    //hides target marker and radius circle
-                    this.setState({
-                        showTargetMarker: false,
-                        showRadiusCircle: false
-                    })
-                    
-                    //enables functions
-                    this.props.disableFunctionsRemote(false)
-                }   
+                }  
+                counter = 0;
             }
-            
-        }, 1000) 
+            counter ++;    
+        }, 100) 
     }
     
     //shows on screen alert (NOT alarm)
@@ -281,12 +287,19 @@ class Map extends Component {
             this.setState({
                 showTargetMarker: false,
                 showRadiusCircle: false
-            })   
+            }); 
         }
     }
     
+    setToFollowLoc = ()=>{
+        this.setState({
+            followLoc: true,
+            showFollowLocBtn: false
+        });        
+    }
+
     componentWillUnmount(){
-        this.clearRefresh()
+        this.clearRefresh();
     }
 
 //-------------------------------------------------------------------------
@@ -338,6 +351,18 @@ class Map extends Component {
             bgView = null;
         }
 
+        //Follow Btn
+        let followLocBtn = null;
+        if (this.state.showFollowLocBtn === true) {
+            followLocBtn =  <Button
+                                title='folow location'
+                                style={styles.followLocBtn}
+                                onPress={this.setToFollowLoc}
+                            />;
+        } else {
+            followLocBtn = null;
+        }
+
         if (this.state.fontReady) {
             return (
                 <View style={styles.viewContainer}>
@@ -346,7 +371,11 @@ class Map extends Component {
                         style={styles.map}
                         region={this.state.screenPosition}
                         onRegionChange={(reg)=>{
-                            this.setState({screenPosition:reg})
+                            this.setState({
+                                screenPosition: reg,
+                                showFollowLocBtn: true,
+                                followLoc: false
+                            })
                         }}
                         rotateEnabled={false}
                         loadingEnabled={true}
@@ -367,7 +396,6 @@ class Map extends Component {
                         </MapView.Marker>
                     </MapView>
                     {bgView}
-
                     <HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
                     <MapSearch 
                         callbackFromParent={this.mapSearchFunc} 
@@ -378,6 +406,7 @@ class Map extends Component {
                         blurProp={this.state.blurProp}
                         resetBlurProp={this.resetBlurProp}
                     />
+                    {followLocBtn}
                 </View>
             );
         } else {
@@ -418,6 +447,9 @@ const styles = StyleSheet.create({
         borderRadius: 20/2,
         overflow: 'hidden',
         backgroundColor: 'rgba(88,55,1430,0.7)'
+    },
+    followLocBtn: {
+        alignSelf: 'flex-end'
     }
 });
 

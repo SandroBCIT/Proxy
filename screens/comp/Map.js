@@ -355,7 +355,7 @@ class Map extends Component {
         let followLocBtn = null;
         if (this.state.showFollowLocBtn === true) {
             followLocBtn =  <Button
-                                title='folow location'
+                                title='follow location'
                                 style={styles.followLocBtn}
                                 onPress={this.setToFollowLoc}
                             />;

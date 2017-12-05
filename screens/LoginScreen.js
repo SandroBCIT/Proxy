@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, Alert, Animated } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
 import Expo from 'expo';
@@ -41,6 +41,8 @@ class LoginScreen extends Component {
                 this.goToHome();   
             }
         });
+		this.animatedPosition = new Animated.Value(50);
+        this.animatedOpacity = new Animated.Value(0);
     }
 
     async componentDidMount() {
@@ -49,6 +51,15 @@ class LoginScreen extends Component {
         });
 
         this.setState({ fontReady: true });
+		
+		Animated.timing(this.animatedPosition, {
+            toValue: 0,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 150
+        }).start()
     }
 
     storeUserEmail = (text)=>{
@@ -140,11 +151,15 @@ class LoginScreen extends Component {
 //-------------------------------------------------------------------------
     
     render() {
+		const animatedStyle = {
+            transform: [{translateY: this.animatedPosition}],
+            opacity: this.animatedOpacity
+        }
         
         if (this.state.fontReady) {
             return (
                 <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
-                    <View style={styles.wrapper}>
+                    <Animated.View style={[styles.wrapper, animatedStyle]}>
                         <View style={styles.viewContainer}>
                             <Image 
                                 style={styles.logo}
@@ -200,7 +215,7 @@ class LoginScreen extends Component {
                             </View>
                         </View>
                         <SignUpScreen openSignUp={this.state.openSignUp} />
-                    </View>
+                    </Animated.View>
                 </TouchableHighlight>
             );
         } else {

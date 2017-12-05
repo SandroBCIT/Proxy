@@ -21,6 +21,22 @@ class HomeScreen extends Component {
             disableFunctions: false
         }
     }
+	
+	componentWillMount() {
+		this.animatedPosition = new Animated.Value(50);
+        this.animatedOpacity = new Animated.Value(0);
+	}
+	
+	componentDidMount() {
+        Animated.timing(this.animatedPosition, {
+            toValue: 0,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 150
+        }).start()
+    }
     
     hamburgerFunction = ()=>{
         this.props.navigation.navigate('DrawerOpen');      
@@ -97,6 +113,12 @@ class HomeScreen extends Component {
 //-------------------------------------------------------------------------
     
     render() {
+		
+		const animatedStyle = {
+            transform: [{translateY: this.animatedPosition}],
+            opacity: this.animatedOpacity
+        }
+		
         //1st
         let initialWindow = null;
         if(this.state.showInitialWindow === true){
@@ -142,7 +164,7 @@ class HomeScreen extends Component {
         //
         
         return (
-            <View style={styles.viewContainer}>
+            <Animated.View style={[styles.viewContainer, animatedStyle]}>
                 <Map 
                     hamburgerFunction={this.hamburgerFunction} 
                     sliderValue={this.state.sliderValue} 
@@ -160,7 +182,7 @@ class HomeScreen extends Component {
                 {initialWindow}
                 {setupWindow}
                 {runningWindow}
-            </View>
+            </Animated.View>
         );
     }
 }

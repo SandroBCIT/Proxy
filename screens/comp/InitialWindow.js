@@ -18,13 +18,14 @@ class InitialWindow extends Component {
     componentDidMount() {
         Animated.timing(this.animatedPosition, {
             toValue: 0,
-            duration: 100
+            duration: 150
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 1,
-            duration: 100
+            duration: 150
         }).start()
     }
+	
     setToAlarm = ()=>{
         this.toggleWindow()
         this.props.alertMethod(1)

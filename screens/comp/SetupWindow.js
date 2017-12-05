@@ -14,6 +14,19 @@ class SetupWindow extends Component {
     
     componentWillMount(){
         this.props.sliderValue(this.state.sliderValue); 
+		this.animatedPosition = new Animated.Value(50);
+        this.animatedOpacity = new Animated.Value(0);
+    }
+	
+	componentDidMount() {
+        Animated.timing(this.animatedPosition, {
+            toValue: 0,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 150
+        }).start()
     }
     
     returnSliderValue = (data)=>{
@@ -33,9 +46,13 @@ class SetupWindow extends Component {
 //-------------------------------------------------------------------------    
 
     render() {
+		const animatedStyle = {
+            transform: [{translateX: this.animatedPosition}],
+            opacity: this.animatedOpacity
+        }
+		
         return (
-            <View style={styles.viewContainer}>
-                <View style={[styles.wrapper, styles.shadowBig]}>
+                <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
                     <Slider
                         style={styles.slider}
                         minimumTrackTintColor = '#2AAE78'
@@ -53,8 +70,7 @@ class SetupWindow extends Component {
                             <Text style={[styles.baseText, styles.btnLabel]}>start</Text>	
                         </View>
                     </TouchableOpacity>
-                </View>
-            </View>
+                </Animated.View>
         );                             
     }
 }
@@ -62,21 +78,14 @@ class SetupWindow extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-	viewContainer: {
-		position: 'absolute',
-        left: '50%',
-        top: '80%'
-	},
     baseText: {
         fontFamily: 'open-sans-light'
     },
     wrapper: {
-        position: 'relative',
-        left: '-50%',
-        top: '-50%',
-        width: 300,
+        position: 'absolute',
+		bottom: 40,
+        width: '80%',
         backgroundColor: '#E9E9E9',
-        borderRadius: 5,
     },
     shadowBig: {
         shadowColor: '#000',

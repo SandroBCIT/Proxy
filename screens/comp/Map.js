@@ -217,7 +217,7 @@ class Map extends Component {
             showTargetMarker: true,
             showRadiusCircle: true
         })
-        this.props.toggleSetupWindow(true);
+        this.props.toggleInitialWindow(true);
          
     }
     

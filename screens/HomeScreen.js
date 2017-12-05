@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Button, StyleSheet, Image, TextInput } from 'react-native'
+import { Text, View, Button, StyleSheet, Image, TextInput, Animated } from 'react-native'
 import { DrawerNavigator } from 'react-navigation'
 import Map from './comp/Map'
 import HamburgerBtn from './comp/HamburgerBtn'
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         alignContent: 'flex-start',
         marginTop: 24,
     },

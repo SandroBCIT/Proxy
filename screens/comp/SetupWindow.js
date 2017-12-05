@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Button, Text, Slider, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Button, Text, Slider, TouchableOpacity, Animated } from 'react-native'
 
 
 class SetupWindow extends Component {
@@ -8,7 +8,7 @@ class SetupWindow extends Component {
         super(props)
         
         this.state = {
-            sliderValue: 1000
+            sliderValue: 100
         }
     }
     
@@ -40,9 +40,9 @@ class SetupWindow extends Component {
                         style={styles.slider}
                         minimumTrackTintColor = '#2AAE78'
                         thumbTintColor = '#2AAE78'
-                        maximumValue = {10000}
+                        maximumValue = {1000}
                         onValueChange = {this.returnSliderValue}
-                        value = {1000}
+                        value = {100}
                         step = {5}
                     />  
                     <Text style={[styles.baseText, styles.text]}>

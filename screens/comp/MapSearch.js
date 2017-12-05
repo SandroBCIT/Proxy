@@ -92,7 +92,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		marginTop: 20,
-        marginLeft: '18%'
+        marginLeft: '18%',
+        marginRight: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 2,
+        borderBottomWidth: 2,
+        borderColor: '#58378F'
     },
 	hamburgerBtn: {
 		width: 27,
@@ -105,16 +113,11 @@ const styles = StyleSheet.create({
 const searchStyles = {
     textInputContainer: {
         backgroundColor: 'white',
-        marginRight: 20,
-        borderRadius: 5,
         height: 45,
-        borderWidth: 1,
-        borderColor: '#58378F'
     },
     predefinedPlacesDescription: { color: '#1faadb' },
     listView: {
         backgroundColor: 'white',
-        marginRight: 20,
         paddingRight: 20
     },
     poweredContainer: { display: 'none' }

@@ -18,14 +18,13 @@ class InitialWindow extends Component {
     componentDidMount() {
         Animated.timing(this.animatedPosition, {
             toValue: 0,
-            duration: 200
+            duration: 100
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 1,
-            duration: 200
+            duration: 100
         }).start()
     }
-    
     setToAlarm = ()=>{
         this.toggleWindow()
         this.props.alertMethod(1)
@@ -51,12 +50,11 @@ class InitialWindow extends Component {
 
     render() {
         const animatedStyle = {
-            transform: [{translateY: this.animatedPosition}],
+            transform: [{translateX: this.animatedPosition}],
             opacity: this.animatedOpacity
         }
         
         return (
-            <View style={styles.viewContainer}>
                 <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
                     <Text style={styles.baseText}>choose your action</Text>
                     <TouchableOpacity onPress={this.setToAlarm}>
@@ -70,7 +68,6 @@ class InitialWindow extends Component {
                         </View>
                     </TouchableOpacity>
                 </Animated.View>
-            </View>
         );                             
     }
 }
@@ -78,18 +75,11 @@ class InitialWindow extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-	viewContainer: {
-		position: 'absolute',
-        left: '50%',
-        top: '75%'
-	},
     wrapper: {
-        position: 'relative',
-        left: '-50%',
-        top: '-50%',
-        width: 300,
+		width: '80%',
+        position: 'absolute',
+		bottom: 40,
         backgroundColor: '#E9E9E9',
-        borderRadius: 5,
         paddingTop: 15,
         paddingBottom: 5
     },
@@ -118,7 +108,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
         alignSelf: 'center',
-		borderRadius: 5,
+//		borderRadius: 5,
         backgroundColor: '#58378F',
         marginVertical: 10,
     },

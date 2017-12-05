@@ -54,11 +54,11 @@ class LoginScreen extends Component {
 		
 		Animated.timing(this.animatedPosition, {
             toValue: 0,
-            duration: 150
+            duration: 300
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 1,
-            duration: 150
+            duration: 400
         }).start()
     }
 

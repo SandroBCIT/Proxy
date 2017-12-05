@@ -159,7 +159,7 @@ class SignUpScreen extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.closeAnim}>
                             <Text style={[styles.loginText, styles.baseText]}>Already have an account?</Text>
-                            <Text style={[styles.loginText, styles.loginTextHighlight]}>Login here</Text>
+                            <Text style={[styles.loginText, styles.loginTextHighlight, styles.baseText]}>Login here</Text>
                         </TouchableOpacity>
                     </View>
                 </TouchableOpacity>
@@ -173,7 +173,7 @@ class SignUpScreen extends Component {
 const styles = StyleSheet.create({
 	signUpArea: {
 		position: 'absolute',
-		backgroundColor: 'lightgrey',
+		backgroundColor: '#E9E9E9',
 		width: width,
 		height: height,
 		marginTop: 24
@@ -195,17 +195,15 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(255,255,255,1)',
 		marginBottom: 10,
 		paddingLeft: 15,
-		borderRadius: 5,
-		borderWidth: 1,
+		borderBottomWidth: 2,
 		borderColor: '#58378F'
 	},
 	btn: {
 		height: 35,
 		justifyContent: 'center',
 		alignItems: 'center',
-		borderRadius: 5,
 		backgroundColor: '#58378F',
-		marginVertical: 30
+		marginVertical: 25
 	},
 	btnLabel: {
 		color: '#E9E9E9'

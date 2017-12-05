@@ -62,8 +62,8 @@ class SetupWindow extends Component {
                         value = {100}
                         step = {5}
                     />  
-                    <Text style={[styles.baseText, styles.text]}>
-                        {this.state.sliderValue} m
+                    <Text style={styles.baseText}>
+                        notify when {this.state.sliderValue} m away
                     </Text>
                     <TouchableOpacity onPress={this.startCheckDistance}>
                         <View style={[styles.confirmBut, styles.shadowSm]}>
@@ -78,14 +78,13 @@ class SetupWindow extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    baseText: {
-        fontFamily: 'open-sans-light'
-    },
     wrapper: {
         position: 'absolute',
 		bottom: 40,
         width: '80%',
         backgroundColor: '#E9E9E9',
+        paddingTop: 15,
+        paddingBottom: 5
     },
     shadowBig: {
         shadowColor: '#000',
@@ -97,15 +96,18 @@ const styles = StyleSheet.create({
     shadowSm: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.75,
+        shadowOpacity: 0.35,
         shadowRadius: 2,
         elevation: 2,
     },
     slider: {
-        marginVertical: 20    
+        marginVertical: 10,
+		marginHorizontal: 20
     },
-    text: {
-        textAlign: 'center'
+	baseText: {
+		textAlign: 'center',
+		color: '#58378F',
+        fontFamily: 'open-sans-light'
     },
     confirmBut: {
         height: 35,
@@ -113,9 +115,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
         alignSelf: 'center',
-		borderRadius: 5,
         backgroundColor: '#58378F',
-        marginVertical: 20,
+        marginVertical: 10,
     },
     btnLabel: {
         color: '#E9E9E9'

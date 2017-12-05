@@ -77,9 +77,9 @@ class InitialWindow extends Component {
 
 const styles = StyleSheet.create({
     wrapper: {
-		width: '80%',
         position: 'absolute',
 		bottom: 40,
+		width: '80%',
         backgroundColor: '#E9E9E9',
         paddingTop: 15,
         paddingBottom: 5
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     shadowSm: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.75,
+        shadowOpacity: 0.35,
         shadowRadius: 2,
         elevation: 2,
     },
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
         alignSelf: 'center',
-//		borderRadius: 5,
         backgroundColor: '#58378F',
         marginVertical: 10,
     },

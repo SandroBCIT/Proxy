@@ -3,6 +3,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, TouchableOpacity } from 'react-native';
 import MapSearch from './MapSearch';
 import HamburgerBtn from './HamburgerBtn';
+import LocationBtn from './LocationBtn';
 
 const {width,height} = Dimensions.get('window');
 const SCREENHEIGHT = height;
@@ -354,11 +355,10 @@ class Map extends Component {
         //Follow Btn
         let followLocBtn = null;
         if (this.state.showFollowLocBtn === true) {
-            followLocBtn =  <Button
-                                title='follow location'
-                                style={styles.followLocBtn}
-                                onPress={this.setToFollowLoc}
-                            />;
+            followLocBtn = 
+			<LocationBtn
+				setToFollowLoc={this.setToFollowLoc}
+			/>;
         } else {
             followLocBtn = null;
         }

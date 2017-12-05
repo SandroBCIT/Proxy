@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { Text, View, Button, StyleSheet, Image, TextInput, Animated } from 'react-native'
-import { DrawerNavigator } from 'react-navigation'
-import Map from './comp/Map'
-import HamburgerBtn from './comp/HamburgerBtn'
-import SetupWindow from './comp/SetupWindow'
-import RunningWindow from './comp/RunningWindow'
-import InitialWindow from './comp/InitialWindow'
+import React, { Component } from 'react';
+import { Text, View, Button, StyleSheet, Image, TextInput, Animated } from 'react-native';
+import { DrawerNavigator } from 'react-navigation';
+import Map from './comp/Map';
+import HamburgerBtn from './comp/HamburgerBtn';
+import SetupWindow from './comp/SetupWindow';
+import RunningWindow from './comp/RunningWindow';
+import InitialWindow from './comp/InitialWindow';
 
 //AIzaSyAO_IeKD3FDszoc7l_A8YM75Bysg9kGAA0
 
@@ -30,11 +30,11 @@ class HomeScreen extends Component {
 	componentDidMount() {
         Animated.timing(this.animatedPosition, {
             toValue: 0,
-            duration: 150
+            duration: 300
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 1,
-            duration: 150
+            duration: 400
         }).start()
     }
     

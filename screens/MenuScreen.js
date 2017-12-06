@@ -16,7 +16,7 @@ class MenuScreen extends Component {
     
     async componentDidMount() {
         await Expo.Font.loadAsync({
-            'open-sans-light': require('../Assets/font/OpenSans-Light.ttf'),
+            'open-sans-light': require('../assets/font/OpenSans-Light.ttf'),
         });
 
         this.setState({ fontReady: true });
@@ -79,8 +79,8 @@ class MenuScreen extends Component {
                             onPress={this.handleHome}
                         >
                             <Image
-                                source={require('../img/icon-g-travels.png')}
-                                style={styles.homeBtnIcon}
+                                source={require('../img/proxy_home.png')}
+                                style={styles.btnIcon}
                             />
                             <Text style={styles.baseText}>home</Text>	
                         </TouchableOpacity>
@@ -90,7 +90,7 @@ class MenuScreen extends Component {
                         >
                             <Image
                                 source={require('../img/icon-g-settings.png')}
-                                style={styles.settingsBtnIcon}
+                                style={styles.btnIcon}
                             />
                             <Text style={styles.baseText}>settings</Text>	
                         </TouchableOpacity>
@@ -98,7 +98,11 @@ class MenuScreen extends Component {
                             style={styles.menuBtn}
                             onPress={this.logOutUser}
                         >
-                            <Text style={[styles.baseText, styles.logOutLabel]}>log out</Text>	
+							<Image
+                                source={require('../img/proxy_logout.png')}
+                                style={styles.btnIcon}
+                            />
+                            <Text style={styles.baseText}>log out</Text>	
                         </TouchableOpacity>
                     </View>        
                 </View>
@@ -154,19 +158,11 @@ const styles = StyleSheet.create({
     menuBtnActive: {
         backgroundColor: 'rgba(0,0,0,0.2)'
     },
-	homeBtnIcon: {
+	btnIcon: {
 		width: 45,
 		height: 45,
 		marginRight: 20,
 	},
-	settingsBtnIcon: {
-		width: 45,
-		height: 45,
-		marginRight: 20,
-	},
-	logOutLabel: {
-		paddingLeft: 65
-	}
 });
 
 export default MenuScreen;

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		position: 'absolute',
         top: 80,
-		left: 15,
+		left: 13,
         backgroundColor: '#5CB487',
 		borderRadius: 100,
 		justifyContent: 'center',
@@ -57,15 +57,15 @@ const styles = StyleSheet.create({
 		borderRadius: 100
 	},
     arrow: {
-        width: 22,
-		height:22
+        width: 20,
+		height:20
     },
     shadowBig: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
-        shadowRadius: 4,
-        elevation: 4,  
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.35,
+        shadowRadius: 2,
+        elevation: 2,  
     },
     shadowSm: {
         shadowColor: '#000',

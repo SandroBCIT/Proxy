@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, TouchableOpacity, Animated } from 'react-native';
 import MapSearch from './MapSearch';
 import HamburgerBtn from './HamburgerBtn';
 import LocationBtn from './LocationBtn';
+import LogoAnim from './LogoAnim'
 
 const {width,height} = Dimensions.get('window');
 const SCREENHEIGHT = height;
@@ -39,7 +40,6 @@ class Map extends Component {
             },
             circleIndex: 9999,
             showFollowLocBtn: false,
-            followLoc: false
         }
     }
     
@@ -52,7 +52,7 @@ class Map extends Component {
     
     async componentDidMount() {
         await Expo.Font.loadAsync({
-            'open-sans-light': require('../../Assets/font/OpenSans-Light.ttf'),
+            'open-sans-light': require('../../assets/font/OpenSans-Light.ttf'),
         });
 
         this.setState({ fontReady: true });
@@ -390,22 +390,22 @@ class Map extends Component {
                             coordinate={this.state.locationMarkerPosition}
                             anchor={{ x: 0.5, y: 0.5 }}
                         >
-                            <View style={styles.locationRadius}>
-                                <View style={styles.locationMarker} />
-                            </View>
+                                <LogoAnim />
                         </MapView.Marker>
                     </MapView>
                     {bgView}
-                    <HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
-                    <MapSearch 
-                        callbackFromParent={this.mapSearchFunc} 
-                        giveLocation={this.state.locationMarkerPosition}
-                        editingInput={this.editingInput}
-                        stopRefresh={this.clearRefresh}
-                        startRefresh={this.startRefresh}
-                        blurProp={this.state.blurProp}
-                        resetBlurProp={this.resetBlurProp}
-                    />
+                    <View style={styles.header}>
+                    	<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.onMapPress}/>
+                    	<MapSearch 
+                    	    callbackFromParent={this.mapSearchFunc} 
+                    	    giveLocation={this.state.locationMarkerPosition}
+                    	    editingInput={this.editingInput}
+                    	    stopRefresh={this.clearRefresh}
+                    	    startRefresh={this.startRefresh}
+                    	    blurProp={this.state.blurProp}
+                    	    resetBlurProp={this.resetBlurProp}
+                    	/>
+                    </View>
                     {followLocBtn}
                 </View>
             );
@@ -423,6 +423,11 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column'
     },
+	anim: {
+		height: 200,
+		width: 200,
+		backgroundColor: 'red',
+	},
     map: {
         left: 0,
         right: 0,

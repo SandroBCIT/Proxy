@@ -56,15 +56,15 @@ class InitialWindow extends Component {
         }
         
         return (
-                <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
-                    <Text style={styles.baseText}>choose your action</Text>
+                <Animated.View style={[styles.wrapper, styles.shadow, animatedStyle]}>
+                    <Text style={[styles.baseText, styles.heading]}>choose your action</Text>
                     <TouchableOpacity onPress={this.setToAlarm}>
-                        <View style={[styles.confirmBut, styles.shadowSm]}>
+                        <View style={[styles.confirmBut, styles.shadow]}>
                             <Text style={[styles.baseText, styles.btnLabel]}>alarm</Text>	
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this.setToNotification}>
-                        <View style={[styles.confirmBut, styles.shadowSm]}>
+                        <View style={[styles.confirmBut, styles.shadow]}>
                             <Text style={[styles.baseText, styles.btnLabel]}>notification</Text>	
                         </View>
                     </TouchableOpacity>
@@ -84,14 +84,7 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 5
     },
-    shadowBig: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
-        shadowRadius: 4,
-        elevation: 4,  
-    },
-    shadowSm: {
+    shadow: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.35,
@@ -103,6 +96,9 @@ const styles = StyleSheet.create({
         color: '#58378F',
         fontFamily: 'open-sans-light'
     },
+	heading: {
+		marginBottom: 10
+	},
     confirmBut: {
         height: 35,
         width:'80%',

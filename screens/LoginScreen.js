@@ -47,7 +47,7 @@ class LoginScreen extends Component {
 
     async componentDidMount() {
         await Expo.Font.loadAsync({
-            'open-sans-light': require('../Assets/font/OpenSans-Light.ttf'),
+            'open-sans-light': require('../assets/font/OpenSans-Light.ttf'),
         });
 
         this.setState({ fontReady: true });
@@ -212,6 +212,7 @@ class LoginScreen extends Component {
                                 <TouchableOpacity onPress={this.triggerAnim}>
                                     <Text style={[styles.baseText, styles.signupText]}>sign up</Text>
                                 </TouchableOpacity>
+								
                             </View>
                         </View>
                         <SignUpScreen openSignUp={this.state.openSignUp} />

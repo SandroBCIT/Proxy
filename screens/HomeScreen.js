@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         alignContent: 'flex-start',
-        marginTop: 24,
+        marginTop: 22,
     },
 });
 

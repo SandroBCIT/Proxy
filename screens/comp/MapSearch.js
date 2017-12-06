@@ -95,19 +95,13 @@ const styles = StyleSheet.create({
         marginLeft: '18%',
         marginRight: 20,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.35,
         shadowRadius: 2,
-        elevation: 2,
+        elevation: 5,
         borderBottomWidth: 2,
         borderColor: '#58378F'
     },
-	hamburgerBtn: {
-		width: 27,
-		height: 25,
-		marginHorizontal: 20,
-		marginTop: 10
-	}
 });
 
 const searchStyles = {

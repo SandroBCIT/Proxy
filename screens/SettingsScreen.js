@@ -10,22 +10,60 @@ class SettingsScreen extends Component {
 		super(props);
 		
 		this.state = {
-			boxStatus: true
+			boxStatus: false
 		}
+	}
+	
+	componentWillMount() {
+		console.log(this.props.screenProps.email);
 	}
 	
 	hamburgerFunction = ()=>{
         this.props.navigation.navigate('DrawerOpen');      
     }
 	
+	toggleNightMode = () => {
+			if (this.state.boxStatus === true) {
+				this.setState({
+					boxStatus: false
+				});
+			} else {
+				this.setState({
+					boxStatus: true
+				});
+			}
+		}
+	
     render() {
 		
 		let activeStyle = null;
 		
-		if (this.state.boxStatus) {
+		if (this.state.boxStatus === true) {
 			activeStyle = [styles.boxBase, styles.boxActive];
 		} else {
 			activeStyle = styles.boxBase;
+		}
+		
+		let picSrc = this.props.screenProps.photoURL,
+			nameSrc = this.props.screenProps.userName,
+			emailSrc = this.props.screenProps.email,
+			picReq = null,
+			nameReq = null;
+		
+		if (picSrc !== null) {
+			picReq = {uri: picSrc};
+		} else {
+			picReq = require('../assets/icon-proxy-200.png')
+		}
+		
+		if (nameSrc !== null) {
+			nameReq = nameSrc;
+		} else {
+			if (emailSrc !== undefined) {
+				nameReq = emailSrc;
+			} else {
+				nameReq = "Hey there qt";
+			}
 		}
 		
         return (
@@ -33,17 +71,34 @@ class SettingsScreen extends Component {
 				<View style={styles.header}>
 					<HamburgerBtn hamburgerFunction={this.hamburgerFunction} onMapPress={this.hamburgerFunction} />
 					<View style={styles.userInfo}>
-						<Image source={require('../assets/icon-proxy-200.png')} style={styles.profPic} />
-						<Text style={styles.profName}>{this.props.screenProps.userName}</Text>
+						<Image source={picReq} style={styles.profPic} />
+						<Text style={styles.profName}>{nameReq}</Text>
 					</View>
 				</View>
 
 				<View style={styles.userSettings}>
 					<Text style={styles.baseText}>toggle night mode</Text>
-					<TouchableOpacity style={activeStyle}></TouchableOpacity>
+					<TouchableOpacity style={activeStyle} onPress={this.toggleNightMode}></TouchableOpacity>
 				</View>
 
-				<View></View>
+				<View style={{marginBottom: 30}}>
+					<Text style={styles.teamName}>team proxy is</Text>
+					<Text style={styles.baseText}>
+						alessandro grunwald
+					</Text>
+					<Text style={styles.baseText}>
+						alessandro grunwald
+					</Text>
+					<Text style={styles.baseText}>
+						alessandro grunwald
+					</Text>
+					<Text style={styles.baseText}>
+						alessandro grunwald
+					</Text>
+					<Text style={styles.baseText}>
+						alessandro grunwald
+					</Text>
+				</View>
             </View>
         );
     }
@@ -73,14 +128,16 @@ const styles = StyleSheet.create({
 	},
 	baseText: {
 		fontFamily: 'open-sans-light',
-		color: 'black'
+		color: 'black',
+		textAlign: 'center'
 	},
 	header: {
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginTop: 30
+		marginTop: 33,
+		height: 60
 	},
 	userSettings: {
 		width: '80%',
@@ -103,7 +160,14 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40,
 		borderRadius: 40,
-		margin: 10
+		marginHorizontal: 10
+	},
+	teamName: {
+		fontFamily: 'open-sans-semibold',
+		fontSize: 18,
+		color: '#58378F',
+		marginBottom: 5,
+		textAlign: 'center'
 	},
 	profName: {
 		fontFamily: 'open-sans-semibold',

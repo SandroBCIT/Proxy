@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, UIManager, Platform } from 'react-native';
 
 import Animation from 'lottie-react-native';
 
 export default class LogoAnim extends Component {
+	constructor(props) {
+		super(props);
+		
+		if (Platform.OS === 'android') {
+			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
+	}
+	
 	componentDidMount() {
 		this.animation.play();
 	}

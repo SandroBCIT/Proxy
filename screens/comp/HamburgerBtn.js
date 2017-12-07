@@ -27,12 +27,10 @@ class HamburgerBtn extends Component {
 //-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
-    hamburgerBtnCont: { 
-        position: 'absolute',
-        top: 30,
-        left: 20,
+    hamburgerBtnCont: {
         width: 40, 
-        height: 40   
+        height: 40,
+		paddingVertical: 10
     },
 	hamburgerBtn: {
 		width: 27,

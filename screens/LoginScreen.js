@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Button, TouchableOpacity, TouchableHighlight, Alert, Animated } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
-import Expo from 'expo';
 
 import SignUpScreen from './SignUpScreen';
 import MenuScreen from './MenuScreen';
@@ -26,7 +25,6 @@ class LoginScreen extends Component {
             openSignUp: false,
             userEmail: '',
             userPassword: '',
-            fontReady: false
         }
     } 
 
@@ -38,20 +36,15 @@ class LoginScreen extends Component {
     componentWillMount() {
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                this.goToHome();   
+                this.goToHome();
+				this.props.screenProps.setUserInfo(user);
             }
         });
 		this.animatedPosition = new Animated.Value(50);
         this.animatedOpacity = new Animated.Value(0);
     }
 
-    async componentDidMount() {
-        await Expo.Font.loadAsync({
-            'open-sans-light': require('../assets/font/OpenSans-Light.ttf'),
-        });
-
-        this.setState({ fontReady: true });
-		
+    componentDidMount() {
 		Animated.timing(this.animatedPosition, {
             toValue: 0,
             duration: 300
@@ -106,7 +99,6 @@ class LoginScreen extends Component {
 
         if (type === 'success') {
             const credential = firebase.auth.FacebookAuthProvider.credential(token);
-            console.log(credential);
             firebase.auth().signInWithCredential(credential).catch((error) => {
                 alert(error);
             });
@@ -155,74 +147,70 @@ class LoginScreen extends Component {
             transform: [{translateY: this.animatedPosition}],
             opacity: this.animatedOpacity
         }
-        
-        if (this.state.fontReady) {
-            return (
-                <TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
-                    <Animated.View style={[styles.wrapper, animatedStyle]}>
-                        <View style={styles.viewContainer}>
-                            <Image 
-                                style={styles.logo}
-                                source={require('../img/proxy-logo.png')}
-                            />
-                            <View style={styles.inputContainer} >
-                                <Text style={[styles.baseText, styles.inputLabel]} >email</Text>
-                                <TextInput 
-                                    ref='emailInput'
-                                    keyboardType='email-address'
-                                    returnKeyType='next'
-                                    style={[styles.baseText, styles.input]}
-                                    placeholder='example@email.com'
-                                    placeholderTextColor='#58378F'
-                                    underlineColorAndroid='transparent'
-                                    autoCapitalize='none'
-                                    autoCorrect={false}
-                                    onChangeText={this.storeUserEmail}
-                                    onSubmitEditing={() => this.refs.passwordInput.focus()}
-                                />
-                                <Text style={[styles.baseText, styles.inputLabel]} >password</Text>
-                                <TextInput 
-                                    secureTextEntry
-                                    returnKeyType='go'
-                                    style={[styles.baseText, styles.input]}
-                                    placeholder='**********'
-                                    placeholderTextColor='#58378F'
-                                    underlineColorAndroid='transparent'
-                                    ref='passwordInput'
-                                    onChangeText={this.storeUserPassword}
-                                    onSubmitEditing={this.loginUser}
-                                />  
-                            </View>
-                            <View style={styles.btnContainer}>
-                                <TouchableOpacity onPress={this.loginUser}>
-                                    <View style={[styles.btn, styles.btnLogin]}>
-                                        <Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.fbLogin}>
-                                    <View style={[styles.btn, styles.btnFacebook]}>
-                                        <Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.googleLogin}>
-                                    <View style={[styles.btn, styles.btnGoogle]}>
-                                        <Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.triggerAnim}>
-                                    <Text style={[styles.baseText, styles.signupText]}>sign up</Text>
-                                </TouchableOpacity>
-								
-                            </View>
-                        </View>
-                        <SignUpScreen openSignUp={this.state.openSignUp} />
-                    </Animated.View>
-                </TouchableHighlight>
-            );
-        } else {
-            return null;
-        }
-    }
+		
+		return (
+			<TouchableHighlight onPress={this.unFocus} activeOpacity={1} >
+				<Animated.View style={[styles.wrapper, animatedStyle]}>
+					<View style={styles.viewContainer}>
+						<Image 
+							style={styles.logo}
+							source={require('../img/proxy-logo.png')}
+						/>
+						<View style={styles.inputContainer} >
+							<Text style={[styles.baseText, styles.inputLabel]} >email</Text>
+							<TextInput 
+								ref='emailInput'
+								keyboardType='email-address'
+								returnKeyType='next'
+								style={[styles.baseText, styles.input]}
+								placeholder='example@email.com'
+								placeholderTextColor='#58378F'
+								underlineColorAndroid='transparent'
+								autoCapitalize='none'
+								autoCorrect={false}
+								onChangeText={this.storeUserEmail}
+								onSubmitEditing={() => this.refs.passwordInput.focus()}
+							/>
+							<Text style={[styles.baseText, styles.inputLabel]} >password</Text>
+							<TextInput 
+								secureTextEntry
+								returnKeyType='go'
+								style={[styles.baseText, styles.input]}
+								placeholder='**********'
+								placeholderTextColor='#58378F'
+								underlineColorAndroid='transparent'
+								ref='passwordInput'
+								onChangeText={this.storeUserPassword}
+								onSubmitEditing={this.loginUser}
+							/>  
+						</View>
+						<View style={styles.btnContainer}>
+							<TouchableOpacity onPress={this.loginUser}>
+								<View style={[styles.btn, styles.btnLogin]}>
+									<Text style={[styles.baseText, styles.btnLabel]}>login</Text>	
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={this.fbLogin}>
+								<View style={[styles.btn, styles.btnFacebook]}>
+									<Text style={[styles.baseText, styles.btnLabel]}>login with Facebook</Text>	
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={this.googleLogin}>
+								<View style={[styles.btn, styles.btnGoogle]}>
+									<Text style={[styles.baseText, styles.btnLabel]}>login with Google</Text>	
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={this.triggerAnim}>
+								<Text style={[styles.baseText, styles.signupText]}>sign up</Text>
+							</TouchableOpacity>
+
+						</View>
+					</View>
+					<SignUpScreen openSignUp={this.state.openSignUp} />
+				</Animated.View>
+			</TouchableHighlight>
+		);
+	}
 }
 
 //-------------------------------------------------------------------------

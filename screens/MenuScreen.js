@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.2)'
     },
 	btnIcon: {
-		width: 45,
+		width: 47,
 		height: 45,
 		marginRight: 20,
 	},

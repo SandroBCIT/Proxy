@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import HamburgerBtn from './HamburgerBtn';
 
 const {width,height} = Dimensions.get('window')
 const SCREENHEIGHT = height
@@ -25,6 +26,7 @@ class MapSearch extends Component {
     render() {
         return (
             <View style={styles.mapSearch}>
+				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.props.onMapPress}/>
                 <GooglePlacesAutocomplete
                     
                     placeholder='where are you going?'
@@ -92,27 +94,27 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		marginTop: 20,
-        marginLeft: '18%',
-        marginRight: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.35,
-        shadowRadius: 2,
-        elevation: 5,
-        borderBottomWidth: 2,
-        borderColor: '#58378F'
-    },
+		marginHorizontal: 20,
+    }
 });
 
 const searchStyles = {
     textInputContainer: {
         backgroundColor: 'white',
         height: 45,
+		shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.35,
+        shadowRadius: 2,
+        elevation: 2,
     },
     predefinedPlacesDescription: { color: '#1faadb' },
     listView: {
         backgroundColor: 'white',
-        paddingRight: 20
+        paddingRight: 20,
+		
+        borderBottomWidth: 2,
+		borderColor: '#58378F'
     },
     poweredContainer: { display: 'none' }
 }

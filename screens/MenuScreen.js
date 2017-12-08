@@ -10,7 +10,8 @@ class MenuScreen extends Component {
         
         this.state = {
             fontReady: false,
-            itemHighlight: 'home'
+            itemHighlight: 'home',
+			boxStatus: false
         }
     }
     
@@ -21,6 +22,22 @@ class MenuScreen extends Component {
 
         this.setState({ fontReady: true });
     }
+	
+	hamburgerFunction = () => {
+        this.props.navigation.navigate('DrawerClose');      
+    }
+	
+	toggleNightMode = () => {
+			if (this.state.boxStatus === true) {
+				this.setState({
+					boxStatus: false
+				});
+			} else {
+				this.setState({
+					boxStatus: true
+				});
+			}
+		}
     
     logOutUser = () => {
         firebase.auth().signOut(); 
@@ -29,22 +46,7 @@ class MenuScreen extends Component {
         this.props.navigation.navigate('Login');
         this.setState({ itemHighlight: 'home' });
     }
-    
-    handleHome = () => {
-        this.setState({ itemHighlight: 'home' });
-        this.props.navigation.navigate('DrawerClose');
-        this.props.navigation.navigate('Home');
-    }
-    
-    handleSettings = () => {
-        this.setState({ itemHighlight: 'settings' });
-        this.props.navigation.navigate('DrawerClose');
-        this.props.navigation.navigate('Settings');
-    }
-    
-    hamburgerFunction = () => {
-        this.props.navigation.navigate('DrawerClose');      
-    }
+	
 //-------------------------------------------------------------------------
     
     render() {
@@ -57,6 +59,36 @@ class MenuScreen extends Component {
         } else {
             settingsStyles = [styles.menuBtn, styles.menuBtnActive];
         }
+		
+		let activeStyle = null;
+		
+		if (this.state.boxStatus === true) {
+			activeStyle = [styles.boxBase, styles.boxActive];
+		} else {
+			activeStyle = styles.boxBase;
+		}
+		
+		let picSrc = this.props.screenProps.photoURL,
+			nameSrc = this.props.screenProps.userName.toLowerCase(),
+			emailSrc = this.props.screenProps.email,
+			picReq = null,
+			nameReq = null;
+		
+		if (picSrc !== null) {
+			picReq = {uri: picSrc};
+		} else {
+			picReq = require('../assets/icon-proxy-200.png')
+		}
+		
+		if (nameSrc !== null) {
+			nameReq = nameSrc;
+		} else {
+			if (emailSrc !== undefined) {
+				nameReq = emailSrc;
+			} else {
+				nameReq = "Hey there qt";
+			}
+		}
         
         if (this.state.fontReady) {
             return (
@@ -68,43 +100,31 @@ class MenuScreen extends Component {
                                 style={styles.hamburgerBtn}
                             />
                         </TouchableHighlight>
+						<Image 
+							style={styles.logo}
+							source={require('../img/proxy-logo-white.png')}
+						/>
                     </View>
-                    <Image 
-                        style={styles.logo}
-                        source={require('../img/proxy-logo-white.png')}
-                    />
-                    <View style={styles.menuBtnCont}>
-                        <TouchableOpacity
-                            style={homeStyles}
-                            onPress={this.handleHome}
-                        >
-                            <Image
-                                source={require('../img/proxy_home.png')}
-                                style={styles.btnIcon}
-                            />
-                            <Text style={styles.baseText}>home</Text>	
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={settingsStyles}
-                            onPress={this.handleSettings}
-                        >
-                            <Image
-                                source={require('../img/icon-g-settings.png')}
-                                style={styles.btnIcon}
-                            />
-                            <Text style={styles.baseText}>settings</Text>	
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.menuBtn}
-                            onPress={this.logOutUser}
-                        >
+									
+					<View style={styles.userInfo}>
+						<Image source={picReq} style={styles.profPic} />
+						<Text style={styles.profName}>{nameReq}</Text>
+					</View>
+		
+					<View style={styles.userSettings}>
+						<Text style={styles.baseText}>toggle night mode</Text>
+						<TouchableOpacity style={activeStyle} onPress={this.toggleNightMode}></TouchableOpacity>
+					</View>
+		
+					<TouchableOpacity onPress={this.logOutUser} style={styles.btnCont}>
+						<View style={styles.btn}>
 							<Image
                                 source={require('../img/proxy_logout.png')}
                                 style={styles.btnIcon}
                             />
-                            <Text style={styles.baseText}>log out</Text>	
-                        </TouchableOpacity>
-                    </View>        
+							<Text style={[styles.baseText, styles.btnLabel]}>logout</Text>	
+						</View>
+					</TouchableOpacity>
                 </View>
             );
         } else {
@@ -121,47 +141,87 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignSelf: 'stretch',
 		flexDirection: 'column',
-		justifyContent: 'flex-start',
+		justifyContent: 'space-between',
 		alignItems: 'center',
 		backgroundColor: '#321754',
-		marginTop: 24
+		marginTop: 24,
+		paddingVertical: 30
 	},
 	baseText: {
         fontFamily: 'open-sans-light',
-		color: '#36D994'
+		color: '#e9e9e9'
 	},
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.35,
+        shadowRadius: 2,
+        elevation: 2,
+    },
 	menuTop: {
-		width: '100%',
+		alignSelf: 'stretch',
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		paddingHorizontal: 20,
-		marginTop: 30
 	},
 	hamburgerBtn: {
 		width: 27,
-		height: 25
+		height: 25,
 	},
 	logo: {
-		width: 150,
-		height: 45,
-		marginVertical: 40
+		width: 120,
+		height: 36,
 	},
-	menuBtnCont: {
-		width: '100%'
+	boxBase: {
+		width: 25,
+		height: 25,
+		borderRadius: 25,
+		borderWidth: 2,
+		borderColor: '#30B783'
 	},
-	menuBtn: {
-        paddingHorizontal: '10%',
-		height: 60,
+	boxActive: {
+		backgroundColor: '#30B783'
+	},
+	userInfo: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 60,
+		height: 60
+	},
+	profPic: {
+		width: 80,
+		height: 80,
+		borderRadius: 40,
+		borderWidth: 2,
+		borderColor: '#695682'
+	},
+	profName: {
+		fontFamily: 'open-sans-semibold',
+		fontSize: 20,
+		color: '#e9e9e9',
+		marginTop: 10
+	},
+	userSettings: {
+		width: '80%',
+		padding: 20,
+		marginTop: 20,
 		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center'
+		justifyContent: 'space-between'
 	},
-    menuBtnActive: {
-        backgroundColor: 'rgba(0,0,0,0.2)'
-    },
+	btnCont: {
+		alignSelf: 'stretch',
+		marginHorizontal: 20,
+		padding: 10,
+	},
+	btn: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	btnIcon: {
-		width: 47,
-		height: 45,
-		marginRight: 20,
+		width: 30,
+		height: 35,
+		marginRight: 10
 	},
 });
 

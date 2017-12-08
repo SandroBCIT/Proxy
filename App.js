@@ -7,7 +7,6 @@ import Expo from 'expo';
 //Importing Screens
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import DrawerMenu from './screens/MenuScreen';
 import LoadingScreen from './screens/comp/LoadingScreen';
 
@@ -30,9 +29,7 @@ const Drawer  = DrawerNavigator({
     })},
     Home: { 
         screen: HomeScreen 
-    },
-    Settings: { screen: SettingsScreen }
-	},
+    }},
 	{
     contentComponent: props => <DrawerMenu {...props} />   
 	});
@@ -44,6 +41,7 @@ export default class DrawerBuild extends Component {
 		this.state = {
 			userName: 'Some Guy',
 			photoURL: './assets/add.png',
+			email: undefined,
 			finishedLoading: false,
             screenPosition: {
                 latitude: 49.2827,
@@ -81,7 +79,8 @@ export default class DrawerBuild extends Component {
 	setUserInfo = (val) => {
 		this.setState({
 			userName: val.displayName,
-			photoURL: val.photoURL
+			photoURL: val.photoURL,
+			email: val.email
 		});
 	}
 	
@@ -228,6 +227,7 @@ export default class DrawerBuild extends Component {
 				<Drawer screenProps={{
 					userName: this.state.userName,
 					photoURL: this.state.photoURL,
+					email: this.state.email,
 				
 					setUserInfo: this.setUserInfo,
 					

@@ -73,7 +73,6 @@ export default class DrawerBuild extends Component {
                 latitude: 49.251161,
                 longitude: -123.003445
             },
-            initialize: true,
             followLoc: true,
             checkDistance: false,
             showFollowLocBtn: false,
@@ -154,7 +153,7 @@ export default class DrawerBuild extends Component {
         }
         
         let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
-            if(this.state.initialize === true || this.state.followLoc === true){
+            if(this.state.followLoc === true){
                 var lastScreenRegion = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
@@ -166,10 +165,6 @@ export default class DrawerBuild extends Component {
                     screenPosition: lastScreenRegion
                 });  
             }
-            
-            this.setState({
-                initialize: false
-            });
             
             var lastMarkerRegion = {
                 latitude: position.coords.latitude,
@@ -365,6 +360,14 @@ export default class DrawerBuild extends Component {
 		});
 	}
     
+    setToFollowLoc = () => {
+        this.setState({
+            screenPosition: this.state.targetMarkerPosition,
+            followLoc: true,
+            showFollowLocBtn: false
+        })
+    }
+    
 	render(){
 		if (this.state.finishedLoading) {
 			return(
@@ -384,6 +387,7 @@ export default class DrawerBuild extends Component {
 					drawerOpen: this.state.drawerOpen,
                     setTargetMarkerPosition: this.state.targetMarkerPosition,
                     setAlertMethod: this.setAlertMethod,
+                    setToFollowLoc: this.setToFollowLoc,
                 
                     onSearchLocation: this.onSearchLocation,
                     onMapLongPress: this.onMapLongPress,
@@ -393,7 +397,8 @@ export default class DrawerBuild extends Component {
                     disableFunctionsRemote: this.state.disableFunctionsRemote,
                     showTargetMarkerRemote: this.state.showTargetMarkerRemote,
                     showRadiusCircleRemote: this.state.showRadiusCircleRemote,
-                
+                    showFollowLocBtn: this.state.showFollowLocBtn,
+                    
                     removeRunningWindow: this.state.removeRunningWindow,
                     checkDistance: this.setCheckDistance,
                     setSliderValue: this.setSliderValue,

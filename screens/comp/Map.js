@@ -16,30 +16,34 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 var targetMarker = null;
 var radiusCircle = null;
 var removePinBtn = null;
-var locRefresh = null;
-var latDelta = null;
-var longDelta = null;
+//var locRefresh = null;
+//var latDelta = null;
+//var longDelta = null;
 var longPressLat = null;
 var longPressLong = null;
-var counter = 0;
+//var counter = 0;
 
 class Map extends Component {
+    
+    
+    
+    
     constructor(props) {
         super(props);
         
         this.state = {
-            screenPosition: {
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0,
-                longitudeDelta: 0
-            },
-            locationMarkerPosition: {
-                latitude: 0,
-                longitude: 0
-            },
+//            screenPosition: {
+//                latitude: 0,
+//                longitude: 0,
+//                latitudeDelta: 0,
+//                longitudeDelta: 0
+//            },
+//            locationMarkerPosition: {
+//                latitude: 0,
+//                longitude: 0
+//            },
             circleIndex: 9999,
-            showFollowLocBtn: false,
+//            showFollowLocBtn: false,
         }
 		
 		if (Platform.OS === 'android') {
@@ -48,138 +52,139 @@ class Map extends Component {
     }
     
     componentWillMount(){
-        this.startRefresh();
-        this.setState({
-            initialize: true
-        })
+//    alert(JSON.stringify(this.props.locationMarkerPosition));
+//        this.startRefresh();
+//        this.setState({
+//            initialize: true
+//        })
     }
     
-    startRefresh = ()=>{
-        this.locRefresh();
-    }
+//    startRefresh = ()=>{
+//        this.locRefresh();
+//    }
     
-    clearRefresh = ()=>{
-        clearInterval(locRefresh);
-    }
+//    clearRefresh = ()=>{
+//        clearInterval(locRefresh);
+//    }
     
-    findLocation = ()=>{
-        navigator.geolocation.getCurrentPosition((position) => {
-            var lat = parseFloat(position.coords.latitude)
-            var long = parseFloat(position.coords.longitude)
-
-                if(this.state.initialize === true || this.state.followLoc === true){
-                    var lastScreenRegion = {
-                        latitude: lat,
-                        longitude: long,
-                        latitudeDelta: latDelta,
-                        longitudeDelta: longDelta
-                    }
-                    this.setState({
-                        screenPosition: lastScreenRegion
-                    });
-                }
-                this.setState({
-                    initialize: false
-                })
-                
-
-            var lastMarkerRegion = {
-                latitude: lat,
-                longitude: long
-            }
-
-            this.setState({
-                locationMarkerPosition: lastMarkerRegion
-            });
-
-        }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
-    }
+//    findLocation = ()=>{
+//        navigator.geolocation.getCurrentPosition((position) => {
+//            var lat = parseFloat(position.coords.latitude)
+//            var long = parseFloat(position.coords.longitude)
+//
+//                if(this.state.initialize === true || this.state.followLoc === true){
+//                    var lastScreenRegion = {
+//                        latitude: lat,
+//                        longitude: long,
+//                        latitudeDelta: latDelta,
+//                        longitudeDelta: longDelta
+//                    }
+//                    this.setState({
+//                        screenPosition: lastScreenRegion
+//                    });
+//                }
+//                this.setState({
+//                    initialize: false
+//                })
+//                
+//
+//            var lastMarkerRegion = {
+//                latitude: lat,
+//                longitude: long
+//            }
+//
+//            this.setState({
+//                locationMarkerPosition: lastMarkerRegion
+//            });
+//
+//        }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
+//    }
     
-    locRefresh = ()=>{
-        latDelta = LATITUDE_DELTA
-        longDelta = LONGITUDE_DELTA
-        
-        locRefresh = setInterval(()=>{
-            
-            this.findLocation();
-            
-            //to have distanceChecker only run every 10th loop (1s)
-            if(counter === 10){
-                if(this.props.checkDistance === true){
-                    //converts radius from meters to lat/long scale
-                    var radius = (0.00001*(this.props.sliderValue));
-
-                    var xLoc = this.state.locationMarkerPosition['longitude'];
-                    var yLoc = this.state.locationMarkerPosition['latitude'];
-                    var xDest = this.state.targetMarkerPosition['longitude'];
-                    var yDest = this.state.targetMarkerPosition['latitude'];
-
-                    //calculates distance from location to targetMarker
-                    var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
-
-                    if(distance <= radius){
-    //                    const DURATION = 1000
-                        const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
-    //                    Vibration.vibrate(DURATION)
-                        Vibration.vibrate(PATTERN)
-    //                    Vibration.vibrate(PATTERN, true)
-    //                    Vibration.cancel()
-
-                        if(this.props.alertMethod === 1){
-                            this.displayAlert()
-                        }else if(this.props.alertMethod === 2){
-                            //Expo Notification
-                            var localNotification = {
-                                title: 'You have arrived!!',
-                                body: 'This is Proxy. You are close to your set destination!',
-                                ios: {
-                                    sound: true
-                                },
-                                android: {
-                                    sound: true
-                                }
-                            }
-                            Expo.Notifications.presentLocalNotificationAsync(localNotification)
-                        }
-
-                        //resetting variables
-                        this.props.stopCheckDistance(false)
-                        this.props.removeRunningWindow(false)
-
-                        //hides target marker and radius circle
-                        this.setState({
-                            showTargetMarker: false,
-                            showRadiusCircle: false
-                        })
-
-                        //enables functions
-                        this.props.disableFunctionsRemote(false)
-                    }
-                }  
-                counter = 0;
-            }
-            counter ++;    
-        }, 100) 
-    }
+//    locRefresh = ()=>{
+//        latDelta = LATITUDE_DELTA
+//        longDelta = LONGITUDE_DELTA
+//        
+//        locRefresh = setInterval(()=>{
+//            
+//            this.findLocation();
+//            
+//            //to have distanceChecker only run every 10th loop (1s)
+//            if(counter === 10){
+//                if(this.props.checkDistance === true){
+//                    //converts radius from meters to lat/long scale
+//                    var radius = (0.00001*(this.props.sliderValue));
+//
+//                    var xLoc = this.state.locationMarkerPosition['longitude'];
+//                    var yLoc = this.state.locationMarkerPosition['latitude'];
+//                    var xDest = this.state.targetMarkerPosition['longitude'];
+//                    var yDest = this.state.targetMarkerPosition['latitude'];
+//
+//                    //calculates distance from location to targetMarker
+//                    var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
+//
+//                    if(distance <= radius){
+//    //                    const DURATION = 1000
+//                        const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
+//    //                    Vibration.vibrate(DURATION)
+//                        Vibration.vibrate(PATTERN)
+//    //                    Vibration.vibrate(PATTERN, true)
+//    //                    Vibration.cancel()
+//
+//                        if(this.props.alertMethod === 1){
+//                            this.displayAlert()
+//                        }else if(this.props.alertMethod === 2){
+//                            //Expo Notification
+//                            var localNotification = {
+//                                title: 'You have arrived!!',
+//                                body: 'This is Proxy. You are close to your set destination!',
+//                                ios: {
+//                                    sound: true
+//                                },
+//                                android: {
+//                                    sound: true
+//                                }
+//                            }
+//                            Expo.Notifications.presentLocalNotificationAsync(localNotification)
+//                        }
+//
+//                        //resetting variables
+//                        this.props.stopCheckDistance(false)
+//                        this.props.removeRunningWindow(false)
+//
+//                        //hides target marker and radius circle
+//                        this.setState({
+//                            showTargetMarker: false,
+//                            showRadiusCircle: false
+//                        })
+//
+//                        //enables functions
+//                        this.props.disableFunctionsRemote(false)
+//                    }
+//                }  
+//                counter = 0;
+//            }
+//            counter ++;    
+//        }, 100) 
+//    }
     
-    //shows on screen alert (NOT alarm)
-    displayAlert = ()=>{
-        Alert.alert(
-            'You have Arrived!!',
-            '',
-            [
-                {text: 'OK', onPress: () =>{
-                        Vibration.cancel()
-                        remRadiusBtn = null
-                        this.setState({
-                            showRadius: false
-                        })
-                    }
-                }
-            ],
-            { cancelable: false }
-            ) 
-    }
+//    //shows on screen alert (NOT alarm)
+//    displayAlert = ()=>{
+//        Alert.alert(
+//            'You have Arrived!!',
+//            '',
+//            [
+//                {text: 'OK', onPress: () =>{
+//                        Vibration.cancel()
+//                        remRadiusBtn = null
+//                        this.setState({
+//                            showRadius: false
+//                        })
+//                    }
+//                }
+//            ],
+//            { cancelable: false }
+//            ) 
+//    }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition
     mapSearchFunc = (data)=>{
@@ -296,7 +301,7 @@ class Map extends Component {
     }
 
     componentWillUnmount(){
-        this.clearRefresh();
+//        this.clearRefresh();
     }
 
 //-------------------------------------------------------------------------
@@ -325,8 +330,8 @@ class Map extends Component {
                 <MapView.Circle 
                     center=
                         {{
-                         latitude: this.state.targetMarkerPosition.latitude, 
-                         longitude: this.state.targetMarkerPosition.longitude
+                            latitude: this.state.targetMarkerPosition.latitude, 
+                            longitude: this.state.targetMarkerPosition.longitude
                         }}
                     radius={this.props.sliderValue}
                     zIndex={this.state.circleIndex}
@@ -364,13 +369,9 @@ class Map extends Component {
 				<MapView
 					provider={PROVIDER_GOOGLE}
 					style={styles.map}
-					region={this.state.screenPosition}
-					onRegionChange={(reg)=>{
-						this.setState({
-							screenPosition: reg,
-							showFollowLocBtn: true,
-							followLoc: false
-						})
+					region={this.props.screenPosition}
+					onRegionChange={(region)=>{
+				        this.props.onRegionChange(region)
 					}}
 					rotateEnabled={false}
 					loadingEnabled={true}
@@ -382,7 +383,7 @@ class Map extends Component {
 					{targetMarker}
 
 					<MapView.Marker 
-						coordinate={this.state.locationMarkerPosition}
+						coordinate={this.props.locationMarkerPosition}
 						anchor={{ x: 0.5, y: 0.5 }}
 					>
 							<LogoAnim />
@@ -393,7 +394,7 @@ class Map extends Component {
 					
 					<MapSearch 
 						callbackFromParent={this.mapSearchFunc} 
-						giveLocation={this.state.locationMarkerPosition}
+						giveLocation={this.props.locationMarkerPosition}
 						editingInput={this.editingInput}
 						stopRefresh={this.clearRefresh}
 						startRefresh={this.startRefresh}

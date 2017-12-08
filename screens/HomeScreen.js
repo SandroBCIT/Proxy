@@ -22,7 +22,7 @@ class HomeScreen extends Component {
         }
     }
 	
-	componentWillMount() {
+	componentWillMount() {        
 		this.animatedPosition = new Animated.Value(50);
         this.animatedOpacity = new Animated.Value(0);
 	}
@@ -178,6 +178,10 @@ class HomeScreen extends Component {
                     disableFunctionsRemote={this.disableFunctionsRemote}
                     delayedRadius={this.state.delayedRadius}
                     alertMethod={this.state.alertMethod}
+            
+                    screenPosition={this.props.screenProps.setScreenPosition}
+                    locationMarkerPosition={this.props.screenProps.setLocationMarkerPosition}
+                    onRegionChange={this.props.screenProps.onRegionChange}
                 />
                 {initialWindow}
                 {setupWindow}

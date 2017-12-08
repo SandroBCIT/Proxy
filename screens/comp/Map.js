@@ -241,7 +241,11 @@ class Map extends Component {
 					{targetMarker}
 
 					<MapView.Marker 
-						coordinate={this.props.locationMarkerPosition}
+						coordinate=
+                            {{
+                                latitude: this.props.locationMarkerPosition.latitude,
+                                longitude: this.props.locationMarkerPosition.longitude
+                            }}
 						anchor={{ x: 0.5, y: 0.5 }}
 					>
 							<LogoAnim nightMode={this.props.nightMode} palette={this.props.palette} />

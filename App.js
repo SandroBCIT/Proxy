@@ -71,7 +71,9 @@ export default class DrawerBuild extends Component {
             },
             locationMarkerPosition: {
                 latitude: 49.251161,
-                longitude: -123.003445
+                longitude: -123.003445,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0
             },
             followLoc: true,
             checkDistance: false,
@@ -100,7 +102,9 @@ export default class DrawerBuild extends Component {
 
             var lastMarkerRegion = {
                 latitude: lat,
-                longitude: long
+                longitude: long,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta
             }
 
             this.setState({
@@ -153,6 +157,8 @@ export default class DrawerBuild extends Component {
         }
         
         let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
+            alert('update')
+            
             if(this.state.followLoc === true){
                 var lastScreenRegion = {
                     latitude: position.coords.latitude,
@@ -168,7 +174,9 @@ export default class DrawerBuild extends Component {
             
             var lastMarkerRegion = {
                 latitude: position.coords.latitude,
-                longitude: position.coords.longitude
+                longitude: position.coords.longitude,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta
             }
 
             this.setState({
@@ -362,7 +370,7 @@ export default class DrawerBuild extends Component {
     
     setToFollowLoc = () => {
         this.setState({
-            screenPosition: this.state.targetMarkerPosition,
+            screenPosition: this.state.locationMarkerPosition,
             followLoc: true,
             showFollowLocBtn: false
         })

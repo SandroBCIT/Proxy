@@ -69,7 +69,7 @@ class MenuScreen extends Component {
 		}
 		
 		let picSrc = this.props.screenProps.photoURL,
-			nameSrc = this.props.screenProps.userName.toLowerCase(),
+			nameSrc = this.props.screenProps.userName,
 			emailSrc = this.props.screenProps.email,
 			picReq = null,
 			nameReq = null;

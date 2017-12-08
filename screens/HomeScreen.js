@@ -37,7 +37,7 @@ class HomeScreen extends Component {
     }
     
     hamburgerFunction = ()=>{
-        this.props.navigation.navigate('DrawerOpen');      
+        this.props.navigation.navigate('DrawerOpen'); 
     }
     
     setSliderValue = (data)=>{

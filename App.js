@@ -63,41 +63,6 @@ export default class DrawerBuild extends Component {
 	}
     
 	componentWillMount(){
-<<<<<<< HEAD
-=======
-        this.startRefresh();
-    }
-    
-	async componentDidMount() {
-        await Expo.Font.loadAsync({
-            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
-        });
-		
-		setTimeout(()=>{
-			this.setState({ finishedLoading: true });
-		}, 3000);
-    }
-	
-	setUserInfo = (val) => {
-		this.setState({
-			userName: val.displayName,
-			photoURL: val.photoURL,
-			email: val.email
-		});
-	}
-	
-    startRefresh = ()=>{
-        this.locRefresh();
-    }
-    
-    clearRefresh = ()=>{
-        clearInterval(locRefresh);
-    }
-    
-    locRefresh = ()=>{
->>>>>>> 5df007ed36fc374c085ec1bcccba5c4e68a6d70f
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
         
@@ -135,6 +100,27 @@ export default class DrawerBuild extends Component {
             this._getLocationAsync();
         }
     }
+    
+	async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
+        });
+		
+		setTimeout(()=>{
+			this.setState({ finishedLoading: true });
+		}, 3000);
+    }
+	
+	setUserInfo = (val) => {
+		this.setState({
+			userName: val.displayName,
+			photoURL: val.photoURL,
+			email: val.email
+		});
+	}
+    
     
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -334,7 +320,8 @@ export default class DrawerBuild extends Component {
 	setUserInfo = (val) => {
 		this.setState({
 			userName: val.displayName,
-			photoURL: val.photoURL
+			photoURL: val.photoURL,
+            email: val.email
 		});
 	}
     

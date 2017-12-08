@@ -63,16 +63,16 @@ class InitialWindow extends Component {
 		}
         
         return (
-                <Animated.View style={[styles.wrapper, styles.shadow, {backgroundColor: colPal.primary}, animatedStyle]}>
-                    <Text style={[styles.baseText, {color: colPal.text}, styles.heading]}>choose your action</Text>
+                <Animated.View style={[styles.wrapper, styles.shadow, {backgroundColor: colPal.butText}, animatedStyle]}>
+                    <Text style={[styles.baseText, {color: colPal.primaryBut}, styles.heading]}>choose your action</Text>
                     <TouchableOpacity onPress={this.setToAlarm}>
-                        <View style={[styles.confirmBut, {backgroundColor: colPal.text}, styles.shadow]}>
-                            <Text style={[styles.baseText, {color: colPal.primary}, styles.btnLabel]}>alarm</Text>	
+                        <View style={[styles.confirmBut, {backgroundColor: colPal.primaryBut}, styles.shadow]}>
+                            <Text style={[styles.baseText, {color: colPal.butText}, styles.btnLabel]}>alarm</Text>	
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this.setToNotification}>
-                        <View style={[styles.confirmBut, {backgroundColor: colPal.text}, styles.shadow]}>
-                            <Text style={[styles.baseText, {color: colPal.primary}]}>notification</Text>
+                        <View style={[styles.confirmBut, {backgroundColor: colPal.primaryBut}, styles.shadow]}>
+                            <Text style={[styles.baseText, {color: colPal.butText}]}>notification</Text>
                         </View>
                     </TouchableOpacity>
                 </Animated.View>

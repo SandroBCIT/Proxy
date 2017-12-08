@@ -153,13 +153,6 @@ class Map extends Component {
             })    
         }        
     }
-    
-    setToFollowLoc = ()=>{
-        this.setState({
-            followLoc: true,
-            showFollowLocBtn: false
-        });        
-    }
 
 //-------------------------------------------------------------------------
 
@@ -206,10 +199,10 @@ class Map extends Component {
 
         //Follow Btn
         let followLocBtn = null;
-        if (this.state.showFollowLocBtn === true) {
+        if (this.props.showFollowLocBtn === true) {
             followLocBtn = 
 			<LocationBtn
-				setToFollowLoc={this.setToFollowLoc}
+				setToFollowLoc={this.props.setToFollowLoc}
 			/>;
         } else {
             followLocBtn = null;
@@ -249,7 +242,7 @@ class Map extends Component {
 						coordinate={this.props.locationMarkerPosition}
 						anchor={{ x: 0.5, y: 0.5 }}
 					>
-							<LogoAnim />
+							<LogoAnim nightMode={this.props.nightMode} palette={this.props.palette} />
 					</MapView.Marker>
 				</MapView>
 				{bgView}

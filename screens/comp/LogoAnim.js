@@ -7,6 +7,10 @@ export default class LogoAnim extends Component {
 	constructor(props) {
 		super(props);
 		
+		this.state = {
+			palette: this.props.palette
+		}
+		
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
@@ -17,6 +21,13 @@ export default class LogoAnim extends Component {
 	}
 	
 	render() {
+		
+		let btnCenter = this.state.palette.light.primary;
+		
+		if (this.props.nightMode === true) {
+			btnCenter = this.state.palette.dark.secondary
+		}
+		
 		return(
 			<View style={{flex: 1}}>
 				<Animation
@@ -31,7 +42,7 @@ export default class LogoAnim extends Component {
 					autoplay={true}
 					source={require('../../assets/radius.json')}
 				/>
-				<View style={{ backgroundColor: '#58378F', borderRadius: 100, height:20, width:20, position: 'absolute', top: 20, left: 20}}></View>
+				<View style={{ backgroundColor: btnCenter, borderRadius: 100, height:20, width:20, position: 'absolute', top: 20, left: 20}}></View>
 			</View>
 		);
 	}

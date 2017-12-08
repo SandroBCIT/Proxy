@@ -41,13 +41,15 @@ const ColorPalette = {
 	light: {
 		text: '#f2f2f2',
 		primary: '#5f3b9a',
-		primaryBut: '#5f3b9a',
-		secondary: '#3c1e5f',
+		primaryBut: '#f2f2f2',
+		butText: '#5f3b9a',
+		secondary: '#1f9668',
 	},
 	dark: {
 		text: '#f2f2f2',
 		primary: '#3c1e5f',
-		primaryBut: '#f2f2f2',
+		primaryBut: '#5f3b9a',
+		butText: '#f2f2f2',
 		secondary: '#1f9668',
 	}
 }

@@ -183,7 +183,6 @@ class HomeScreen extends Component {
                     disableFunctionsRemote={this.disableFunctionsRemote}
                     delayedRadius={this.state.delayedRadius}
                     alertMethod={this.state.alertMethod}
-            
                     screenPosition={this.props.screenProps.setScreenPosition}
                     locationMarkerPosition={this.props.screenProps.setLocationMarkerPosition}
                     targetMarkerPosition={this.props.screenProps.setTargetMarkerPosition}
@@ -194,6 +193,9 @@ class HomeScreen extends Component {
 					palette={this.props.screenProps.palette}
                     showTargetMarkerRemote={this.props.screenProps.showTargetMarkerRemote}
                     showRadiusCircleRemote={this.props.screenProps.showRadiusCircleRemote}
+					showFollowLocBtn={this.props.screenProps.showFollowLocBtn}
+					setToFollowLoc={this.props.screenProps.setToFollowLoc}
+					screenPosition={this.props.screenProps.screenPosition}
                 />
                 {progWindow}
             </Animated.View>

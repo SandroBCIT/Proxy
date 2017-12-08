@@ -8,7 +8,8 @@ class SetupWindow extends Component {
         super(props)
         
         this.state = {
-            sliderValue: 100
+            sliderValue: 100,
+			palette: this.props.palette
         }
     }
     
@@ -51,23 +52,29 @@ class SetupWindow extends Component {
             opacity: this.animatedOpacity
         }
 		
+		let colPal = this.state.palette.light;
+		
+		if (this.props.nightMode === true) {
+			colPal = this.state.palette.dark;
+		}
+		
         return (
-                <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
+                <Animated.View style={[styles.wrapper, styles.shadowBig, {backgroundColor: colPal.butText}, animatedStyle]}>
                     <Slider
                         style={styles.slider}
-                        minimumTrackTintColor = '#2AAE78'
-                        thumbTintColor = '#2AAE78'
+                        minimumTrackTintColor = {colPal.secondary}
+                        thumbTintColor = {colPal.secondary}
                         maximumValue = {1000}
                         onValueChange = {this.returnSliderValue}
                         value = {100}
                         step = {5}
                     />  
-                    <Text style={styles.baseText}>
+                    <Text style={[styles.baseText, {color: colPal.primaryBut}]}>
                         notify when {this.state.sliderValue} m away
                     </Text>
                     <TouchableOpacity onPress={this.startCheckDistance}>
-                        <View style={[styles.confirmBut, styles.shadowSm]}>
-                            <Text style={[styles.baseText, styles.btnLabel]}>start</Text>	
+                        <View style={[styles.confirmBut, styles.shadowSm, {backgroundColor:colPal.primaryBut}]}>
+                            <Text style={[styles.baseText, {color: colPal.butText}]}>start</Text>	
                         </View>
                     </TouchableOpacity>
                 </Animated.View>

@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, TouchableOpacity, Animated } from 'react-native';
 
 class RunningWind extends Component {
+	
+	constructor(props){
+        super(props);
+        
+        this.state = {
+			palette: this.props.palette
+        }
+    }
+	
 	componentWillMount() {
         this.animatedPosition = new Animated.Value(50);
         this.animatedOpacity = new Animated.Value(0);
@@ -34,12 +43,18 @@ class RunningWind extends Component {
             opacity: this.animatedOpacity
         }
 		
+		let colPal = this.state.palette.light;
+		
+		if (this.props.nightMode === true) {
+			colPal = this.state.palette.dark;
+		}
+		
         return (
-            <Animated.View style={[styles.wrapper, styles.shadowBig, animatedStyle]}>
-				<Text style={styles.baseText}>enjoy your trip!</Text>
+            <Animated.View style={[styles.wrapper, styles.shadowBig, {backgroundColor: colPal.butText}, animatedStyle]}>
+				<Text style={[styles.baseText, {color: colPal.primaryBut}]}>enjoy your trip!</Text>
                 <TouchableOpacity onPress={this.toggleRunningWindow}>
-                    <View style={[styles.cancelBut, styles.shadowSm]}>
-                        <Text style={[styles.baseText, styles.btnLabel]}>cancel</Text>
+                    <View style={[styles.cancelBut, styles.shadowSm, {backgroundColor: colPal.primaryBut}]}>
+                        <Text style={[styles.baseText, styles.btnLabel, {color: colPal.butText}]}>cancel</Text>
                     </View>
                 </TouchableOpacity>
             </Animated.View>
@@ -87,9 +102,6 @@ const styles = StyleSheet.create({
 		marginTop: 20,
         marginBottom: 10,
     },
-    btnLabel: {
-        color: '#E9E9E9'
-    }
 });
 
 export default RunningWind;

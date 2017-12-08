@@ -15,8 +15,6 @@ class HomeScreen extends Component {
         
         this.state = {
             showSetupWindow: false,
-            checkDistance: false,
-            sliderValue: 50,
             removeOldPin: false,
             disableFunctions: false
         }
@@ -37,9 +35,7 @@ class HomeScreen extends Component {
     }
     
     setSliderValue = (data)=>{
-        this.setState({
-            sliderValue: data
-        })
+        this.props.screenProps.setSliderValue(data);
     }
     
     toggleInitialWindow = (data)=>{
@@ -59,20 +55,12 @@ class HomeScreen extends Component {
             showRunningWindow: data
         })  
         if(data === false){
-            this.stopCheckDistance(false)
+            this.checkDistance(false)
         }
     }
     
-    startCheckDistance = (data)=>{
-        this.setState({
-            checkDistance: data
-        }) 
-    }
-    
-    stopCheckDistance = (data)=>{
-        this.setState({
-            checkDistance: data
-        })      
+    checkDistance = (data) => {
+        this.props.screenProps.checkDistance(data)    
     }
     
     disableFunctions = (data)=>{
@@ -81,10 +69,17 @@ class HomeScreen extends Component {
         })    
     }
     
-    disableFunctionsRemote = (data)=>{
-        this.setState({
-            disableFunctions: data
-        })    
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.screenProps.disableFunctionsRemote === false){
+            this.setState({
+                disableFunctions: false
+            })    
+        }
+        if(nextProps.screenProps.removeRunningWindow === true){
+            this.setState({
+                showRunningWindow: false       
+            })
+        }
     }
     
     delayedRadius = (data)=>{
@@ -100,9 +95,7 @@ class HomeScreen extends Component {
     }
     
     alertMethod = (data)=>{
-        this.setState({
-            alertMethod: data
-        }) 
+        this.props.screenProps.setAlertMethod(data);
     }
 	
 	animateOut = () => {
@@ -158,7 +151,7 @@ class HomeScreen extends Component {
             progWindow = 
                 <SetupWindow 
                     sliderValue={this.setSliderValue} 
-                    checkDistance={this.startCheckDistance}
+                    checkDistance={this.checkDistance}
                     toggleSetupWindow={this.toggleSetupWindow}
                     toggleRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.disableFunctions}
@@ -173,20 +166,19 @@ class HomeScreen extends Component {
                     removeOldPin={this.removeOldPin}
 					nightMode={this.props.screenProps.nightMode}
 					palette={this.props.screenProps.palette}
+                    checkDistance={this.checkDistance}
                 />   
         }
-        
+		
         return (
             <Animated.View style={[styles.viewContainer, animatedStyle]}>
                 <Map 
                     hamburgerFunction={this.hamburgerFunction} 
-                    sliderValue={this.state.sliderValue} 
+                    sliderValue={this.props.screenProps.sliderValue} 
                     toggleInitialWindow={this.toggleInitialWindow} 
                     toggleSetupWindow={this.toggleSetupWindow} 
-                    checkDistance={this.state.checkDistance} 
-                    stopCheckDistance={this.stopCheckDistance}
                     removeOldPin={this.state.removeOldPin}
-                    removeRunningWindow={this.toggleRunningWindow}
+                    toggleRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.state.disableFunctions}
                     disableFunctionsRemote={this.disableFunctionsRemote}
                     delayedRadius={this.state.delayedRadius}
@@ -194,9 +186,14 @@ class HomeScreen extends Component {
             
                     screenPosition={this.props.screenProps.setScreenPosition}
                     locationMarkerPosition={this.props.screenProps.setLocationMarkerPosition}
+                    targetMarkerPosition={this.props.screenProps.setTargetMarkerPosition}
+                    searchLocation={this.props.screenProps.onSearchLocation}
+                    onMapLongPress={this.props.screenProps.onMapLongPress}
                     onRegionChange={this.props.screenProps.onRegionChange}
 					nightMode={this.props.screenProps.nightMode}
 					palette={this.props.screenProps.palette}
+                    showTargetMarkerRemote={this.props.screenProps.showTargetMarkerRemote}
+                    showRadiusCircleRemote={this.props.screenProps.showRadiusCircleRemote}
                 />
                 {progWindow}
             </Animated.View>

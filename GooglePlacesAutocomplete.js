@@ -44,8 +44,7 @@ const defaultStyles = {
     marginLeft: 8,
     marginRight: 8,
     fontSize: 15,
-    flex: 1,
-    fontFamily: 'open-sans-light'
+    flex: 1
   },
   poweredContainer: {
     justifyContent: 'flex-end',
@@ -54,6 +53,7 @@ const defaultStyles = {
   },
   powered: {},
   listView: {
+    // flex: 1,
   },
   row: {
     padding: 13,
@@ -64,9 +64,7 @@ const defaultStyles = {
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#c8c7cc',
   },
-  description: {
-    fontFamily: 'open-sans-light'
-  },
+  description: {},
   loader: {
     // flex: 1,
     flexDirection: 'row',
@@ -707,13 +705,6 @@ export default class GooglePlacesAutocomplete extends Component {
 
               placeholderTextColor={this.props.placeholderTextColor}
               /*onFocus={onFocus ? () => {this._onFocus(); onFocus()} : this._onFocus}*/
-//custom              
-onFocus={()=>{
-    this.props.stopRefresh();
-}}
-onBlur={()=>{
-    this.props.startRefresh();
-}}
               clearButtonMode="while-editing"
               underlineColorAndroid={this.props.underlineColorAndroid}
               { ...userProps }

@@ -118,7 +118,11 @@ export default class DrawerBuild extends Component {
         }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
         
         //Location Check   
-        
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+            alert('Try on real device');
+        } else {
+            this._getLocationAsync();
+        }
     }
     
 	async componentDidMount() {
@@ -132,11 +136,7 @@ export default class DrawerBuild extends Component {
 			this.setState({ finishedLoading: true });
 		}, 3000);
 		
-		if (Platform.OS === 'android' && !Constants.isDevice) {
-            alert('Try on real device');
-        } else {
-            this._getLocationAsync();
-        }
+		//Location Check (old place for code)
     }
 	
 	setUserInfo = (val) => {
@@ -157,8 +157,6 @@ export default class DrawerBuild extends Component {
         }
         
         let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
-            alert('update')
-            
             if(this.state.followLoc === true){
                 var lastScreenRegion = {
                     latitude: position.coords.latitude,

@@ -61,8 +61,7 @@ class Map extends Component {
         
         //displays target marker and circle radius
         this.setState({
-            showTargetMarker: true,
-            showRadiusCircle: true
+            showTargetMarker: true
         })
         this.props.toggleInitialWindow(true);
          

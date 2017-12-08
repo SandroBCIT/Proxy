@@ -33,6 +33,8 @@ class Map extends Component {
 		if (Platform.OS === 'android') {
 		  UIManager.setLayoutAnimationEnabledExperimental(true)
 		}
+		
+		console.log(this.props.screenPosition)
     }
     
     //grabs location data (long/lat) from MapSearch component and updates screenPosition

@@ -195,7 +195,6 @@ class HomeScreen extends Component {
                     showRadiusCircleRemote={this.props.screenProps.showRadiusCircleRemote}
 					showFollowLocBtn={this.props.screenProps.showFollowLocBtn}
 					setToFollowLoc={this.props.screenProps.setToFollowLoc}
-					screenPosition={this.props.screenProps.screenPosition}
                 />
                 {progWindow}
             </Animated.View>

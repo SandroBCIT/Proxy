@@ -101,22 +101,22 @@ class HomeScreen extends Component {
 	animateOut = () => {
         Animated.timing(this.animatedScale, {
             toValue: 1.1,
-            duration: 150
+            duration: 250
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 0.9,
-            duration: 150
+            duration: 250
         }).start()
     }
 	
 	animateIn = () => {
         Animated.timing(this.animatedScale, {
             toValue: 1,
-            duration: 150
+            duration: 250
         }).start()
         Animated.timing(this.animatedOpacity, {
             toValue: 1,
-            duration: 150
+            duration: 250
         }).start()
     }
 	

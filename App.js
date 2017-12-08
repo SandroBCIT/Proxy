@@ -9,6 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DrawerMenu from './screens/MenuScreen';
+import LoadingScreen from './screens/comp/LoadingScreen';
 
 const {width,height} = Dimensions.get('window');
 const SCREENHEIGHT = height;
@@ -43,7 +44,7 @@ export default class DrawerBuild extends Component {
 		this.state = {
 			userName: 'Some Guy',
 			photoURL: './assets/add.png',
-			fontReady: false,
+			finishedLoading: false,
             screenPosition: {
                 latitude: 49.2827,
                 longitude: -123.1207,
@@ -71,8 +72,10 @@ export default class DrawerBuild extends Component {
 			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
 			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
         });
-
-        this.setState({ fontReady: true });
+		
+		setTimeout(()=>{
+			this.setState({ finishedLoading: true });
+		}, 3000);
     }
 	
 	setUserInfo = (val) => {
@@ -220,7 +223,7 @@ export default class DrawerBuild extends Component {
     
 	render(){
 		
-		if (this.state.fontReady) {
+		if (this.state.finishedLoading) {
 			return(
 				<Drawer screenProps={{
 					userName: this.state.userName,
@@ -234,7 +237,7 @@ export default class DrawerBuild extends Component {
 				}} />
 			);
 		} else {
-			return null;
+			return <LoadingScreen />;
 		}
 	}
 	

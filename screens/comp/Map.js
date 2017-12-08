@@ -160,14 +160,22 @@ class Map extends Component {
 
     render() {
 		
-		
+		let curMapStyle = LightMap,
+			targetMarker = null,
+			targetMarkerCol = require("../../img/pin-01.png");
+
+		if (this.props.nightMode === true) {
+			curMapStyle = DarkMap;
+			targetMarkerCol = require("../../img/pin-01-g.png")
+		}
         //Target Marker
-        let targetMarker = null
+		
+		
         if(this.state.showTargetMarker === true){
             targetMarker = 
                 <MapView.Marker 
                     coordinate={this.props.targetMarkerPosition}
-                    image={require("../../img/pin-01.png")}
+                    image={targetMarkerCol}
                 />
         }else if(this.state.showTargetMarker === false){
             targetMarker = null   
@@ -212,14 +220,7 @@ class Map extends Component {
 
 		// Night Mode
 
-		let 
-			curMapStyle = null;
-
-		if (this.props.nightMode === true) {
-			curMapStyle = DarkMap;
-		} else {
-			curMapStyle = LightMap;
-		}
+		
 
 		return (
 			<View style={styles.viewContainer} key={this.props.nightMode}>

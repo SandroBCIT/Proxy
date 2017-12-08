@@ -820,3 +820,4 @@ module.exports = {
   GooglePlacesAutocomplete,
   create
 };
+}

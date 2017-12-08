@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StackNavigator, DrawerNavigator, UIManager, Platform } from 'react-navigation';
-import { Dimensions, Alert, Vibration } from 'react-native';
+import { StackNavigator, DrawerNavigator, UIManager } from 'react-navigation';
+import { Dimensions, Alert, Vibration, Platform } from 'react-native';
 
-import Expo from 'expo';
+import Expo, { Constants, Location, Permissions } from 'expo';
 
 //Importing Screens
 import LoginScreen from './screens/LoginScreen';
@@ -21,7 +21,8 @@ var locRefresh = null;
 var latDelta = null;
 var longDelta = null;
 var counter = 0;
-
+var watchID = null;
+    
 const Drawer  = DrawerNavigator({
     Login: { 
         screen: LoginScreen,
@@ -46,141 +47,38 @@ export default class DrawerBuild extends Component {
 			photoURL: './assets/add.png',
 			finishedLoading: false,
             screenPosition: {
-                latitude: 49.2827,
-                longitude: -123.1207,
+                latitude: 49.251161,
+                longitude: -123.003445,
                 latitudeDelta: 0.05,
                 longitudeDelta: 0
             },
             locationMarkerPosition: {
-                latitude: 0,
-                longitude: 0
+                latitude: 49.251161,
+                longitude: -123.003445
             },
             initialize: true,
             followLoc: true,
             checkDistance: false,
-            showFollowLocBtn: false
+            showFollowLocBtn: false,
+            sliderValue: 100
 		}
 	}
     
 	componentWillMount(){
-        this.startRefresh();
-    }
-    
-	async componentDidMount() {
-        await Expo.Font.loadAsync({
-            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
-        });
-		
-		setTimeout(()=>{
-			this.setState({ finishedLoading: true });
-		}, 3000);
-    }
-	
-	setUserInfo = (val) => {
-		this.setState({
-			userName: val.displayName,
-			photoURL: val.photoURL
-		});
-	}
-	
-    startRefresh = ()=>{
-        this.locRefresh();
-    }
-    
-    clearRefresh = ()=>{
-        clearInterval(locRefresh);
-    }
-    
-    locRefresh = ()=>{
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
         
-        locRefresh = setInterval(()=>{
-            
-            this.findLocation();
-            
-            //to have distanceChecker only run every 10th loop (1s)
-            if(counter === 10){
-                if(this.state.checkDistance === true){
-                    //converts radius from meters to lat/long scale
-                    var radius = (0.00001*(this.props.sliderValue));
-
-                    var xLoc = this.state.locationMarkerPosition['longitude'];
-                    var yLoc = this.state.locationMarkerPosition['latitude'];
-                    var xDest = this.state.targetMarkerPosition['longitude'];
-                    var yDest = this.state.targetMarkerPosition['latitude'];
-
-                    //calculates distance from location to targetMarker
-                    var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
-
-                    if(distance <= radius){
-    //                    const DURATION = 1000
-                        const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
-    //                    Vibration.vibrate(DURATION)
-                        Vibration.vibrate(PATTERN)
-    //                    Vibration.vibrate(PATTERN, true)
-    //                    Vibration.cancel()
-
-                        if(this.props.alertMethod === 1){
-                            this.displayAlert()
-                        }else if(this.props.alertMethod === 2){
-                            //Expo Notification
-                            var localNotification = {
-                                title: 'You have arrived!!',
-                                body: 'This is Proxy. You are close to your set destination!',
-                                ios: {
-                                    sound: true
-                                },
-                                android: {
-                                    sound: true
-                                }
-                            }
-                            Expo.Notifications.presentLocalNotificationAsync(localNotification)
-                        }
-
-                        //resetting variables
-                        this.props.stopCheckDistance(false)
-                        this.props.removeRunningWindow(false)
-
-                        //hides target marker and radius circle
-                        this.setState({
-                            showTargetMarker: false,
-                            showRadiusCircle: false
-                        })
-
-                        //enables functions
-                        this.props.disableFunctionsRemote(false)
-                    }
-                }  
-                counter = 0;
-            }
-            counter ++;    
-        }, 100) 
-    }
-    
-    findLocation = () => {
+        //initial Location
         navigator.geolocation.getCurrentPosition((position) => {
-            
-            var lat = parseFloat(position.coords.latitude);
-            var long = parseFloat(position.coords.longitude);
-            
-                if(this.state.initialize === true || this.state.followLoc === true){
-                    //makes the screen follow the locationMarker
-                    var lastScreenRegion = {
-                        latitude: lat,
-                        longitude: long,
-                        latitudeDelta: latDelta,
-                        longitudeDelta: longDelta
-                    }
-                    this.setState({
-                        screenPosition: lastScreenRegion
-                    });
-                }
-                this.setState({
-                    initialize: false
-                })
+            var lat = parseFloat(position.coords.latitude)
+            var long = parseFloat(position.coords.longitude)
+
+            var lastScreenRegion = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta
+            }
 
             var lastMarkerRegion = {
                 latitude: lat,
@@ -188,10 +86,148 @@ export default class DrawerBuild extends Component {
             }
 
             this.setState({
+                screenPosition: lastScreenRegion,
                 locationMarkerPosition: lastMarkerRegion
             });
 
+            latDelta = parseFloat(position.coords.latitudeDelta)
+            longDelta = parseFloat(position.coords.longitudeDelta)
+
         }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
+        
+        //Location Check   
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+            alert('Try on real device');
+        } else {
+            this._getLocationAsync();
+        }
+    }
+    
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
+        }
+        
+        let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
+            if(this.state.initialize === true || this.state.followLoc === true){
+                var lastScreenRegion = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: latDelta,
+                    longitudeDelta: longDelta
+                }
+                
+                this.setState({
+                    screenPosition: lastScreenRegion
+                });  
+            }
+            
+            this.setState({
+                initialize: false
+            });
+            
+            var lastMarkerRegion = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+
+            this.setState({
+                locationMarkerPosition: lastMarkerRegion
+            });
+            
+            if(this.state.checkDistance === true){
+                this.checkDistanceFunc();
+            } 
+        });
+    };
+
+    checkDistanceFunc = () => {
+        //converts radius from meters to lat/long scale
+        var radius = (0.00001*(this.state.sliderValue));
+
+        var xLoc = this.state.locationMarkerPosition['longitude'];
+        var yLoc = this.state.locationMarkerPosition['latitude'];
+        var xDest = this.state.targetMarkerPosition['longitude'];
+        var yDest = this.state.targetMarkerPosition['latitude'];
+
+        //calculates distance from location to targetMarker
+        var distance = Math.sqrt(Math.pow((xLoc-xDest),2)+Math.pow((yLoc-yDest),2));
+
+        if(distance <= radius){
+//                    const DURATION = 1000
+            const PATTERN = [0, 1000, 300, 1000, 300, 1000, 300]
+//                    Vibration.vibrate(DURATION)
+            Vibration.vibrate(PATTERN)
+//                    Vibration.vibrate(PATTERN, true)
+//                    Vibration.cancel()
+
+            if(this.state.alertMethod === 1){
+                this.displayAlert()
+            }else if(this.state.alertMethod === 2){
+                //Expo Notification
+                var localNotification = {
+                    title: 'You have arrived!!',
+                    body: 'This is Proxy. You are close to your set destination!',
+                    ios: {
+                        sound: true
+                    },
+                    android: {
+                        sound: true
+                    }
+                }
+                Expo.Notifications.presentLocalNotificationAsync(localNotification)
+            }
+
+            //resetting variables
+            this.setState({
+                checkDistance: false
+            })
+            
+            //removes the running window after alarm is triggered
+            this.setState({
+                removeRunningWindow: true    
+            })
+            setTimeout(() => {
+                this.setState({
+                    removeRunningWindow: false,
+                });
+            }, 100)
+
+            //hides target marker and radius circle after alarm is triggered
+            this.setState({
+                showTargetMarkerRemote: false,
+                showRadiusCircleRemote: false
+            })
+            setTimeout(() => {
+                this.setState({
+                    showTargetMarkerRemote: true,
+                    showRadiusCircleRemote: true
+                });
+            }, 100)
+
+            //enables functions
+            this.setState({
+                disableFunctionsRemote: false
+            })
+            setTimeout(() => {
+                this.setState({
+                    disableFunctionsRemote: true    
+                });
+            }, 100)
+
+        }    
+    }
+
+    setCheckDistance = (data) => {
+        this.setState({
+            checkDistance: data
+        })
+        if(data === true){
+            this.checkDistanceFunc();
+        }
     }
     
 //     //shows on screen alert (NOT alarm)
@@ -221,8 +257,55 @@ export default class DrawerBuild extends Component {
         })
     }
     
-	render(){
+    onSearchLocation = (searchLocation) => {
+        var searchTarget = {
+            latitude: searchLocation.latitude,
+            longitude: searchLocation.longitude
+        }
+        this.setState({
+            screenPosition: searchLocation,
+            targetMarkerPosition: searchTarget
+        });   
+    }
+    
+    onMapLongPress = (newTargetMarker) => {
+        this.setState({
+            targetMarkerPosition: newTargetMarker
+        });    
+    }
+    
+    setSliderValue = (data) => {
+        this.setState({
+            sliderValue: data
+        })
+    }
+    
+    setAlertMethod = (data) => {
+        this.setState({
+            alertMethod: data
+        }) 
+    }
+    
+    async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
+        });
 		
+		setTimeout(()=>{
+			this.setState({ finishedLoading: true });
+		}, 3000);
+    }
+    
+	setUserInfo = (val) => {
+		this.setState({
+			userName: val.displayName,
+			photoURL: val.photoURL
+		});
+	}
+    
+	render(){
 		if (this.state.finishedLoading) {
 			return(
 				<Drawer screenProps={{
@@ -233,7 +316,22 @@ export default class DrawerBuild extends Component {
 					
                     setScreenPosition: this.state.screenPosition,
                     setLocationMarkerPosition: this.state.locationMarkerPosition,
-                    onRegionChange: this.onRegionChange
+                    setTargetMarkerPosition: this.state.targetMarkerPosition,
+                    setAlertMethod: this.setAlertMethod,
+                
+                    onSearchLocation: this.onSearchLocation,
+                    onMapLongPress: this.onMapLongPress,
+                    onRegionChange: this.onRegionChange,
+                    regionLat: this.state.regionLat,
+                
+                    disableFunctionsRemote: this.state.disableFunctionsRemote,
+                    showTargetMarkerRemote: this.state.showTargetMarkerRemote,
+                    showRadiusCircleRemote: this.state.showRadiusCircleRemote,
+                
+                    removeRunningWindow: this.state.removeRunningWindow,
+                    checkDistance: this.setCheckDistance,
+                    setSliderValue: this.setSliderValue,
+                    sliderValue: this.state.sliderValue
 				}} />
 			);
 		} else {

@@ -39,7 +39,6 @@ class LoginScreen extends Component {
                 this.goToHome();
 				this.props.screenProps.setUserInfo(user);
             }
-			console.log(user);
         });
 		this.animatedPosition = new Animated.Value(50);
         this.animatedOpacity = new Animated.Value(0);
@@ -119,7 +118,6 @@ class LoginScreen extends Component {
                 firebase.auth().signInWithCredential(credential).catch((error) => {
                     alert(error);
                 });
-				console.log(result);
             }
         } catch(e) {
             alert(e);

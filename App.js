@@ -7,7 +7,6 @@ import Expo, { Constants, Location, Permissions } from 'expo';
 //Importing Screens
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import DrawerMenu from './screens/MenuScreen';
 import LoadingScreen from './screens/comp/LoadingScreen';
 
@@ -31,9 +30,7 @@ const Drawer  = DrawerNavigator({
     })},
     Home: { 
         screen: HomeScreen 
-    },
-    Settings: { screen: SettingsScreen }
-	},
+    }},
 	{
     contentComponent: props => <DrawerMenu {...props} />   
 	});
@@ -45,6 +42,7 @@ export default class DrawerBuild extends Component {
 		this.state = {
 			userName: 'Some Guy',
 			photoURL: './assets/add.png',
+			email: undefined,
 			finishedLoading: false,
             screenPosition: {
                 latitude: 49.251161,
@@ -65,6 +63,41 @@ export default class DrawerBuild extends Component {
 	}
     
 	componentWillMount(){
+<<<<<<< HEAD
+=======
+        this.startRefresh();
+    }
+    
+	async componentDidMount() {
+        await Expo.Font.loadAsync({
+            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
+			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
+        });
+		
+		setTimeout(()=>{
+			this.setState({ finishedLoading: true });
+		}, 3000);
+    }
+	
+	setUserInfo = (val) => {
+		this.setState({
+			userName: val.displayName,
+			photoURL: val.photoURL,
+			email: val.email
+		});
+	}
+	
+    startRefresh = ()=>{
+        this.locRefresh();
+    }
+    
+    clearRefresh = ()=>{
+        clearInterval(locRefresh);
+    }
+    
+    locRefresh = ()=>{
+>>>>>>> 5df007ed36fc374c085ec1bcccba5c4e68a6d70f
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
         
@@ -311,6 +344,7 @@ export default class DrawerBuild extends Component {
 				<Drawer screenProps={{
 					userName: this.state.userName,
 					photoURL: this.state.photoURL,
+					email: this.state.email,
 				
 					setUserInfo: this.setUserInfo,
 					

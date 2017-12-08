@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 	profPic: {
 		width: 40,
 		height: 40,
-		borderRadius: 40,
+		borderRadius: 40/2,
 		marginHorizontal: 10
 	},
 	teamName: {

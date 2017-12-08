@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
 		bottom: 40,
 		width: '80%',
-        backgroundColor: '#E9E9E9',
+        backgroundColor: '#58378F',
         paddingTop: 15,
         paddingBottom: 5
     },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     baseText: {
         textAlign: 'center',
-        color: '#58378F',
+        color: 'white',
         fontFamily: 'open-sans-light'
     },
 	heading: {
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
         alignSelf: 'center',
-        backgroundColor: '#58378F',
+        backgroundColor: 'white',
         marginVertical: 10,
     },
     btnLabel: {
-        color: '#E9E9E9'
+        color: '#58378F'
     }
 });
 

@@ -4,7 +4,9 @@ import { StyleSheet, Dimensions, Alert, View, Text, Button, Vibration, Touchable
 import MapSearch from './MapSearch';
 import HamburgerBtn from './HamburgerBtn';
 import LocationBtn from './LocationBtn';
-import LogoAnim from './LogoAnim'
+import LogoAnim from './LogoAnim';
+import LightMap from '../../assets/maps/light.json'
+import DarkMap from '../../assets/maps/dark.json'
 
 const {width,height} = Dimensions.get('window');
 const SCREENHEIGHT = height;
@@ -255,7 +257,7 @@ class Map extends Component {
     }
     
     //when tapping on map
-    onMapPress = ()=>{
+    onMapPress = () => {
         if(this.props.disableFunctions === false){
             if(this.state.showTargetMarker === true){
                 this.setState({
@@ -272,6 +274,11 @@ class Map extends Component {
             })
         }
     }
+	
+	hamburgerFunction = () => {
+		this.onMapPress();
+		this.props.hamburgerFunction();
+	}
     
     resetBlurProp = (data)=>{
         this.setState({
@@ -307,6 +314,8 @@ class Map extends Component {
 //-------------------------------------------------------------------------
 
     render() {
+		
+		
         //Target Marker
         let targetMarker = null
         if(this.state.showTargetMarker === true){
@@ -364,11 +373,23 @@ class Map extends Component {
             followLocBtn = null;
         }
 
+		// Night Mode
+
+		let 
+			curMapStyle = null;
+
+		if (this.props.nightMode === true) {
+			curMapStyle = DarkMap;
+		} else {
+			curMapStyle = LightMap;
+		}
+
 		return (
-			<View style={styles.viewContainer}>
+			<View style={styles.viewContainer} key={this.props.nightMode}>
 				<MapView
 					provider={PROVIDER_GOOGLE}
 					style={styles.map}
+					customMapStyle={curMapStyle}
 					region={this.props.screenPosition}
 					onRegionChange={(region)=>{
 				        this.props.onRegionChange(region)
@@ -400,8 +421,9 @@ class Map extends Component {
 						startRefresh={this.startRefresh}
 						blurProp={this.state.blurProp}
 						resetBlurProp={this.resetBlurProp}
-						hamburgerFunction={this.props.hamburgerFunction}
+						hamburgerFunction={this.hamburgerFunction}
 						onMapPress={this.onMapPress}
+						nightMode={this.props.nightMode}
 					/>
 				</View>
 				{followLocBtn}

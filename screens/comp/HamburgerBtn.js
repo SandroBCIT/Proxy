@@ -9,14 +9,19 @@ class HamburgerBtn extends Component {
 //-------------------------------------------------------------------------
     
     render() {
+		let btnSrc = require('../../img/icon-p-menu.png');
+		
+		if (this.props.nightMode === true) {
+			btnSrc = require('../../img/icon-g-menu.png')
+		}
+		
         return (
             <TouchableHighlight 
-                style= {styles.hamburgerBtnCont}
-                onPress={()=>{this.props.hamburgerFunction(); this.props.onMapPress();}}
-                underlayColor='rgba(0,0,0,0)'>
+                style={styles.hamburgerBtnCont}
+                onPress={this.props.hamburgerFunction}>
 
                 <Image
-                    source={require('../../img/icon-p-menu.png')}
+                    source={btnSrc}
                     style={styles.hamburgerBtn}
                 />
             </TouchableHighlight>

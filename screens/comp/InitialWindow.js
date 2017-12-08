@@ -7,6 +7,7 @@ class InitialWindow extends Component {
         super(props);
         
         this.state = {
+			palette: this.props.palette
         }
     }
     
@@ -54,18 +55,24 @@ class InitialWindow extends Component {
             transform: [{translateX: this.animatedPosition}],
             opacity: this.animatedOpacity
         }
+		
+		let colPal = this.state.palette.light;
+		
+		if (this.props.nightMode === true) {
+			colPal = this.state.palette.dark;
+		}
         
         return (
-                <Animated.View style={[styles.wrapper, styles.shadow, animatedStyle]}>
-                    <Text style={[styles.baseText, styles.heading]}>choose your action</Text>
+                <Animated.View style={[styles.wrapper, styles.shadow, {backgroundColor: colPal.primary}, animatedStyle]}>
+                    <Text style={[styles.baseText, {color: colPal.text}, styles.heading]}>choose your action</Text>
                     <TouchableOpacity onPress={this.setToAlarm}>
-                        <View style={[styles.confirmBut, styles.shadow]}>
-                            <Text style={[styles.baseText, styles.btnLabel]}>alarm</Text>	
+                        <View style={[styles.confirmBut, {backgroundColor: colPal.text}, styles.shadow]}>
+                            <Text style={[styles.baseText, {color: colPal.primary}, styles.btnLabel]}>alarm</Text>	
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this.setToNotification}>
-                        <View style={[styles.confirmBut, styles.shadow]}>
-                            <Text style={[styles.baseText, styles.btnLabel]}>notification</Text>	
+                        <View style={[styles.confirmBut, {backgroundColor: colPal.text}, styles.shadow]}>
+                            <Text style={[styles.baseText, {color: colPal.primary}]}>notification</Text>
                         </View>
                     </TouchableOpacity>
                 </Animated.View>
@@ -80,7 +87,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
 		bottom: 40,
 		width: '80%',
-        backgroundColor: '#58378F',
         paddingTop: 15,
         paddingBottom: 5
     },
@@ -93,7 +99,6 @@ const styles = StyleSheet.create({
     },
     baseText: {
         textAlign: 'center',
-        color: 'white',
         fontFamily: 'open-sans-light'
     },
 	heading: {
@@ -105,11 +110,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
         alignSelf: 'center',
-        backgroundColor: 'white',
         marginVertical: 10,
-    },
-    btnLabel: {
-        color: '#58378F'
     }
 });
 

@@ -31,8 +31,25 @@ const Drawer  = DrawerNavigator({
         screen: HomeScreen 
     }},
 	{
-    contentComponent: props => <DrawerMenu {...props} />   
+	drawerWidth: Dimensions.get('window').width,
+	drawerBackgroundColor: 'rgba(0,0,0,0)',
+    contentComponent: props => <DrawerMenu {...props} />  
 	});
+
+const ColorPalette = {
+	light: {
+		text: '#f2f2f2',
+		primary: '#5f3b9a',
+		primaryBut: '#5f3b9a',
+		secondary: '#3c1e5f',
+	},
+	dark: {
+		text: '#f2f2f2',
+		primary: '#3c1e5f',
+		primaryBut: '#f2f2f2',
+		secondary: '#1f9668',
+	}
+}
 
 export default class DrawerBuild extends Component {
 	constructor(props) {
@@ -56,7 +73,9 @@ export default class DrawerBuild extends Component {
             initialize: true,
             followLoc: true,
             checkDistance: false,
-            showFollowLocBtn: false
+            showFollowLocBtn: false,
+			nightMode: false,
+			drawerOpen: false
 		}
 	}
     
@@ -219,6 +238,23 @@ export default class DrawerBuild extends Component {
             followLoc: false
         })
     }
+	
+	toggleNightMode = () => {
+		if (this.state.nightMode === true) {
+			this.setState({ nightMode: false })
+		} else if (this.state.nightMode === false) {
+			this.setState({ nightMode: true })
+		}
+		console.log(this.state.nightMode)
+	}
+	
+	toggleDrawer = () => {
+		if (this.state.drawerOpen === true) {
+			this.setState({ drawerOpen: false })
+		} else {
+			this.setState({ drawerOpen: true })
+		} 
+	}
     
 	render(){
 		
@@ -228,12 +264,17 @@ export default class DrawerBuild extends Component {
 					userName: this.state.userName,
 					photoURL: this.state.photoURL,
 					email: this.state.email,
+					nightMode: this.state.nightMode,
+					toggleNightMode: this.toggleNightMode,
 				
 					setUserInfo: this.setUserInfo,
 					
                     setScreenPosition: this.state.screenPosition,
                     setLocationMarkerPosition: this.state.locationMarkerPosition,
-                    onRegionChange: this.onRegionChange
+                    onRegionChange: this.onRegionChange,
+					palette: ColorPalette,
+					toggleDrawer: this.toggleDrawer,
+					drawerOpen: this.state.drawerOpen
 				}} />
 			);
 		} else {

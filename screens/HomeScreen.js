@@ -23,23 +23,17 @@ class HomeScreen extends Component {
     }
 	
 	componentWillMount() {        
-		this.animatedPosition = new Animated.Value(50);
+		this.animatedScale = new Animated.Value(1.1);
         this.animatedOpacity = new Animated.Value(0);
 	}
 	
 	componentDidMount() {
-        Animated.timing(this.animatedPosition, {
-            toValue: 0,
-            duration: 300
-        }).start()
-        Animated.timing(this.animatedOpacity, {
-            toValue: 1,
-            duration: 400
-        }).start()
+        this.animateIn();
     }
     
     hamburgerFunction = ()=>{
-        this.props.navigation.navigate('DrawerOpen');      
+        this.props.navigation.navigate('DrawerOpen');
+		this.props.screenProps.toggleDrawer();
     }
     
     setSliderValue = (data)=>{
@@ -110,58 +104,77 @@ class HomeScreen extends Component {
             alertMethod: data
         }) 
     }
+	
+	animateOut = () => {
+        Animated.timing(this.animatedScale, {
+            toValue: 1.1,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 0.9,
+            duration: 150
+        }).start()
+    }
+	
+	animateIn = () => {
+        Animated.timing(this.animatedScale, {
+            toValue: 1,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 150
+        }).start()
+    }
+	
 //-------------------------------------------------------------------------
     
     render() {
 		
 		const animatedStyle = {
-            transform: [{translateY: this.animatedPosition}],
+            transform: [{scale: this.animatedScale}],
             opacity: this.animatedOpacity
         }
 		
-        //1st
-        let initialWindow = null;
-        if(this.state.showInitialWindow === true){
-            initialWindow = 
+		if (this.props.screenProps.drawerOpen === true) {
+			this.animateOut();
+		} else if (this.props.screenProps.drawerOpen === false) {
+			this.animateIn();
+		}
+		
+		let progWindow = null;
+		
+		if (this.state.showInitialWindow === true) {
+			progWindow = 
                 <InitialWindow 
                     toggleInitialWindow={this.toggleInitialWindow}
                     toggleSetupWindow={this.toggleSetupWindow}
                     delayedRadius={this.delayedRadius}
                     alertMethod={this.alertMethod}
-                />   
-        }else if(this.state.showInitialWindow === false){
-            initialWindow = null;  
-        }
-        
-        //2nd
-        let setupWindow = null;
-        if(this.state.showSetupWindow === true){
-            setupWindow = 
+					nightMode={this.props.screenProps.nightMode}
+					palette={this.props.screenProps.palette}
+                />
+		} else if(this.state.showSetupWindow === true){
+            progWindow = 
                 <SetupWindow 
                     sliderValue={this.setSliderValue} 
                     checkDistance={this.startCheckDistance}
                     toggleSetupWindow={this.toggleSetupWindow}
                     toggleRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.disableFunctions}
+					nightMode={this.props.screenProps.nightMode}
+					palette={this.props.screenProps.palette}
                 />  
-        }else if(this.state.showSetupWindow === false){
-            setupWindow = null  
-        }
-        
-        //3rd
-        let runningWindow = null
-        if(this.state.showRunningWindow === true){
-            runningWindow =   
+        } else if(this.state.showRunningWindow === true){
+            progWindow =   
                 <RunningWindow
                     toggleRunningWindow={this.toggleRunningWindow}
                     disableFunctions={this.disableFunctions}
                     removeOldPin={this.removeOldPin}
+					nightMode={this.props.screenProps.nightMode}
+					palette={this.props.screenProps.palette}
                 />   
-        }else if(this.state.showSetupWindow === false){
-            runningWindow = null  
         }
-        
-        //
         
         return (
             <Animated.View style={[styles.viewContainer, animatedStyle]}>
@@ -182,10 +195,10 @@ class HomeScreen extends Component {
                     screenPosition={this.props.screenProps.setScreenPosition}
                     locationMarkerPosition={this.props.screenProps.setLocationMarkerPosition}
                     onRegionChange={this.props.screenProps.onRegionChange}
+					nightMode={this.props.screenProps.nightMode}
+					palette={this.props.screenProps.palette}
                 />
-                {initialWindow}
-                {setupWindow}
-                {runningWindow}
+                {progWindow}
             </Animated.View>
         );
     }

@@ -26,7 +26,7 @@ class MapSearch extends Component {
     render() {
         return (
             <View style={styles.mapSearch}>
-				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} onMapPress={this.props.onMapPress}/>
+				<HamburgerBtn hamburgerFunction={this.props.hamburgerFunction} nightMode={this.props.nightMode}/>
                 <GooglePlacesAutocomplete
                     
                     placeholder='where are you going?'

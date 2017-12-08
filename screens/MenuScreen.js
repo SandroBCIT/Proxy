@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Text, View, Button, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Animated } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import firebase from 'firebase';
 import HamburgerBtn from './comp/HamburgerBtn';
@@ -11,145 +11,149 @@ class MenuScreen extends Component {
         this.state = {
             fontReady: false,
             itemHighlight: 'home',
-			boxStatus: false
+			boxStatus: false,
+			palette: this.props.screenProps.palette
         }
     }
+	
+	componentWillMount() {
+        this.animatedPosition = new Animated.Value(-50);
+        this.animatedOpacity = new Animated.Value(0);
+    }
     
-    async componentDidMount() {
-        await Expo.Font.loadAsync({
-            'open-sans-light': require('../assets/font/OpenSans-Light.ttf'),
-        });
-
-        this.setState({ fontReady: true });
+    animateOut = () => {
+        Animated.timing(this.animatedPosition, {
+            toValue: -50,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 0,
+            duration: 150
+        }).start()
+    }
+	
+	animateIn = () => {
+        Animated.timing(this.animatedPosition, {
+            toValue: 0,
+            duration: 150
+        }).start()
+        Animated.timing(this.animatedOpacity, {
+            toValue: 1,
+            duration: 150
+        }).start()
     }
 	
 	hamburgerFunction = () => {
-        this.props.navigation.navigate('DrawerClose');      
+        this.props.navigation.navigate('DrawerClose');
+		this.props.screenProps.toggleDrawer();
     }
-	
-	toggleNightMode = () => {
-			if (this.state.boxStatus === true) {
-				this.setState({
-					boxStatus: false
-				});
-			} else {
-				this.setState({
-					boxStatus: true
-				});
-			}
-		}
     
     logOutUser = () => {
         firebase.auth().signOut(); 
         
         this.props.navigation.navigate('DrawerClose');
+		this.props.screenProps.toggleDrawer();
         this.props.navigation.navigate('Login');
         this.setState({ itemHighlight: 'home' });
     }
 	
+	
+	
 //-------------------------------------------------------------------------
     
     render() {
-        
-        let homeStyles = styles.menuBtn,
-            settingsStyles = styles.menuBtn;
-        
-        if (this.state.itemHighlight === 'home') {
-            homeStyles = [styles.menuBtn, styles.menuBtnActive];
-        } else {
-            settingsStyles = [styles.menuBtn, styles.menuBtnActive];
-        }
 		
-		let activeStyle = null;
-		
-		if (this.state.boxStatus === true) {
-			activeStyle = [styles.boxBase, styles.boxActive];
+		if (this.props.screenProps.drawerOpen === true) {
+			this.animateIn();
 		} else {
-			activeStyle = styles.boxBase;
+			this.animateOut();
+		}
+		
+		let colPal = this.state.palette.light,
+			activeStyle = [styles.boxBase,
+						  styles.boxBase,
+						  {borderColor: colPal.secondary}];
+		
+		if (this.props.screenProps.nightMode === true) {
+			colPal = this.state.palette.dark;
+			activeStyle = [styles.boxBase,
+						   {borderColor: colPal.secondary},
+						   {backgroundColor: colPal.secondary}];
 		}
 		
 		let picSrc = this.props.screenProps.photoURL,
-			nameSrc = this.props.screenProps.userName.toLowerCase(),
+			nameSrc = this.props.screenProps.userName,
 			emailSrc = this.props.screenProps.email,
-			picReq = null,
-			nameReq = null;
+			picReq = require('../assets/icon-proxy-200.png'),
+			nameReq = "User";
 		
 		if (picSrc !== null) {
 			picReq = {uri: picSrc};
-		} else {
-			picReq = require('../assets/icon-proxy-200.png')
 		}
 		
 		if (nameSrc !== null) {
-			nameReq = nameSrc;
-		} else {
-			if (emailSrc !== undefined) {
-				nameReq = emailSrc;
-			} else {
-				nameReq = "Hey there qt";
-			}
+			nameReq = nameSrc.toLowerCase();
+		} else if (emailSrc !== undefined) {
+			nameReq = emailSrc;
 		}
-        
-        if (this.state.fontReady) {
-            return (
-                <View style={styles.viewContainer}>
-                    <View style={styles.menuTop}>
-                        <TouchableHighlight onPress={this.hamburgerFunction}>
-                            <Image
-                                source={require('../img/icon-g-menu.png')}
-                                style={styles.hamburgerBtn}
-                            />
-                        </TouchableHighlight>
+		
+		const animatedStyle = {
+            transform: [{translateX: this.animatedPosition}],
+            opacity: this.animatedOpacity
+        }
+		
+		return (
+			<View style={{flex:1,flexDirection:'row',backgroundColor:'rgba(0,0,0,0)'}}>
+				<View style={[styles.viewContainer, {backgroundColor: colPal.primary}]}>
+					<View style={styles.menuTop}>
+						<HamburgerBtn hamburgerFunction={this.hamburgerFunction} nightMode={this.props.screenProps.nightMode}/>
 						<Image 
 							style={styles.logo}
 							source={require('../img/proxy-logo-white.png')}
 						/>
-                    </View>
-									
+					</View>
+				
 					<View style={styles.userInfo}>
-						<Image source={picReq} style={styles.profPic} />
-						<Text style={styles.profName}>{nameReq}</Text>
+						<Animated.Image source={picReq} style={[styles.profPic, animatedStyle]} />
+						<Animated.Text style={[styles.profName, {color: colPal.text}, animatedStyle]}>{nameReq}</Animated.Text>
 					</View>
-		
-					<View style={styles.userSettings}>
-						<Text style={styles.baseText}>toggle night mode</Text>
-						<TouchableOpacity style={activeStyle} onPress={this.toggleNightMode}></TouchableOpacity>
-					</View>
-		
+				
+					<TouchableOpacity onPress={this.props.screenProps.toggleNightMode} style={styles.btnCont}>
+						<View style={styles.userSettings}>
+							<Text style={[styles.baseText, {color: colPal.text}]}>toggle night mode</Text>
+							<View style={activeStyle}></View>
+						</View>
+					</TouchableOpacity>
+				
 					<TouchableOpacity onPress={this.logOutUser} style={styles.btnCont}>
 						<View style={styles.btn}>
 							<Image
-                                source={require('../img/proxy_logout.png')}
-                                style={styles.btnIcon}
-                            />
-							<Text style={[styles.baseText, styles.btnLabel]}>logout</Text>	
+								source={require('../img/proxy_logout.png')}
+								style={styles.btnIcon}
+							/>
+							<Text style={[styles.baseText, styles.btnLabel, {color: colPal.text}]}>logout</Text>	
 						</View>
 					</TouchableOpacity>
-                </View>
-            );
-        } else {
-            return null;
-        }
+				</View>
+				<TouchableOpacity onPress={this.hamburgerFunction} style={{width:'30%',height:'100%',opacity:0}} />
+			</View>
+		);
         
     }
 }
 
-//-------------------------------------------------------------------------
-
 const styles = StyleSheet.create({
+	
 	viewContainer: {
 		flex: 1,
 		alignSelf: 'stretch',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: '#321754',
-		marginTop: 24,
-		paddingVertical: 30
+		paddingVertical: 40
 	},
 	baseText: {
         fontFamily: 'open-sans-light',
-		color: '#e9e9e9'
 	},
     shadow: {
         shadowColor: '#000',
@@ -162,25 +166,19 @@ const styles = StyleSheet.create({
 		alignSelf: 'stretch',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingHorizontal: 20,
-	},
-	hamburgerBtn: {
-		width: 27,
-		height: 25,
+		alignItems: 'flex-start',
+		marginHorizontal: 20,
 	},
 	logo: {
 		width: 120,
 		height: 36,
+		marginTop: 5
 	},
 	boxBase: {
 		width: 25,
 		height: 25,
 		borderRadius: 25,
 		borderWidth: 2,
-		borderColor: '#30B783'
-	},
-	boxActive: {
-		backgroundColor: '#30B783'
 	},
 	userInfo: {
 		justifyContent: 'space-between',
@@ -198,12 +196,10 @@ const styles = StyleSheet.create({
 	profName: {
 		fontFamily: 'open-sans-semibold',
 		fontSize: 20,
-		color: '#e9e9e9',
 		marginTop: 10
 	},
 	userSettings: {
-		width: '80%',
-		padding: 20,
+		paddingHorizontal: 20,
 		marginTop: 20,
 		flexDirection: 'row',
 		justifyContent: 'space-between'

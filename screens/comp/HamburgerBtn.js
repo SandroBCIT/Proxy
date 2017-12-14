@@ -9,10 +9,10 @@ class HamburgerBtn extends Component {
 //-------------------------------------------------------------------------
     
     render() {
-		let btnSrc = require('../../img/icon-p-menu.png');
+		let btnSrc = require('../../assets/icon-p-menu.png');
 		
 		if (this.props.nightMode === true) {
-			btnSrc = require('../../img/icon-g-menu.png')
+			btnSrc = require('../../assets/icon-g-menu.png')
 		}
 		
         return (

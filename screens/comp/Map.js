@@ -160,11 +160,11 @@ class Map extends Component {
 		
 		let curMapStyle = LightMap,
 			targetMarker = null,
-			targetMarkerCol = require("../../img/pin-01.png");
+			targetMarkerCol = require("../../assets/pin-01.png");
 
 		if (this.props.nightMode === true) {
 			curMapStyle = DarkMap;
-			targetMarkerCol = require("../../img/pin-01-g.png")
+			targetMarkerCol = require("../../assets/pin-01-g.png")
 		}
         //Target Marker
 		

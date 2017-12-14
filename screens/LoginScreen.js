@@ -154,7 +154,7 @@ class LoginScreen extends Component {
 					<View style={styles.viewContainer}>
 						<Image 
 							style={styles.logo}
-							source={require('../img/proxy-logo.png')}
+							source={require('../assets/proxy-logo.png')}
 						/>
 						<View style={styles.inputContainer} >
 							<Text style={[styles.baseText, styles.inputLabel]} >email</Text>

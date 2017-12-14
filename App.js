@@ -88,35 +88,6 @@ export default class DrawerBuild extends Component {
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
         
-        //initial Location
-//        navigator.geolocation.getCurrentPosition((position) => {
-//            var lat = parseFloat(position.coords.latitude)
-//            var long = parseFloat(position.coords.longitude)
-//
-//            var lastScreenRegion = {
-//                latitude: lat,
-//                longitude: long,
-//                latitudeDelta: latDelta,
-//                longitudeDelta: longDelta
-//            }
-//
-//            var lastMarkerRegion = {
-//                latitude: lat,
-//                longitude: long,
-//                latitudeDelta: latDelta,
-//                longitudeDelta: longDelta
-//            }
-//
-//            this.setState({
-//                screenPosition: lastScreenRegion,
-//                locationMarkerPosition: lastMarkerRegion
-//            });
-//
-//            latDelta = parseFloat(position.coords.latitudeDelta)
-//            longDelta = parseFloat(position.coords.longitudeDelta)
-//
-//        }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
-        
         //Location Check   
         if (Platform.OS === 'android' && !Constants.isDevice) {
             alert('Try on real device');
@@ -135,12 +106,6 @@ export default class DrawerBuild extends Component {
 		setTimeout(()=>{
 			this.setState({ finishedLoading: true });
 		}, 3000);
-		
-//		if (Platform.OS === 'android' && !Constants.isDevice) {
-//            alert('Try on real device');
-//        } else {
-//            this._getLocationAsync();
-//        }
     }
 	
 	setUserInfo = (val) => {
@@ -161,7 +126,7 @@ export default class DrawerBuild extends Component {
         }
         
         let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
-            alert("update");
+			
             if(this.state.followLoc === true){
                 var lastScreenRegion = {
                     latitude: position.coords.latitude,

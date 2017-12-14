@@ -34,7 +34,7 @@ export default class LogoAnim extends Component {
 					/>
 				</View>
 				<Image
-					source={require('../../img/proxy-logo.png')}
+					source={require('../../assets/proxy-logo.png')}
 					style={styles.logo}
 				/>
 			</View>

@@ -105,7 +105,7 @@ class MenuScreen extends Component {
 						<HamburgerBtn hamburgerFunction={this.hamburgerFunction} nightMode={this.props.screenProps.nightMode}/>
 						<Image 
 							style={styles.logo}
-							source={require('../img/proxy-logo-white.png')}
+							source={require('../assets/proxy-logo-white.png')}
 						/>
 					</View>
 				
@@ -124,7 +124,7 @@ class MenuScreen extends Component {
 					<TouchableOpacity onPress={this.logOutUser} style={styles.btnCont}>
 						<View style={styles.btn}>
 							<Image
-								source={require('../img/proxy_logout.png')}
+								source={require('../assets/proxy_logout.png')}
 								style={styles.btnIcon}
 							/>
 							<Text style={[styles.baseText, styles.btnLabel, {color: colPal.text}]}>logout</Text>	

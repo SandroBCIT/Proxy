@@ -87,7 +87,6 @@ export default class DrawerBuild extends Component {
 	componentWillMount(){
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
-                
         //Location Check   
         if (Platform.OS === 'android' && !Constants.isDevice) {
             alert('Try on real device');

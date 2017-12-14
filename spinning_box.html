@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			height: 100vh;
+			margin-top: 80px;
+			width: 100vw;
+		}
+		
+		.flex {
+			display: flex;
+			width: 100vw;
+			height: inherit;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.box-outer {
+			transform: rotate(45deg);
+			box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.16);
+			width: 100px;
+			height: 100px;
+		}
+
+		.box-outer-big {
+			background: linear-gradient(-45deg, #66C1C3 50%, #88D1D2 50%);
+/*
+			width: 500px;
+			height: 500px;
+*/
+			z-index: 3;
+		}
+
+		.box-outer-med {
+			background: linear-gradient(-45deg, #66C1C3 50%, #88D1D2 50%);
+/*
+			width: 350px;
+			height: 350px;
+*/
+			z-index: 2
+		}
+
+		.box-outer-sm {
+			background: linear-gradient(-45deg, #66C1C3 50%, #88D1D2 50%);
+/*
+			width: 200px;
+			height: 200px;
+*/
+			z-index: 1
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="flex">
+		<div class="box-outer box-outer-sm"></div>
+		
+		<div class="box-outer box-outer-med"></div>
+		
+		<div class="box-outer box-outer-big"></div>
+		
+		<div class="box-outer box-outer-med"></div>
+		
+		<div class="box-outer box-outer-sm"></div>
+	</div>
+	
+	<script>
+	
+	
+	</script>
+
+</body>
+</html>

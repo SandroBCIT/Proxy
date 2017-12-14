@@ -32,7 +32,7 @@ class LocationBtn extends Component {
                 <TouchableOpacity style={styles.touchableArea} onPress={this.props.setToFollowLoc}>
 					<Image 
 						style={styles.arrow}
-						source={require('../../img/location-arrow.png')}
+						source={require('../../assets/location-arrow.png')}
 					/>
                 </TouchableOpacity>
             </Animated.View>

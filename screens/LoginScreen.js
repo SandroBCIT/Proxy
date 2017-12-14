@@ -139,8 +139,6 @@ class LoginScreen extends Component {
         this.refs.emailInput.blur()
         this.refs.passwordInput.blur()
     }
-
-//-------------------------------------------------------------------------
     
     render() {
 		const animatedStyle = {

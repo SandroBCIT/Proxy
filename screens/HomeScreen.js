@@ -29,6 +29,19 @@ class HomeScreen extends Component {
         this.animateIn();
     }
     
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.screenProps.disableFunctionsRemote === false){
+            this.setState({
+                disableFunctions: false
+            })    
+        }
+        if(nextProps.screenProps.removeRunningWindow === true){
+            this.setState({
+                showRunningWindow: false       
+            })
+        }
+    }
+    
     hamburgerFunction = ()=>{
         this.props.navigation.navigate('DrawerOpen');
 		this.props.screenProps.toggleDrawer();
@@ -67,19 +80,6 @@ class HomeScreen extends Component {
         this.setState({
             disableFunctions: data
         })    
-    }
-    
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.screenProps.disableFunctionsRemote === false){
-            this.setState({
-                disableFunctions: false
-            })    
-        }
-        if(nextProps.screenProps.removeRunningWindow === true){
-            this.setState({
-                showRunningWindow: false       
-            })
-        }
     }
     
     delayedRadius = (data)=>{

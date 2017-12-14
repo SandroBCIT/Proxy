@@ -154,8 +154,6 @@ class Map extends Component {
         }        
     }
 
-//-------------------------------------------------------------------------
-
     render() {
 		
 		let curMapStyle = LightMap,
@@ -166,9 +164,8 @@ class Map extends Component {
 			curMapStyle = DarkMap;
 			targetMarkerCol = require("../../img/pin-01-g.png")
 		}
+		
         //Target Marker
-		
-		
         if(this.state.showTargetMarker === true){
             targetMarker = 
                 <MapView.Marker 
@@ -217,9 +214,6 @@ class Map extends Component {
         }
 
 		// Night Mode
-
-		
-
 		return (
 			<View style={styles.viewContainer} key={this.props.nightMode}>
 				<MapView
@@ -271,8 +265,6 @@ class Map extends Component {
 
     }
 }
-
-//-------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
     viewContainer: {

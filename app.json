@@ -2,7 +2,13 @@
     "expo": {
         "sdkVersion": "23.0.0",
         "name": "Proxy",
-        "icon": "./assets/icon-proxy-200.png"
+        "icon": "./assets/icon-proxy-200.png",
+        "notification": {
+            "icon": "./assets/icon-proxy-200.png"
+        },
+        "loading": {
+            "icon": "./assets/icon-proxy-200.png"
+        }
+            
     }
 }
-    

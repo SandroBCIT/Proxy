@@ -87,36 +87,7 @@ export default class DrawerBuild extends Component {
 	componentWillMount(){
         latDelta = LATITUDE_DELTA
         longDelta = LONGITUDE_DELTA
-        
-        //initial Location
-//        navigator.geolocation.getCurrentPosition((position) => {
-//            var lat = parseFloat(position.coords.latitude)
-//            var long = parseFloat(position.coords.longitude)
-//
-//            var lastScreenRegion = {
-//                latitude: lat,
-//                longitude: long,
-//                latitudeDelta: latDelta,
-//                longitudeDelta: longDelta
-//            }
-//
-//            var lastMarkerRegion = {
-//                latitude: lat,
-//                longitude: long,
-//                latitudeDelta: latDelta,
-//                longitudeDelta: longDelta
-//            }
-//
-//            this.setState({
-//                screenPosition: lastScreenRegion,
-//                locationMarkerPosition: lastMarkerRegion
-//            });
-//
-//            latDelta = parseFloat(position.coords.latitudeDelta)
-//            longDelta = parseFloat(position.coords.longitudeDelta)
-//
-//        }, (error)=> this.setState({alertMsg:alert}), {enableHighAccuracy: true, timeout: 1000, maximumAge: 500})
-        
+                
         //Location Check   
         if (Platform.OS === 'android' && !Constants.isDevice) {
             alert('Try on real device');
@@ -135,23 +106,9 @@ export default class DrawerBuild extends Component {
 		setTimeout(()=>{
 			this.setState({ finishedLoading: true });
 		}, 3000);
-		
-//		if (Platform.OS === 'android' && !Constants.isDevice) {
-//            alert('Try on real device');
-//        } else {
-//            this._getLocationAsync();
-//        }
     }
-	
-	setUserInfo = (val) => {
-		this.setState({
-			userName: val.displayName,
-			photoURL: val.photoURL,
-			email: val.email
-		});
-	}
-    
-    
+	    
+    //watches the user's location and updates if it changes
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -191,6 +148,7 @@ export default class DrawerBuild extends Component {
         });
     };
 
+    //calculates distance between user location and destination
     checkDistanceFunc = () => {
         //converts radius from meters to lat/long scale
         var radius = (0.00001*(this.state.sliderValue));
@@ -268,6 +226,7 @@ export default class DrawerBuild extends Component {
         }    
     }
 
+    //toggle to start checkinig the distance between user location and destination
     setCheckDistance = (data) => {
         this.setState({
             checkDistance: data
@@ -277,7 +236,7 @@ export default class DrawerBuild extends Component {
         }
     }
     
-//     //shows on screen alert (NOT alarm)
+    //shows on screen alert (NOT alarm)
     displayAlert = ()=>{
         Alert.alert(
             'You are almost there!',
@@ -296,6 +255,7 @@ export default class DrawerBuild extends Component {
             ) 
     }
     
+    //when map is interacted with
     onRegionChange = (region) => {
         this.setState({
             screenPosition: region,
@@ -304,6 +264,7 @@ export default class DrawerBuild extends Component {
         })
     }
 	
+    //changes colors of app
 	toggleNightMode = () => {
 		if (this.state.nightMode === true) {
 			this.setState({ nightMode: false })
@@ -312,6 +273,7 @@ export default class DrawerBuild extends Component {
 		}
 	}
 	
+    //opens/closes drawer
 	toggleDrawer = () => {
 		if (this.state.drawerOpen === true) {
 			this.setState({ drawerOpen: false })
@@ -320,6 +282,7 @@ export default class DrawerBuild extends Component {
 		} 
 	}
     
+    //when search results are chosen
     onSearchLocation = (searchLocation) => {
         var searchTarget = {
             latitude: searchLocation.latitude,
@@ -331,36 +294,28 @@ export default class DrawerBuild extends Component {
         });   
     }
     
+    //when map is pressed for a long time
     onMapLongPress = (newTargetMarker) => {
         this.setState({
             targetMarkerPosition: newTargetMarker
         });    
     }
     
+    //slider value from setup window
     setSliderValue = (data) => {
         this.setState({
             sliderValue: data
         })
     }
     
+    //how the app notifies the user
     setAlertMethod = (data) => {
         this.setState({
             alertMethod: data
         }) 
     }
     
-    async componentDidMount() {
-        await Expo.Font.loadAsync({
-            'open-sans-light': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-regular': require('./assets/font/OpenSans-Light.ttf'),
-			'open-sans-semibold': require('./assets/font/OpenSans-SemiBold.ttf'),
-        });
-		
-		setTimeout(()=>{
-			this.setState({ finishedLoading: true });
-		}, 3000);
-    }
-    
+    //grabs user login info from loginScreen
 	setUserInfo = (val) => {
 		this.setState({
 			userName: val.displayName,
@@ -369,6 +324,7 @@ export default class DrawerBuild extends Component {
 		});
 	}
     
+    //will set the map to follow the user's location
     setToFollowLoc = () => {
         this.setState({
             screenPosition: this.state.locationMarkerPosition,

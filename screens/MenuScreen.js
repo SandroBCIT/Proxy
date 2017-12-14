@@ -56,10 +56,6 @@ class MenuScreen extends Component {
         this.props.navigation.navigate('Login');
         this.setState({ itemHighlight: 'home' });
     }
-	
-	
-	
-//-------------------------------------------------------------------------
     
     render() {
 		

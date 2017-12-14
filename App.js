@@ -161,7 +161,6 @@ export default class DrawerBuild extends Component {
         }
         
         let location = await Location.watchPositionAsync({enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1},(position)=>{
-            alert("update");
             if(this.state.followLoc === true){
                 var lastScreenRegion = {
                     latitude: position.coords.latitude,
